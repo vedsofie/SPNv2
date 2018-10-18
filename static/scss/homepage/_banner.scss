@@ -1,0 +1,53 @@
+//------------------------------------
+//    #Homepage banner
+//------------------------------------
+
+
+/* Welcome Section
+--------------------------------------------- */
+
+.m-homepage-banner {
+	width: 100%;
+	min-height: 500px;
+	text-align: right;
+    position: relative;
+	/*padding: 0px 70px 50px 0; 
+    @extend %home-overlay-gradient;*/
+    @include e(text) {
+        width: 80%;
+        height: 360px;
+        margin: 160px auto 0 auto;    
+        @include media('<=tablet'){
+            width: 100%;
+            padding: 50px 50px 0 0;
+            margin: 0;
+        }
+		@include media('<=400px'){
+			padding: 0 30px 50px 0; 
+		}
+    }
+    @include e(overlay) {
+        position: absolute;
+		bottom: -1px;
+		left: 0;
+		right: 0;
+		z-index: 5;
+		overflow: hidden;	
+        margin-bottom: 0;	
+        @include e(angle) {
+            display: block;	    
+			@include e(path) {
+		        fill: #081323;
+			}
+		}
+    }
+    @include media('<=desktop'){
+		min-height: 418px; 
+	}
+    /*@include media('<=desktop'){
+		min-height: 550px; 
+	}
+    @include media('<=tablet'){
+		min-height: 450px; 
+	}*/
+}

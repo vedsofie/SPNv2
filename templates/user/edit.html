@@ -1,0 +1,60 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+{% endblock %}
+
+{% block content_body %}
+	{% if terms_required%}
+        <span data-bind="with: termsAndConditions">
+            <div class="yes-no popup l-popup-overlay" data-bind="visible: isOpen">
+                <div class="m-popup m-terms-popup">
+                    <div class="m-popup-box">
+                        {% include 'user/terms.html' %}
+                        <div class="button-footer">
+                            <a data-bind="click: confirm.bind($data, true)" class="btn-blue btn-blue--right">Agree</a>
+                            <a data-bind="click: confirm.bind($data, false)" class="btn-blue btn-blue--right">Disagree</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+	{%endif%}
+    <span data-bind="with: userDetailPopup">
+        <div class="m-form-wrapper">
+            <span data-bind="template: {name: 'user-detail-template', data: userDetailViewModel}"></span>
+            <div class="m-submit-buttons">
+                <a data-bind="click: save" class="m-solid-button">Save</a>
+                <a data-bind="click: cancel" class="m-solid-button">Cancel</a>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </span>
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+    <script>
+        var user = new User([JSON.parse({{user|tojson|safe}})][0]);
+        var userDetailPopup = new UserDetailPopupCtrl({user: user});
+    </script>
+
+    <script>
+        TermsAndConditions = function(){
+            var self = this;
+            self.isOpen = ko.observable(true);
+            this.confirm = function(doAgree){
+                if(doAgree){
+                    $.get('/user/agreeToTerms/').success(function(res){
+                        self.isOpen(false);
+                    }).fail(function(err){
+                        alert(err);
+                    });
+                }
+                else{
+                    window.location = '/user/logout/';
+                }
+            }
+        }
+        termsAndConditions = new TermsAndConditions();
+    </script>
+{% endblock %}

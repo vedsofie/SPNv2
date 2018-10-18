@@ -1,0 +1,27 @@
+<script type="text/html" id="user_template">
+
+    <div class="m-card-container">
+        <div class="card" data-bind="attr: { id: 'user_' + user.UserID}">
+            <img class="m-account-avatar" data-bind="attr: {src: '/user/' + user.UserID + '/avatar'}" width="210" height="210"/>
+
+	        <div class="card-description">
+			    <span data-bind="text: user.name"></span>
+			    <p data-bind="text: user.title"></p>
+		    </div>
+			
+	    	<div class="card-footer__sequences" data-bind="visible: user.isPrimaryContact">
+			    <div class="card-footer__count">Y</div>
+			    <span>Primary Contact</span>
+			</div>
+        </div>
+		<span data-bind="if: user.canEdit()">
+			<user-detail-popup params="user: user,
+									   btnText: 'Edit User'"></user-detail-popup>
+		</span>
+    </div>
+
+	<span data-bind="if: user.canEdit()">
+		<user-detail-popup params="user: user,
+								   btnText: 'Edit User'"></user-detail-popup>
+	</span>
+</script>

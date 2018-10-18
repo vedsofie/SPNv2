@@ -1,0 +1,85 @@
+rake login[me,dev]
+rake force
+
+To Export:
+force fetch -t=CustomObject -n=Add_On_Product__c
+force fetch -t=CustomObject -n=BreakDownProduct__c
+force fetch -t=CustomObject -n=Product2
+
+To Import: # If it looks good, remove the -c argument
+force import -directory=. -c -r -v
+
+
+Collect the Product Id's
+force query "Select Product__c from Add_On_Product__c"
+force query "Select Product__c from BreakDownProduct__c"
+
+
+
+force bulk query Product2 "Select Id, Name, Family, Description, UnitType__c,Display_In_SPN__c from Product2 where Display_In_SPN__c=True or Id in ('01t36000001fKQlAAM','01t36000001fKQnAAM','01t36000001fKQjAAM','01t36000001fKQnAAM','01t36000001fKQkAAM','01t36000001fKQkAAM','01t36000001fKQlAAM','01t36000001fKQjAAM','01t36000001fKQwAAM','01t36000001fKQpAAM','01t36000001fKQqAAM','01t36000001fKQoAAM','01t36000001fKQqAAM','01t36000001fKQvAAM','01t36000001fKQuAAM','01t36000001fKQrAAM','01t36000001fKQvAAM','01t36000001fKQuAAM','01t36000001fKQwAAM','01t36000001fKQxAAM','01t36000001fKQxAAM','01t36000001fKQsAAM','01t36000001fKQrAAM','01t36000001fKQtAAM','01t36000001fKQyAAM','01t36000001fKQoAAM','01t36000001fKQyAAM','01t36000001fKQsAAM','01t36000001fKQpAAM','01t36000001fKQtAAM')"
+force bulk query status xxx xxx
+force bulk query retrieve xxx xxx > product2.csv
+
+
+
+force bulk query Add_On_Product__c "Select Name, Product__c, Product_Parent__c from Add_On_Product__c"
+force bulk query status xxx xxx
+force bulk query retrieve xxx xxx > add_on_products.csv
+
+
+force bulk query BreakDownProduct__c "Select Name,Quantity__c,Product__c,ParentProduct__c from BreakDownProduct__c"
+force bulk query status xxx xxx
+force bulk query retrieve xxx xxx > breakdown_products__c.csv
+
+Get the Standard Pricebook from the org and add it to the next query
+force query "Select Id from Pricebook2 where IsStandard=True"
+
+
+Collect the Id's from product2.csv and set that to be the Product2Id in ('').  See the example below
+force bulk query PricebookEntry "Select UnitPrice,Product2Id,Pricebook2Id from PricebookEntry where Pricebook2Id = '01s360000042pVRAAY' and Product2Id in ('01t36000001fKQlAAM','01t36000001fKQnAAM','01t36000001fKQjAAM','01t36000001fKQnAAM','01t36000001fKQkAAM','01t36000001fKQkAAM','01t36000001fKQlAAM','01t36000001fKQjAAM','01t36000001fKQwAAM','01t36000001fKQpAAM','01t36000001fKQqAAM','01t36000001fKQoAAM','01t36000001fKQqAAM','01t36000001fKQvAAM','01t36000001fKQuAAM','01t36000001fKQrAAM','01t36000001fKQvAAM','01t36000001fKQuAAM','01t36000001fKQwAAM','01t36000001fKQxAAM','01t36000001fKQxAAM','01t36000001fKQsAAM','01t36000001fKQrAAM','01t36000001fKQtAAM','01t36000001fKQyAAM','01t36000001fKQoAAM','01t36000001fKQyAAM','01t36000001fKQsAAM','01t36000001fKQpAAM','01t36000001fKQtAAM')"
+force bulk query status xxx xxx
+force bulk query retrieve xxx xxx > pbes.csv
+
+
+rake login[dev,dev]
+rake force
+
+cp product2.csv cpy_product2.csv
+remove the first column of the file
+sed -i .bak 's/\"Id",//' cpy_product2.csv
+replace the first column
+\n["][A-Za-z0-9]*["], with \n
+
+
+
+EDIT FIELD LEVEL SECURITY before continuing
+Product2, AddOn, Breakdown custom fields set field level security to visible for all
+
+
+force bulk insert Product2 cpy_product2.csv
+force bulk batch 75041000002FFINAA4 75141000001Ec6JAAS
+Query force bulk batch 75041000002EsHHAA0 75141000001EOKvAAO until completed
+then download results.
+
+  Validate no errors occured in the 
+
+https://na35.salesforce.com/services/async/37.0/job/JOB_ID/batch/BATCH_ID/result
+
+https://na35.salesforce.com/services/async/37.0/job/75041000002FFINAA4/batch/75141000001Ec6JAAS/result
+
+
+Save the results as uploaded_products.csv
+
+
+
+
+
+
+force bulk insert Add_On_Product__c new-add_on_products.csv
+force bulk insert BreakDownProduct__c new-breakdown_products__c.csv
+
+force query "Select Id from Pricebook2 where IsStandard=True"
+replace the old  id with the new
+force bulk insert PricebookEntry new-pbes.csv
+
+	

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Sofie Probe Network</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/normalize.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/custom.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap-overrides.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/application.css')}}"/>
+        <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/7299072/6859952/css/fonts.css" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600i,900|Nunito:300,400,600,900" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+        {% block head %}
+            {%include 'dependencies.html'%}
+            <script>
+                {% if runninguser is defined %}
+                    var runningUser = new User(JSON.parse({{runninguser|tojson|safe}}));
+		        {% else %}
+				    var runningUser;
+                {% endif %}
+
+                validate.validators.isNumber = function(value, options, key, attributes) {
+                    if(typeof value === 'undefined' || value == null || value == ""){
+                        return;
+                    }
+                    var parsedVal = parseFloat(value);
+
+                    if(!validate.isNumber(parsedVal)){
+                        return "not a number";
+                    }
+                }
+                validate.validators.isInteger = function(value, options, key, attributes) {
+                    if(typeof value === 'undefined' || value == null || value == ""){
+                        return;
+                    }
+                    var parsedVal = parseInt(value);
+
+                    if(!validate.isNumber(parsedVal)){
+                        return "not an integer";
+                    }
+                }
+                /*
+                ko.bindingHandlers.pagination = {
+                    init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {},
+                    update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+                        var pageSize = valueAccessor()['itemsOnPage'];
+                        var currentPage = valueAccessor()['currentPage'];
+                        var items = valueAccessor()['items'];
+
+                        if(items > pageSize){
+                            $(element).pagination({
+                                items: items,
+                                itemsOnPage: pageSize,
+                                cssStyle: 'dark-theme',
+                                onPageClick: function(pageNumber, event){
+                                    currentPage(pageNumber);
+                                    $(element).parent().goTo();
+                                }
+                            });
+                        }
+                        else{
+                            $(element).pagination("destroy");
+                        }
+                    }
+                };
+                */
+                $.fn.goTo = function() {
+                    $('html, body').animate({
+                        scrollTop: $(this).offset().top + 'px'
+                    }, 'fast');
+                    return this; // for chaining...
+                }
+                function truncate(target, limit) {
+                    var text = ko.unwrap(target);
+
+                    if( text && text.length > limit ) {
+                      return text.substring(0, limit-3) + "...";
+                    }
+                    else {
+                      return text;
+                    }
+                }
+            </script>
+
+            <script src="https://use.typekit.net/kyt1kmk.js"></script>
+            <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+        {% endblock %}
+    </head>
+    <body>
+        <script>
+        var loading_dashboard = ko.observable(true);
+        function loading(){
+            loading_dashboard(true)
+        }
+        function unLoading() {
+            loading_dashboard(false)
+        }
+        </script>
+        {% block title_bar %}
+            {% if runninguser is defined %}
+                {% include 'navigation_bar.html' %}
+            {% endif %}
+        {% endblock %}   	
+        
+        <script>
+            //application confirmation
+            ConfirmationPopup = function(params){
+                var self = this;
+                console.log(self)
+                $.extend(self, new PopupBox(params));
+                self.title = ko.observable(params.title);
+                self.response = params.response;
+
+                self.confirm = function(confirmed){
+                    self.response(confirmed);
+                    self.close();
+                }
+
+                self.prompt = function(title, respondTo){
+                    self.title(title);
+                    self.response = respondTo;
+                    self.open();
+                }
+            }
+            var applicationConfirmation = new ConfirmationPopup({title: 'Are you sure?'});
+        </script>
+        <script>
+            {% if reset_password is defined %}
+                var resetPassword = JSON.parse({{reset_password|tojson|safe}})
+            {% else %}
+                var resetPassword = false;
+            {% endif %}
+
+
+            if(runningUser){
+                var navbar = new NavigationBar();
+            }
+        </script>
+
+		{% if runninguser is defined %}
+        <div class="col-sm-12" id="home-wrapper">
+            {% block content_body %}
+            {% endblock %}
+        </div>
+        {% else %}
+        <script>
+            var navbar = new LoginNavbar();
+        </script>
+        <div data-bind="with: navbar">
+			{% include 'login_navigation_bar.html' %}
+			{% block login_content_body %}
+			{% endblock %}
+        </div>
+        {% endif %}
+        
+		<!-- Footer -->
+        <div id="spn-sub-section">
+            <div class="spn-page-container">
+                {% block subsection %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="l-footer">
+            {% block footer %}
+			<div class="container-fluid grey-bg" id="footer">
+				<div class="col-md-3 text-left col-md-offset-1">
+					<ul class="list-unstyled" id="footer-links">
+						<li>                    
+							<section data-bind="if: runningUser">
+	                        	<a href="/user/privacy_policy">Privacy Policy</a>
+	                    	</section>
+	                	</li>
+						<li> <a href="https://sofie.com/radiochemistry/" target="_blank">About ELIXYS</a> </li>
+						<li> <a href="https://sofie.com/about" target="_blank">About SOFIE</a> </li>					
+                        <li> <a href="https://sofie.com/" target="_blank">SOFIE.com</a> </li>
+					</ul>
+				</div>
+				<div class="col-md-2 col-md-offset-6">
+                    <img src="http://res.cloudinary.com/sofie/image/upload/v1517436571/7B3928ED-F550-4C5D-A6C4-2DE59C048360_2x_sovvin.png" alt="" id="footer-sofie-logo">
+                    <br>
+					<p>© 2017 Sofie</p>
+				</div>
+			</div>
+            <script>
+                $(function(){
+                    ko.applyBindings();
+                });
+            </script>
+            {% endblock %}
+        </div>
+        <!-- application confirmation -->
+        <div data-bind="with: applicationConfirmation">
+            <div class="yes-no popup l-popup-overlay" data-bind="visible: visible">
+                <div class="m-popup m-confirm-popup">
+                    <div class="m-popup-box">
+                        <p data-bind="text: title"></p>
+                        <div class="button-footer">
+                            <a data-bind="click: confirm.bind($data, true)" class="btn-blue btn-blue--right">Yes</a>
+                            <a data-bind="click: confirm.bind($data, false)" class="btn-blue btn-blue--right">No</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- application confirmation -->
+    </body>
+</html>

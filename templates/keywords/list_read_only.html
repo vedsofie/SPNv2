@@ -1,0 +1,34 @@
+<script type="text/html" id="keyword-list-read-only-popup-template">
+    <span data-bind="if: showBtn">
+        <div class="control-option" data-bind="click: open, text: btnText"></div>
+    </span>
+    <span data-bind="if: showTemplate">
+        <span data-bind="template: template"></span>
+    </span>
+    <div class="l-popup-overlay" data-bind="visible: visible, style: {'z-index': zIndex}">
+        <div class="m-popup m-keyword-popup">
+            <div class="m-popup-box">
+                <div data-bind="click: close" class="m-close-button">X</div>
+                <span data-bind="if: loading">Loading...</span>
+                <span data-bind="if: !loading()">
+                    <span data-bind="if: keywords().length == 0">
+                        No Synonyms
+                    </span>
+                </span>
+                <div data-bind="foreach: {data: keywords, as: 'keyword'}">
+                    <div data-bind="html: keyword.record.DisplayFormat"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="molecule_keyword_list_read_only_open_button">
+    <div style="cursor: pointer;" data-bind="click: open">
+        <span class="info_name">
+            <span data-bind="text: keywordCount()"></span>
+            <span>Synonyms:</span>
+        </span>
+        <img class="keyword-open-icon" src="/static/img/arrow_icon.png"/>
+    </div>
+</script>

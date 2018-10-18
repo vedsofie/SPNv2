@@ -1,0 +1,80 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+    <script type="text/javascript">
+        $(function(){
+            navbar.currentlyOpenedTab("support");
+        });
+    </script>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="m-form-wrapper google-card-1" id="support-request-form">
+        <div data-bind="css: {'savingBlockUI': issueCtrl.issue().isSaving,
+                              'savingBlockHidden': !issueCtrl.issue().isSaving()}">
+            <div>Reporting...</div>
+        </div>
+        <h4>ELIXYS Support Form</h4>
+        <div>
+            <br>
+            <span class="lbl">If this is an emergency, please contact ELIXYS Support at: 1-(714)-679-2820</span><br>
+            <br>
+        </div>
+        <div data-bind="template: {name: 'issue-template', data: issueCtrl.issue}"></div>
+
+        <div class="attachment-container" data-bind="with: issueCtrl.issue()">
+            <div class="validation-error" data-bind="text: record.errors.pleaseAttach()"></div>
+            <div data-bind="if: attachments().length > 0">
+                <div data-bind="foreach: attachments">
+                    <div class="attachment-box">
+                        <span class="attachment-box__text attachment-box__text--label">Image:</span>
+                        <span class="attachment-box__text" data-bind="text: name"></span>
+                        <span class="attachment-box__text attachment-box__text--clear" data-bind="click: $parent.deleteImageAttachment.bind($data, $index())">X</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div data-bind="if: fileAttachments().length > 0">
+                <div data-bind="foreach: fileAttachments">
+                    <div class="attachment-box" >
+                        <span class="attachment-box__text attachment-box__text--label">Attachment:</span>
+                        <span class="attachment-box__text" data-bind="text: name"></span>
+                        <span class="attachment-box__text attachment-box__text--clear" data-bind="click: $parent.deleteFileAttachment.bind($data, $index())">X</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <span data-bind="with: issueCtrl.issue()">
+            <label style="margin: 10px 10px 0 0;" data-bind="attr:{'for': 'issueImage'}">
+                <span style="cursor: pointer;" class="photo_icon"></span>
+            </label>
+
+            <label style="margin-top: 10px;" data-bind="attr:{'for': 'issueAttachment'}">
+                <span style="cursor: pointer;" class="attachment_icon"></span>
+            </label>
+
+            <span style="display: none;">
+                <input id='issueImage' type="file" accept="image/*" data-bind="event: {change: attachImage.bind($data, $element.files[0])}"/>
+                <input id="issueAttachment" type="file" data-bind="event: {change: attachFile.bind($data, $element.files[0])}"/>
+            </span>
+        </span>
+
+        <div class="m-submit-buttons">
+            <a data-bind="click: issueCtrl.reportIssue" class="m-solid-button">Report</a>
+            <a href='/user/dashboard?support=true' class="m-solid-button">Cancel</a>
+            <div class="clear"></div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+    <script>
+        var issueCtrl = new ReportIssueCtrl({hideButton: true});
+
+    </script>
+{% endblock %}

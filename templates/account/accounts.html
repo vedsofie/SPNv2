@@ -1,0 +1,54 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+
+    <script type="text/javascript">
+        var accounts = ko.observableArray(initAccounts(JSON.parse({{accounts|tojson|safe}})));
+        var AccountSearch = function(params){
+            var self = this;
+            self.params = params || {};
+            self.displayItems = params.displayItems || ko.observableArray();
+            self.fullList = _.cloneDeep(self.displayItems());
+            self.text = ko.observable("");
+            self.search = function(){
+                var txt = self.text();
+                var matches = [];
+                for(var i = 0; i < self.fullList.length; i++){
+                    var act = self.fullList[i];
+                    var name = act.name;
+                    if(name){
+                        txt = txt.toUpperCase();
+                        name = name.toUpperCase();
+                        if(name.indexOf(txt) >= 0){
+                            matches.push(act);
+                        }
+                    }
+                }
+                self.displayItems(matches);
+            }
+        }
+        var accountSearch = new AccountSearch({displayItems: accounts});
+
+        $(function(){
+            navbar.currentlyOpenedTab("organizations");
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block content_body %}
+
+   <div class="l-content-wrapper">
+       <!--<div class="m-search-wrapper" data-bind="with: accountSearch">
+           <input type="text" data-bind="textInput: text, event:{keyup: search}" placeholder="Search..."/>
+           <div class="clear"></div>
+       </div>-->
+       <div class="col-sm-12" id="organization-screen">
+           <div data-bind="template: { name: 'account_template', foreach: accounts, as: 'account'}"></div>
+           <div class="clear"></div>
+       </div>
+   </div>
+
+
+{% endblock %}

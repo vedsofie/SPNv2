@@ -1,0 +1,30 @@
+<script type="text/html" id="account-detail-popup-template">
+	<span data-bind="if: showBtn">
+	    <div class="m-solid-button" data-bind="click: open, text: btnText"></div>
+	</span>
+    
+	<div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+		<div class="m-popup create-org" data-bind="visible: visible">
+		
+				<div class="m-popup-box">
+					<div data-bind="css: {'savingBlockUI': account.record.isSaving,
+										  'savingBlockHidden': !account.record.isSaving()}">
+						<div>Saving...</div>
+					</div>
+		
+					<div data-bind="click: close" class="m-close-button">X</div>
+					<span data-bind="template: {name: 'account-detail-template', data: accountDetailViewModel()}"></span>
+					
+					<div class="m-contact-form create-org">
+						<a data-bind="click: save" class="m-solid-button">Save</a>
+					</div>
+				</div>
+			
+		</div>
+	</div>
+	
+    <div data-bind="with: userCreator()">
+        <div data-bind="template:{name: 'user-detail-popup-template'}"></div>
+    </div>
+</script>
+

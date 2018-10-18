@@ -1,0 +1,77 @@
+
+<section data-bind="if: (selectedTab() != 'FieldService' && selectedTab() != 'Forums')">
+    <div class="box-wrapper" data-bind="foreach: selectedTabsFollowing">
+        <div class="box" data-bind="attr:{'id': 'following_' + record.FollowingID}">
+            <posts params="record: record,
+                           enabledMinimizing: true,
+                           ref: reference"></posts>
+            <div class="clear"></div>
+        </div>
+    </div>
+</section>
+
+<section data-bind="if: selectedTab() == 'Forums'">
+    <div class="col-sm-12 google-card-4">
+        <div class="col-sm-3 col-sm-offset-9 dash-published-date">Published on: 10/16/2018</div>
+        <div class="col-sm-12 vpadding-10">
+            <img src="https://res.cloudinary.com/sofie/image/upload/v1537998104/top_banner_tj9ilp.jpg" alt="" class="img-responsive dash-banner-img">
+            <p class="text-left voffset-10">We would like to announce another Conference Presentation Award for ISRS 2019 in Beijing, China! If you’re planning to attend, SOFIE could help! Present an ELIXYS-focused presentation (poster or oral) at ISRS 2019 for a chance to win $1,500 USD!    <br><br>
+    
+<strong>Submit your accepted abstract</strong> to <a href="mailto:eric.schopf@sofie.com">eric.schopf@sofie.com</a> by March 22, 2019 to enter the contest. <br><br>
+
+<strong>The deadline for submitting an abstract to ISRS 2019 is November 30th.</strong> Check out the conference website for more information: <a href="https://www.srsweb.org/isrs2019/" target="_blank">https://www.srsweb.org/isrs2019/</a></p>
+
+        </div>
+    </div>
+</section>
+
+<section data-bind="if: selectedTab() == 'FieldService',
+                    visible: selectedTab() == 'FieldService'"
+        style="display: none;">
+
+    <div class="box-wrapper">
+        <div class="box">
+            <div class="m-support-nav-container">
+                <ul class="support-nav">
+                    <li class="support-nav__item" data-bind="click: doOpen.bind($data, true),
+                                                    css: { 'support-nav__item--current' : showOpen()}">OPEN</li>
+                    <li class="support-nav__item" data-bind="click: doOpen.bind($data, false),
+                             css: { 'support-nav__item--current' : !showOpen()}">CLOSED</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--<input type="checkbox" data-bind="checked: showOpen"/>-->
+    <div class="box-wrapper" data-bind="foreach: showOpen() ? openIssues : closedIssues">
+        <div class="box" data-bind="attr:{'id': 'following_' + record.FollowingID}">
+                <posts params="record: record,
+                           enabledMinimizing: true,
+                           ref: reference"></posts>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <section data-bind="if: showOpen() ? openIssues().length <= 0 : closedIssues().length <= 0">
+        <div class="box-wrapper">
+            <div class="box">
+                <div class="existing-posts" >
+                    <div class="post-p">
+                        <span>There are currently no </span>
+                        <span data-bind="text: showOpen() ? 'open ' : 'closed '"></span>
+                        <span>Issues.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+
+
+<!--             <div class="col-sm-12 google-card-4">
+        <div class="col-sm-3 col-sm-offset-9 dash-published-date">Published on: 10/16/2018</div>
+        <div class="col-sm-12">
+            <img src="https://res.cloudinary.com/sofie/image/upload/v1538171031/SPN_banner_owxtog.png" alt="" class="img-responsive">
+        </div>
+    </div> -->

@@ -1,0 +1,59 @@
+/* Forms - global form components
+--------------------------------------------- */
+
+.m-form-wrapper {
+    position: relative;
+	width: 600px;
+   	margin: 0 auto;
+    padding: 0;
+    background-color: $white;
+    padding: 40px;
+}
+
+.required-field {
+	margin-right: 10px;
+}
+
+.required-field:after{
+	content: '    *';
+	color: red;
+}
+
+.validation-error{
+	color: red;
+	display: inline-block;
+}
+
+.savingBlockUI {
+	opacity: .5;
+	background-color: $river-bed;
+	z-index: 20;
+	position: absolute;
+	width:100%;
+	height:100%;
+    margin: -40px 0 0 -40px;
+    @include m(popup) {
+        margin: 0;
+    }
+}
+
+.blockUIText{
+    font-size: 24px;
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    margin-top: 20%;
+    text-align: center;
+    color: $black;
+}
+
+.savingBlockUI div {
+    color: $color-secondary;
+    width: 100%;
+	height: 100%;
+}
+
+
+.savingBlockHidden{
+    display: none;
+}

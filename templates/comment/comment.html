@@ -1,0 +1,41 @@
+<script type="text/html" id="comment_template">
+    <div class="comment-box">
+        <img class="avatar-small" style="cursor: default;" data-bind="attr: {src: '/user/' + comment.UserID + '/avatar'}"/>
+        <div data-bind="text: comment.OwnerName" class="b_n"></div>
+        
+        <div class="comment_actions">
+            <span data-bind="text: comment.displayDateTime()" class="time_stamp"></span>
+            <span data-bind="if: comment.canDelete" class="delete_icon">
+                <div data-bind="click: comment.delete_self" class="delete">X</div>
+            </span>
+            <!--<span data-bind="template: {name: 'confirm-yes-no-popup-template', data: confirmationPopup}"></span>-->
+        </div>
+        
+        <span data-bind="if: comment.RenderType() == 'text' || comment.RenderType() == null">
+            <div class="comment-message" data-bind="text: comment.Message,
+                                                style: {'border-left': '0px solid #f2f4f5'}"></div>
+        </span>
+        <span data-bind="if: comment.RenderType() == 'html'">
+            <div class="comment-message">
+                <span data-bind="html: comment.Message"></span>
+            </div>
+        </span>
+        <span data-bind="if: comment.RenderType() == 'image'">
+            <div class="comment-message" style="text-align: center;">
+                <img style="overflow: auto;max-width: 505px;max-height:200px;" data-bind="attr: {src: '/comment/' + comment.CommentID() + '/image'}"></img>
+            </div>
+        </span>
+        <span data-bind="if: comment.RenderType() == 'attachment'">
+            <div class="comment-message">
+                <a data-bind="attr: {href: comment.attachmentLink}">
+                    <span data-bind="text: comment.attachmentName"></span>
+                </a>
+            </div>
+        </span>
+        <span data-bind="if: comment.RenderType() == 'link'">
+            <div class="comment-message">
+                Not Implemented Yet
+            </div>
+        </span>
+    </div>
+</script>

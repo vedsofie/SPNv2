@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="110px" height="190px" viewBox="0 0 110 190" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.1 (47250) - http://www.bohemiancoding.com/sketch -->
+    <title>magnifying glass</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0,56.7777778 C0,60.2142162 2.6862915,63 6,63 C9.3137085,63 12,60.2142162 12,56.7777778" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="magnifying-glass">
+            <g id="Group" transform="translate(16.000000, 30.000000)">
+                <g id="Group-2" transform="translate(31.000000, 74.000000)">
+                    <polyline id="Line-2" stroke="#775252" stroke-width="3" stroke-linecap="square" points="1.125 1.16666667 1.125 31.2911523 1.125 56"></polyline>
+                    <path d="M10.875,1.16666667 L10.875,56" id="Line-2-Copy" stroke="#775252" stroke-width="3" stroke-linecap="square"></path>
+                    <g id="Oval-3-Copy">
+                        <use fill="#775252" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <path stroke="#775252" stroke-width="3" d="M1.73150652,58.2777778 C2.330388,60.1559051 4.02272549,61.5 6,61.5 C7.97727451,61.5 9.669612,60.1559051 10.2684935,58.2777778 L1.73150652,58.2777778 Z"></path>
+                    </g>
+                    <path d="M1.5,0 C3.66951904,0.103702121 5.29451904,0.155553182 6.375,0.155553182 C7.45548096,0.155553182 9.08048096,0.103702121 11.25,0 L11.25,57.3222198 L1.5,57.3222198 L1.5,0 Z" id="Rectangle" fill="#775252"></path>
+                </g>
+                <circle id="Oval" stroke="#A6BCD6" stroke-width="10" fill="#E0EEFE" cx="37.5" cy="37.5" r="37.5"></circle>
+                <circle id="Oval-5" fill="#FFFFFF" cx="51.5" cy="20.5" r="3.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

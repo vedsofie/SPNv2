@@ -1,0 +1,113 @@
+<script type="text/html" id="issue-template">
+	<div>
+		<span class="lbl">What can we help with?</span>
+		<div class="validation-error" data-bind="text: record.errors.title()"></div>
+		<span>
+            <input class="input_main" type="text" data-bind="textInput: record.title"/>
+        </span>
+	</div>
+
+	<div style="margin-bottom: 18px;">
+		<span class="lbl">Explain what happened and steps to replicate this issue:</span>
+		<div class="validation-error" data-bind="text: record.errors.message()"></div>
+		<span>
+			<textarea class="input_main" data-bind="textInput: record.message">
+			</textarea>
+        </span>
+	</div>
+
+	<div style="margin-bottom: 18px;">
+		<span class="lbl">Which ELIXYS module do you need help with?</span>
+		<div class="validation-error" data-bind="text: record.errors.supportRequest()"></div>
+		<div>
+			<select data-bind="options: ['PURE/FORM', 'FLEX/CHEM'],
+                               value: record.supportRequest,
+                               valueAllowUnset: false,
+                               optionsCaption: 'Choose Synthesis Module'"></select>
+		</div>
+	</div>
+
+	<div style="margin-bottom: 18px;">
+		<span class="lbl">Type of request</span>
+		<div class="validation-error" data-bind="text: record.errors.assistanceRequest()"></div>
+		<div>
+			<select data-bind="options: ['Chemistry/Applications', 'Instrument', 'Software'],
+                               value: record.assistanceRequest,
+                               valueAllowUnset: false,
+                               optionsCaption: 'Choose Type'"></select>
+		</div>
+	</div>
+
+	<div>
+		<span class="lbl">What is your ELIXYS software version? (on login screen)</span>
+		<div class="validation-error" data-bind="text: record.errors.elixysVersion()"></div>
+		<input class="input_main input_main--last" data-bind="value: record.elixysVersion"/>
+	</div>
+
+</script>
+
+<script type="text/html" id="report-issue-popup-template">
+		<span data-bind="if: showBtn">
+			<div class="m-solid-button" data-bind="click: open,
+												   text: btnText"></div>
+		</span>
+											   
+		<div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+			<div class="m-popup simple-contact" data-bind="visible: visible">
+					
+					<div data-bind="click: close" class="m-close-button">X</div>
+					<div class="m-login-header">Report Issue</div>
+					<div>
+						<span class="lbl">If this is an emergency, please contact ELIXYS Support at: 1-(424)-341-1928</span>
+					</div>
+					
+					<div class="m-contact-form">
+					    <div data-bind="template: {name: 'issue-template', data: issue}"></div>
+
+					<div class="attachment-container" data-bind="with: issue">
+						<div class="validation-error" data-bind="text: record.errors.pleaseAttach()"></div>
+						<div data-bind="if: attachments().length > 0">
+							<div data-bind="foreach: attachments">
+                                <div class="attachment-box" >
+									<span class="attachment-box__text attachment-box__text--label">Image:</span>
+									<span class="attachment-box__text" data-bind="text: name"></span>
+									<span class="attachment-box__text attachment-box__text--clear" data-bind="click: $parent.deleteImageAttachment.bind($data, $index())">X</span>
+                                </div>
+							</div>
+						</div>
+
+
+						<div data-bind="if: fileAttachments().length > 0">
+							<div data-bind="foreach: fileAttachments">
+                                <div class="attachment-box" >
+									<span class="attachment-box__text attachment-box__text--label">Attachment:</span>
+									<span class="attachment-box__text" data-bind="text: name"></span>
+									<span class="attachment-box__text attachment-box__text--clear" data-bind="click: $parent.deleteFileAttachment.bind($data, $index())">X</span>
+                                </div>
+							</div>
+						</div>
+					</div>
+
+                    <span data-bind="with: issue">
+						<label style="margin: 10px 10px 0 0;" data-bind="attr:{'for': 'issueImage'}">
+							<span style="cursor: pointer;" class="photo_icon"></span>
+						</label>
+
+						<label style="margin-top: 10px;" data-bind="attr:{'for': 'issueAttachment'}">
+							<span style="cursor: pointer;" class="attachment_icon"></span>
+						</label>
+
+						
+
+						<span style="display: none;">
+							<input id='issueImage' type="file" accept="image/*" data-bind="event: {change: attachImage.bind($data, $element.files[0])}"/>
+							<input id="issueAttachment" type="file" data-bind="event: {change: attachFile.bind($data, $element.files[0])}"/>
+						</span>
+					</span>
+
+					<a class="btn-blue btn-blue--right-aligned" data-bind="click: reportIssue">Report</a>
+
+					</div>
+			</div>
+		</div>
+</script>

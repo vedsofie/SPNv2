@@ -1,0 +1,22 @@
+<script type="text/html" id="moleculeSearch">
+    <input  type="text" data-bind="textInput: text,
+											  event:{keyup: search,
+													 blur: hideHints,
+													 focus: doShowHints},
+											  attr: {'placeholder': placeHolder}"
+           />
+
+	<div class="keyword-hints" data-bind="visible: showHints()" style="display:none;">
+		<h4 class="heading_main_s" data-bind="text: numMatches() + ' Results'"></h4>
+		<div data-bind="foreach: {data: keywordHints, as: 'keyword'}">
+			<div class="keyword-match">
+				<div data-bind="click: $parent.autoFillText.bind($data)">
+					<div class="heading_s" data-bind="html: keyword.formatted_master_name"></div>
+					<span data-bind="foreach: {data: keyword.keywords, as: 'key'}">
+						<div class="name_s" data-bind="html: key"></div>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>

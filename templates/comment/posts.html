@@ -1,0 +1,247 @@
+<style>
+    .post-title-bar p{
+        font-weight: inherit;
+        color: inherit;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+</style>
+
+<script type="text/html" id='standard-post-template'>
+    <div class="existing-posts">
+        <div class="post-p">
+            <div class="post-header">
+                <div style="display: inline-block;" data-bind="if: record().RedirectURL">
+                    <a data-bind="attr: {href: record().RedirectURL}">
+                        <section data-bind="if: record().Type == 'Molecules'">
+                            <h2 class="post-title-bar" data-bind="html: record().Title"></h2>
+                        </section>
+                        <section data-bind="if: record().Type != 'Molecules'">
+                            <h2 class="post-title-bar" data-bind="text: record().Title"></h2>
+                        </section>
+
+                     </a>
+                 </div>
+                 <span data-bind="if: !record().RedirectURL">
+                     <h2 class="post-title-bar" data-bind="text: record().Title"></h2>
+                 </span>
+
+                 <div class="action-control--150" style="float:right;">
+                     <a class="action-control__arrow action-control__arrow--posts" data-bind="event: {click: toggleContextMenu, blur: hideContextMenu}" href="#" tabindex="0"></a>
+
+                      <div class="m-toggle-menu-wrapper">
+                          <span data-bind="visible: showContext" style="display: none;" class="toggle-menu toggle-menu--posts">
+                              <span class="toggle-menu__control-option toggle-menu__control-option--posts"
+                                    data-bind="visible: record().RedirectURL,
+                                               click: unfollow">Unfollow</span>
+                              <span class="toggle-menu__control-option toggle-menu__control-option--posts"
+                                    data-bind="click: unsubscribe,
+                                               visible: canUnsubscribe,
+                                               text: record().EmailSubscribed() ? 'Unsubscribe' : 'Subscribe'">Unsubscribe</span>
+                              <span data-bind="if: canClose">
+                                  <span class="toggle-menu__control-option toggle-menu__control-option--posts toggle-menu__control-option--last" data-bind="click: close">Close</span>
+                              </span>
+                          </span>
+                      </div>
+
+                      <span class="post_type" data-bind="event: {click: toggleContextMenu,
+                                                                 blur: hideContextMenu}" href="#" tabindex="0">
+                          <span data-bind="if: postIcon">
+                              <img data-bind="attr: {src: postIcon},
+                                              css: 'post-' + postType() + '-img'"/>
+                          </span>
+                          <span data-bind="text: postType,
+                                           css: 'post-' + postType() + '-txt'"></span>
+                      </span>
+                  </div>
+              </div>
+
+                <span data-bind="if: record().ImageURL,css: postType">
+                    <img class="thumb_nail" data-bind="attr: {'src': record().ImageURL},
+                                                       css: postType"/>
+                </span>
+
+                <div class="elipse-overflow post-description-container">
+                    <p class="post_description" data-bind="text: record().SubTitle"></p>
+                </div>
+
+
+                <div class="clear"></div>
+
+            <div class="company">
+              <span data-bind="if: record().OwnerName">
+                  <img class="avatar-small" data-bind="attr:{ src: record().OwnerAvatarURL}"/>
+                  <p class="b_n" data-bind="text: record().OwnerName"></p>
+              </span>
+              <div class="comment_icon_wrap">
+                <span data-bind="if: hasNotifications" class="notification">*</span>
+                <p class="comment_link" data-bind="click: toggleExpanded, text: calculatedCommentCount() + ' Comments'"></p>
+                <img src="/static/img/comment_icon.png" class="comment-icon" alt="" height="" width="" data-bind="click: toggleExpanded" style="cursor: pointer;"/>
+              </div>
+
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id='issue-post-template'>
+    <div class="existing-posts" >
+        <div class="post-p">
+            <div class="post-header">
+
+                <span>Submitted Date:
+                    <span data-bind="text: record().CreatedDate"></span>
+                </span>
+                <br>
+                <span>Closed Date:
+                    <span data-bind="text: record().ClosedDate"></span>
+                </span>
+
+                 <div class="action-control--150" style="float:right;">
+                     <a class="action-control__arrow action-control__arrow--posts" data-bind="event: {click: toggleContextMenu, blur: hideContextMenu}" href="#" tabindex="0"></a>
+
+                      <div class="m-toggle-menu-wrapper">
+                          <span data-bind="visible: showContext" style="display: none;" class="toggle-menu toggle-menu--posts">
+                              <span class="toggle-menu__control-option toggle-menu__control-option--posts"
+                                    data-bind="visible: record().RedirectURL,
+                                               click: unfollow">Unfollow</span>
+                              <span class="toggle-menu__control-option toggle-menu__control-option--posts"
+                                    data-bind="click: unsubscribe,
+                                               visible: canUnsubscribe,
+                                               text: record().EmailSubscribed() ? 'Unsubscribe' : 'Subscribe'">Unsubscribe</span>
+                              <span data-bind="if: canClose">
+                                  <span class="toggle-menu__control-option toggle-menu__control-option--posts toggle-menu__control-option--last" data-bind="click: close">Close</span>
+                              </span>
+                          </span>
+                      </div>
+
+                      <span class="post_type" data-bind="event: {click: toggleContextMenu,
+                                                                 blur: hideContextMenu}" href="#" tabindex="0">
+                          <span data-bind="if: postIcon">
+                              <img data-bind="attr: {src: postIcon},
+                                              css: 'post-' + postType() + '-img'"/>
+                          </span>
+                          <span data-bind="text: postType,
+                                           css: 'post-' + postType() + '-txt'"></span>
+                      </span>
+                </div>
+            </div>
+
+            <div class="support-card-content">
+                <div>
+                    
+                        <span class="support-bold-text">Case #</span>
+                        <span class="support-bold-text" data-bind="text: record().CaseNumber"></span><br>
+                   
+
+                    <br>
+                    <span class="post_description support-bold-text" data-bind="text: record().Title"></span><br>
+                    <br>
+
+                    <span>Steps to Replicate:<br>
+                        <span class="post_description" data-bind="text: record().SubTitle"></span>
+                    </span>
+                </div>
+
+
+                <div class="clear"></div>
+            </div>
+
+
+            <div class="company">
+              <span data-bind="if: record().OwnerName">
+                  <img class="avatar-small" data-bind="attr:{ src: record().OwnerAvatarURL}"/>
+                  <p class="b_n" data-bind="text: record().OwnerName"></p>
+              </span>
+              <div class="comment_icon_wrap">
+                <span data-bind="if: hasNotifications" class="notification">*</span>
+                <p class="comment_link" data-bind="click: toggleExpanded, text: calculatedCommentCount() + ' Comments'"></p>
+                <img src="/static/img/comment_icon.png" class="comment-icon" alt="" height="" width="" data-bind="click: toggleExpanded" style="cursor: pointer;"/>
+              </div>
+
+            </div>
+
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id='post-template'>
+    <div style="position: relative;" class="post-container">
+
+        <div data-bind="css: {'savingBlockUI': isSaving,
+                          'savingBlockHidden': !isSaving()}">
+            <div class="blockUIText">Saving...</div>
+        </div>
+
+        <section data-bind="if: record().SubType != 'FieldService'">
+            <span data-bind="template: 'standard-post-template'"></span>
+        </section>
+        <section data-bind="if: record().SubType == 'FieldService'">
+            <span data-bind="template: 'issue-post-template'"></span>
+        </section>
+
+
+        <span data-bind="if: isExpanded()">
+        <div class="expanded_comments">
+            <div>
+              <span data-bind="if: loading">Loading...</span>
+              <span data-bind="template: {name: 'comment_template', foreach: comments, as: 'comment'}"></span>
+              <!--<span data-bind="if: hasMore,
+                  click: findComments"
+                  style="cursor: pointer;">See More</span>-->
+            </div>
+            
+            <div style="z-index: 6;" class="form_wrap" data-bind="with: new_comment">
+                <span data-bind="visible: !$parent.ReadOnly">
+                    <textarea data-bind="value: Message,
+                                         valueUpdate: 'keypress',
+                                         event: { keydown: checkForSave.bind($data) }"
+                              type="text" class="main_form"
+                              placeholder="Leave a comment"
+                              aria-describedby="sizing-addon2"></textarea>
+                    <label style="margin-right: 10px;" data-bind="attr:{'for': 'avatar_comment-image-' + $parent.record().FollowingID}">
+                        <span style="cursor: pointer;" class="photo_icon"></span>
+                    </label>
+                    <label data-bind="attr:{'for': 'comment-attachment-' + $parent.record().FollowingID}">
+                        <span style="cursor: pointer;" class="attachment_icon"></span>
+                    </label>
+                    <input type="file" style="display: none;" data-bind="event: {change: $data.attachFile.bind($data, $element.files[0])},
+                                                                         attr:{'id': 'comment-attachment-' + $parent.record().FollowingID}"/>
+
+                    <span class="validation-error" data-bind="text: savingErrors"></span>
+                    <span class="image_upload_file">
+                        <binary-field params="record: $data,
+                                              column: 'Image',
+                                              id: $parent.uniqueImageUploadId,
+                                              edit: true,
+                                              showImage: false,
+                                              cropperApplyText: 'Post',
+                                              showClose: true,
+                                              showCropButton: false,
+                                              maxCropWidth: 540,
+                                              maxCropHeight: 200,
+                                              aspectRatio: false,
+                                              cropperApplyResponse: $parent.postImageComment,
+                                              doCrop: true"></binary-field>
+                    </span>
+
+                </span>
+            </div>
+          </div>
+        </span>
+    </div>
+
+</script>
+
+<script type="text/html" id="posts-detail-popup-template">
+    <a class="control-option" data-bind="click: open, text: btnText"></a>
+    <div class="popup" data-bind="visible: visible">
+        <div style="width: 700px;" class="popup-box" data-bind="if: visible">
+            <div data-bind="click: close" class="popup-box-close-button">X</div>
+            <div class="posts-container">
+                <posts params="parent_id: parent_id, type: type"></posts>
+            </div>
+        </div>
+    </div>
+</script>

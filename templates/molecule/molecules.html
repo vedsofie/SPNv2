@@ -1,0 +1,41 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+    <script type="text/javascript">
+        var molecules = ko.observableArray();
+        var moleSearch = new MoleculeSearch({searchType: 'local', displayResults: molecules, placeHolder: 'Search for a Probe'});
+        var moles = JSON.parse({{molecules|tojson|safe}});
+        for(var i = 0; i < moles.length; i++){
+            molecules().push(new Molecule(moles[i]));
+        }
+        var paginationSize = 12;
+        var currentPage = ko.observable(1);
+
+        $(function(){
+            navbar.currentlyOpenedTab("tracers");
+        });
+
+    </script>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="col-sm-12" id="probes-page">
+
+        <div class="">
+            <span data-bind="foreach: {data: molecules, as: 'molecule'}">
+                <!--<span data-bind="if: (parseInt($index()/paginationSize) + 1) == currentPage()">-->
+                <span>
+                    <div data-bind="template: { name: 'molecule_template', data: molecule}"></div>
+                </span>
+            </span>
+            <div class="clear"></div>
+        </div>
+
+        <div data-bind="pagination:{'itemsOnPage': paginationSize,
+                                    'currentPage': currentPage,
+                                    'items': molecules().length}"></div>
+
+    </div>
+   
+{% endblock %}

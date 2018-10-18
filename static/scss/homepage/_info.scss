@@ -1,0 +1,69 @@
+//------------------------------------
+//    #Homepage info
+//------------------------------------
+
+
+/* Info Section
+--------------------------------------------- */
+
+.m-home-info-wrapper {
+	width: 100%;
+	/*height: 1000px;*/	
+	padding: 120px 0 120px 0;
+	@extend %home-background-gradient;
+    /*background-color: $black;*/
+    @include media('<=desktop'){
+		padding: 120px 0 120px 0;
+	}
+    @include media('<=400px'){
+		padding: 20px 0 120px 0;
+	}
+}
+
+.home-info {
+    width: 960px;
+	margin: 0 auto;	
+    @include media('<=desktop'){
+        width: 80%;
+    }
+    @include m(mobile) {
+		@include media('<=desktop'){
+			width: 380px;
+		}
+		@include media('<=tablet'){
+			width: auto;
+		}
+    }
+    hr {
+		border: none;
+		height: 1px;
+        margin: 20px 0 60px 0;
+		background-color: rgba(238, 238, 238, 0.2);	
+	}
+    @include e(text) {
+		width: 510px;
+		float: left;	
+		padding-right: 40px;
+		@include media('<=desktop'){
+			width: 100%;
+		}
+	}
+    @include e(img) {
+        width: 445px;
+        height: auto;
+        margin-top: 45px;
+        @include media('<=desktop'){
+            float: right;
+			width: 250px;
+			height: 223px;
+			margin-top: -260px;
+        }
+        @include media('<=tablet'){
+			width: 250px;
+			height: 223px;
+			float: left;
+			margin-top: 30px;
+        }
+    }
+}
+

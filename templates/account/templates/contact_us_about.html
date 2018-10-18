@@ -1,0 +1,15 @@
+<script type="text/html" id="account_contact_us_about_template">
+    <div class="m-card-container">
+		<div class="card" data-bind="attr: { id: 'account_' + account.id}">
+			<a data-bind="attr: {href: account.details_url()}">
+				<img class="m-account-avatar" data-bind="attr: {src: '/account/' + account.id + '/logo'}" width="210" height="210"/>
+			</a>
+			<div class="card-description">
+				<span class="card-title" data-bind="text: account.name"></span>
+			</div>
+			<div class="btn-card">
+				<contact-us-popup params="contact: account.name, contact_url: '/account/' + account.id + '/contact', Message: defaultMessage"></contact-us-popup>
+			</div>
+		</div>
+	</div>
+</script>

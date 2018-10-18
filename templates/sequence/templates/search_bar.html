@@ -1,0 +1,21 @@
+<style>
+    .selected-filter{
+        background-color: red !important;
+    }
+</style>
+<script type="text/html" id="sequence-search-bar-template">
+    <div class="m-search-wrapper">
+        <div class="m-molecule-buttons" style="width: 80%;">
+            <a class="m-solid-button" style="float: left;cursor:pointer;" data-bind="click: showSequencesDownloadable,
+                                                                               css: {'selected-filter': filteredBy() == 'downloadable'}">Downloadable</a>
+            <a class="m-solid-button" style="float: left;cursor:pointer;" data-bind="click: showSequencesMadeOnElixys,
+                                                                               css: {'selected-filter': filteredBy() == 'madeOnElixys'}">Made On Elixys</a>
+            <a class="m-solid-button" style="float: left;cursor:pointer;" data-bind="click: showSequencesNotMadeOnElixys,
+                                                                               css: {'selected-filter': filteredBy() == 'notMadeOnElixys'}">Not made on Elixys</a>
+            <a class="m-solid-button" style="float: left;cursor:pointer;" data-bind="click: showAllSequences,
+                                                                               css: {'selected-filter': filteredBy() == 'all'}">All</a>
+        </div>
+        <input type="text" placeholder="Search..." data-bind="visible: !hideTextSearch"/>
+        <div class="clear"></div>
+    </div>
+</script>

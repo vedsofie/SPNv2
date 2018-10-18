@@ -1,0 +1,59 @@
+<script type="text/html" id="lookup-template">
+    <div class="m-lookup">
+        <div data-bind="if: !showHints">
+            <span data-bind="click: toggleShowSearch,
+                             text: 'Edit'"></span>
+            <div class="l-popup-overlay" data-bind="visible: searchModalVisible">
+                <div class="m-popup simple-contact">
+                    <div data-bind="click: toggleShowSearch" class="m-close-button">X</div>
+                    <div class="m-login-header" data-bind="text: 'Search ' + objectType()"></div>
+
+                    <div>
+                        <div class="m-search-wrapper">
+                            <input type="text" data-bind="textInput: searchTxt"/>
+                        </div>
+                        <div class="btn-blue" style="display: inline-block;" data-bind="click: doSearch">Search</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div style="height: 300px;overflow: auto;" data-bind="foreach: {data: searchResults, as: 'res'}">
+                        <div>
+                            <div class="btn-gray" style="display:inline-block;" data-bind="click: $parent.selectLookup.bind($data)">Select</div>
+                            <span data-bind="text: res.name"></span>
+                            <span data-bind="text: res.link"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-bind="if: showHints">
+            <input type="text/html" data-bind="textInput: calculatedName(),
+                                               event: {keyup: doHints.bind($data, $element, name),
+                                                       blur: hideHints,
+                                                       focus: doShowHints}"
+                    class="input_main"/>
+            <span data-bind="visible: displayHints()" style="display:none;">
+                <div class="keyword-hints">
+                    <h4 class="heading_main_s" data-bind="text: numMatches() + ' Results'"></h4>
+                    <div data-bind="foreach: {data: hints, as: 'keyword'}">
+                        <div class="keyword-match">
+                            <div data-bind="click: $parent.selectHint.bind($data)">
+                                <div class="heading_s" data-bind="text: keyword.master_name"></div>
+                                <span data-bind="foreach: {data: keyword.keywords, as: 'key'}">
+                                    <div class="name_s" data-bind="html: key"></div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div data-bind="if: showLookup() && displayLink">
+            <a data-bind="attr:{href: lookup_url()}">
+                <span data-bind="text: calculatedName()"></span>
+            </a>
+        </div>
+    </div>
+
+</script>

@@ -1,0 +1,145 @@
+//------------------------------------
+//    #Products 
+//------------------------------------
+
+.m-product-pane {
+    width: 100%;
+    border-radius: $br--default;
+    background-color: $white;
+    padding: 20px;
+    margin-bottom: 50px;
+    color: $color-primary;
+    @extend %clearfix;
+        @include m(cart) {
+            padding: 20px 200px;
+        }
+        p {
+            color: $color-primary;
+        }
+}
+
+
+
+.product-header {
+    width: 100%;
+    height: 100px;
+    padding: 20px 0 0 0;
+		@include e(h2) {
+            display: inline;
+			font-size: 28px;
+			line-height: 28px;
+			font-weight: $font-weight--xlight;
+			padding: 0;
+			margin: 0;
+                @include m(span) { 
+                    color: $color-primary;
+                    font-weight: $font-weight--xlight;
+                }   
+                @include m(bold) {
+                   color: $color-primary;
+                   font-weight: $font-weight--bold;
+                }
+		}
+}
+
+.product-image {
+    width: 460px;
+    border-radius: $br--default;
+    overflow: hidden;
+    float: left;
+    @include e(hero) {
+        width: 460px;
+    }
+}
+
+.product-details {
+    width: 400px;
+    margin-left: 40px;
+    float: left;
+    @include e(section) {
+        border-top: 1px solid $color-secondary;
+        margin-bottom: 36px;
+        @include m(last) {
+            margin-top: 80px;
+        }
+    }
+    @include e(title) {
+        display: block;
+        width: 160px;
+        text-align: center;
+        padding: 2px 0;
+        color: $color-secondary;
+        font-size: 16px;
+        line-height: 16px;
+        margin: -10px auto 14px auto;
+        background-color: $white;
+    }
+    @include e(total) {
+        display: inline-block;
+        color: $color-primary;
+        font-size: 36px;
+        line-height: 36px;
+        padding: 0 24px;
+        margin-top: -18px;
+        background-color: $white;
+        float: right;
+    }   
+}
+
+.product-list li {
+    list-style-type: none;
+    color: $color-primary;
+        .add-on {
+            display: inline-block;
+            margin: 0 15px 15px 0;
+        }
+}
+
+.breakdown {
+    margin-bottom: 4px;
+    @include e(letter) {
+		width: 24px;
+		height: 24px;
+		display: inline-block;
+		color: $white;
+		border-radius: $br--round;
+		background-color: $color-secondary;
+		font-size: 16px;
+		line-height: 24px;
+		vertical-align: middle;
+		text-align: center; 
+        @include m(thumb) {
+            display: block;
+            position: absolute;
+            top: 6px;
+            left: 6px;
+        }
+    }
+	@include e(quant) {
+		display: inline-block;
+		width: 74px;
+		font-weight: $font-weight--bold; 
+		text-align: center;
+		&::before {
+			content: "-";
+			padding-right: 14px;
+            color: $color-main-background;
+		}
+		&::after {
+			content: "-";
+			padding-left: 14px;
+            color: $color-main-background;
+		}
+	}
+}
+
+.product-thumb {
+    position: relative;
+    float: left;
+    width: 115px;
+    height: 115px;
+    @include m(wide) {
+        width: 230px;
+    }
+}
+

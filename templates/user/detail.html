@@ -1,0 +1,33 @@
+{% if user is defined %}
+    {% include 'dependencies.html' %}
+    <script type="text/javascript">
+        var usr = JSON.parse({{user|tojson|safe}})
+        var user = new User(usr);
+        var canToggle = ko.observable(true);
+
+        var edit = ko.observable(false);
+        toggleEditMode = function(){
+            edit(!edit());
+        }
+
+        $(function(){
+            var url = location.search;
+
+            if(url){
+                var captured = /edit=([^&]+)/.exec(url);
+                if(captured && captured.length > 1){
+                    var captured = (captured[1] === 'true');
+                    canToggle(false);
+                    edit(captured);
+                }
+            }
+            else{
+                canToggle(false);
+                edit(false);
+            }
+            ko.applyBindings();
+        });
+
+    </script>
+    <span data-bind="template: {name: 'user-detail-template'}"></span>
+{%endif%}

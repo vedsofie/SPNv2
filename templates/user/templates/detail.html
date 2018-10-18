@@ -1,0 +1,94 @@
+<script type="text/html" id="user-detail-template">
+
+    <div data-bind="css: {'savingBlockUI': user.record.isSaving,
+                      'savingBlockHidden': !user.record.isSaving()}">
+        <div class="blockUIText">Saving...</div>
+    </div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('username') && user.record.canEdit('username')}">Username</span>
+		<span data-bind="if: !user.record.canEdit('username')">
+			<span data-bind="text: user.username"></span>
+		</span>
+		<div class="validation-error" data-bind="text: user.record.errors.username()"></div>
+		<span data-bind="if: user.record.canEdit('username')">
+			<input class="input_main" data-bind="textInput: user.record.username"/>
+		</span>
+	</div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('FirstName')}">First Name</span>
+		<div class="validation-error" data-bind="text: user.record.errors.FirstName()"></div>
+		<input class="input_main" data-bind="textInput: user.record.FirstName"/>
+	</div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('LastName')}">Last Name</span>
+		<div class="validation-error" data-bind="text: user.record.errors.LastName()"></div>
+		<input class="input_main" data-bind="textInput: user.record.LastName"/>
+	</div>
+
+	<div style="margin-bottom: 18px;">
+		<span class="lbl">Company:</span>
+		<span data-bind="text: user.calculated_account()().name"></span>
+	</div>
+
+	<div style="margin-bottom: 18px;">
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('RoleID') && user.record.canEdit('RoleID')}">Role</span>
+		<span>
+			<span data-bind="if: user.record.canEdit('RoleID')">
+				<div class="validation-error" data-bind="text: user.record.errors.RoleID()"></div>
+				<select data-bind="options: user.computedRoles(),
+								   optionsText: 'Type',
+								   optionsValue: 'RoleID',
+								   value: user.record.RoleID,
+								   valueAllowUnset: true,
+								   optionsCaption: 'Choose Role'"></select>
+			</span>
+			<span data-bind="if: !user.record.canEdit('RoleID')">
+				<span data-bind="text: user.RoleType"></span>
+			</span>
+		</span>
+	</div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('avatar')}">Avatar</span>
+		<div class="validation-error" data-bind="text: user.record.errors.avatar()"></div>
+		<div class="m-imageUpload-row">
+			<binary-field params="record: user.record,
+								  column: 'avatar',
+								  url: '/user/' + user.UserID + '/avatar',
+								  edit: edit,
+								  showImage: true,
+								  showClose: true,
+								  doCrop: true"></binary-field>
+		</div>
+	</div>
+	
+	<div data-bind="css: {'required-field': user.record.columnRequired('Phone')}">
+		<span class="lbl">Phone</span>
+		<span>
+			<input class="input_main" data-bind="textInput: user.record.Phone"/>
+		</span>
+		<div class="validation-error" data-bind="text: user.record.errors.Phone()"></div>
+	</div>
+	
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': user.record.columnRequired('Email')}">Email</span>
+		<div class="validation-error" data-bind="text: user.record.errors.Email()"></div>
+		<input class="input_main" data-bind="textInput: user.record.Email"/>
+	</div>
+	
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': user.record.columnRequired('title')}">Title</span>
+		<input class="input_main" data-bind="textInput: user.record.title"/>
+		<div class="validation-error" data-bind="text: user.record.errors.title()"></div>
+	</div>
+	
+	<div data-bind="if: user.record.canEdit('password'),
+					css: {'required-field': user.record.columnRequired('password')}">
+		<span class="lbl">Password</span>
+		<input class="input_main" type="password" data-bind="textInput: user.record.password"/>
+		<div class="validation-error" data-bind="text: user.record.errors.password()"></div>
+	</div>
+</script>

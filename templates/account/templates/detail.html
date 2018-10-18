@@ -1,0 +1,107 @@
+<script type="text/html" id="account-detail-template">
+    <div data-bind="css: {'savingBlockUI': account.record.isSaving,
+                      'savingBlockHidden': !account.record.isSaving()}">
+        <div class="blockUIText">Saving...</div>
+    </div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': account.record.columnRequired('name')}">Organization Name</span>
+		<div class="validation-error" data-bind="text: account.record.errors.name()"></div>
+		<div data-bind="if: account.record.canEdit('name')">
+			<input class="input_main" data-bind="textInput: account.record.name"/>
+		</div>
+
+		<div data-bind="if: !account.record.canEdit('name')">
+			<span data-bind="text: account.record.name"></span>
+		</div>
+	</div>
+
+    <span class="lbl">Profile Picture</span>
+	<div class="validation-error" data-bind="text: account.record.errors.image()"></div>
+	<div class="m-imageUpload-row" data-bind="css: {'required-field': account.record.columnRequired('image')}">
+		<binary-field params="record: account.record,
+							  column: 'image',
+							  url: '/account/' + account.id + '/logo/',
+							  edit: edit,
+							  showImage: true,
+							  showClose: true,
+							  doCrop: true"></binary-field>
+	</div>
+
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': account.record.columnRequired('LabName')}">Department Name</span>
+		<div class="validation-error" data-bind="text: account.record.errors.LabName()"></div>
+		<input class="input_main" type="text" data-bind="textInput: account.record.LabName"/>
+	</div>
+
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': account.record.columnRequired('description')}">Description</span>
+		<div class="validation-error" data-bind="text: account.record.errors.description()"></div>
+		<textarea class="input_main" type="text" style="height: 160px;" data-bind="textInput: account.record.description"></textarea>
+	</div>
+
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': account.record.columnRequired('City')}">City</span>
+		<div class="validation-error" data-bind="text: account.record.errors.City()"></div>
+		<input class="input_main" type="text" data-bind="textInput: account.record.City"/>
+	</div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': account.record.columnRequired('State')}">State</span>
+		<div class="validation-error" data-bind="text: account.record.errors.State()"></div>
+		<input class="input_main" type="text" data-bind="textInput: account.record.State"/>
+	</div>
+
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': account.record.columnRequired('ZipCode')}">Zip Code</span>
+		<div class="validation-error" data-bind="text: account.record.errors.ZipCode()"></div>
+		<input class="input_main" type="text" data-bind="textInput: account.record.ZipCode"/>
+	</div>
+
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': account.record.columnRequired('Address')}">Address</span>
+		<div class="validation-error" data-bind="text: account.record.errors.Address()"></div>
+		<textarea class="input_main" style="vertical-align: inherit;" type="text" data-bind="textInput: account.record.Address"></textarea>
+	</div>
+
+	<span data-bind="visible: account.record.canEdit('Latitude')">
+		<div>
+			<span class="lbl" data-bind="css: {'required-field': account.record.columnRequired('Latitude')}">Latitude</span>
+			<div class="validation-error" data-bind="text: account.record.errors.Latitude()"></div>
+			<input class="input_main" style="vertical-align: inherit;" type="text" data-bind="textInput: account.record.Latitude"/>
+		</div>
+
+		<div>
+			<span class="lbl"  data-bind="css: {'required-field': account.record.columnRequired('Longitude')}">Longitude</span>
+			<div class="validation-error" data-bind="text: account.record.errors.Longitude()"></div>
+			<input class="input_main" style="vertical-align: inherit;" type="text" data-bind="textInput: account.record.Longitude"/>
+		</div>
+	</span>
+	<!--
+	<div data-bind="if: account.hasUsers">
+		<div data-bind="css: {'required-field': account.record.columnRequired('primary_contact_id')}">
+			<span class="lbl" style="vertical-align:top;">Primary Contact</span>
+			<select data-bind="options: account.users(),
+							   optionsText: 'name',
+							   optionsValue: 'UserID',
+							   value: account.record.primary_contact_id,
+							   valueAllowUnset: true,
+							   optionsCaption: 'Choose Primary Contact'"></select>
+			<div class="validation-error" data-bind="text: account.record.errors.primary_contact_id()"></div>
+		</div>
+		<div data-bind="css: {'required-field': account.record.columnRequired('PrincipalInvestigatorID')}">
+			<span class="lbl" style="vertical-align:top;">PI</span>
+			<select data-bind="options: account.users(),
+							   optionsText: 'name',
+							   optionsValue: 'UserID',
+							   value: account.record.PrincipalInvestigatorID,
+							   valueAllowUnset: true,
+							   optionsCaption: 'Choose PI'"></select>
+			<div class="validation-error" data-bind="text: account.record.errors.PrincipalInvestigatorID()"></div>
+		</div>
+	</div>
+	-->
+</script>
+
+
+

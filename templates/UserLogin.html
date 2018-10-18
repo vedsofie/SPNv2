@@ -1,0 +1,485 @@
+{% extends "application.html" %}
+{% block head %}
+    {{ super() }}
+    <script src="/static/js/maps/map.js"></script>
+    <script src="/static/js/user_login_model.js"></script>
+    {% include 'contact_us.html' %}
+    {% include 'molecule/templates/featured_molecule.html' %}
+    {% include 'molecule/templates/search.html' %}
+    {% include 'visual_components/confirm_yes_no.html' %}
+    <script>
+        var accountLocations = JSON.parse({{sequence_data|tojson|safe}})
+        var loginModel = new UserLoginModel(accountLocations);
+        var redirectUrl = "{{redirect_url}}";
+
+        var contactUsPopup = new ContactUsPopupCtrl({
+                                                        contact: ko.observable(""),
+                                                        to_contact_url: '',
+                                                        hideOpenButton: true
+                             });
+        var paginationSize = ko.observable(3);
+        var currentPage = ko.observable(1);
+        var moleculeCount = ko.pureComputed(function(){
+            return loginModel.featuredOrganization().probes().length;
+        });
+
+        hasNext = function(){
+            return currentPage() < moleculeCount()/paginationSize();
+        }
+
+        goNext = function(){
+            if(hasNext()){
+                currentPage(currentPage()+1);
+            }
+        }
+
+        goPrevious = function(){
+            if(hasPrevious()){
+                currentPage(currentPage()-1);
+            }
+        }
+
+        hasPrevious = function(){
+            return currentPage() > 1;
+        }
+
+        visitSection = function(section){
+            //$("[name='" + section + "']").eq(0).goTo()
+            var name = '.' + section
+            $('html,body').animate({scrollTop: $(name).offset().top},'slow');
+        }
+        goToContact = function() {
+            navbar.mapTurnOff()
+            var name = '.' + "contact"
+            $('html,body').animate({scrollTop: $(name).offset().top},'slow');
+
+        }
+        unSelectSite = function() {
+            loginModel.locationSelected(null)
+        }
+        $(function(){
+            resizePagination($(window).width());
+            var passwordResetMessage = JSON.parse({{password_reset|tojson|safe}});
+            if(passwordResetMessage){
+                $.notify(passwordResetMessage, "info");
+            }
+            window.onresize = function(){
+                resizePagination($(window).width());
+            }
+        });
+
+        resizePagination = function(width){
+            if(width > 1024){
+                paginationSize(3);
+            }
+            else if(width <= 1024 && width > 768){
+                paginationSize(2);
+            }
+            else{
+                paginationSize(1);
+            }
+            currentPage(1);
+        }
+    </script>
+
+    <!-- map and search script -->
+    <script>
+        loginModel.set_probe_list();
+        var tapinfo = ko.observable(false)
+        var resultinfo = ko.observable(false)
+        var searching = ko.observable(false)
+        var probeInfo = ko.observable(false)
+        var wholeList = ko.observable(true)
+        var keyword = ko.observable("")
+        var probes = ko.observableArray();
+        var siteInformation = ko.observableArray()
+        var probe_master_name = ko.observable()
+        var probe_master_url = ko.observable()
+        var siteWith = ko.observable()
+
+        function find_probe() {
+            loginModel.locationSelected(null)
+            searching(true)
+            tapinfo(false)
+            resultinfo(false)
+            probeInfo(false)
+            wholeList(false)
+            var path = "/probe/hint/" + keyword()
+            $.ajax({
+                type: "GET",
+                url: path,
+                success: function(res){
+                            loginModel.set_probe_number(res)
+                            var result = []
+                            for(var i = 0; i < res.length; i++) {
+                                var number = loginModel.get_probe_number(res[i].searchName)
+                                if(number != undefined) {
+                                    res[i].number = number
+                                    result.push(res[i])
+                                }
+                            }
+                            probes(result)
+                            
+                            if(probes().length == 0) {
+                                searching(false)
+                                tapinfo(false)
+                                resultinfo(true)
+                                wholeList(false)
+                            }else{
+                                searching(false)
+                                tapinfo(true)
+                                resultinfo(false)
+                                wholeList(false)
+                            }
+                        },
+                  error: function(err){
+                            console.log(err);
+                            searching(false)
+                            tapinfo(false)
+                            resultinfo(true)
+                            wholeList(false)
+                        },                
+            });
+        }
+
+        var image = ko.observable("")
+        var probeName = ko.observable("")
+
+        function getPureInfo(info) {
+            console.log("asd")
+            console.log(loginModel.pure_probe_list().length)
+           for(var i = 0; i < loginModel.pure_probe_list().length; i++) {
+                if(info.Name == loginModel.pure_probe_list()[i].searchName) {
+                    return {master_name: loginModel.pure_probe_list()[i].name, url: loginModel.pure_probe_list()[i].url, searchName: loginModel.pure_probe_list()[i].searchName }
+                }
+           } 
+        }
+
+        function siteWithProbe(information) {
+            console.log("sitwwithprobe")
+            probes(null)
+            probeInfo(true)
+            tapinfo(false)
+            resultinfo(false)
+            searching(false)
+            wholeList(false)
+            loginModel.setFeaturedOrganization()
+            probe_master_name(information['master_name'])
+            if(probe_master_name() == undefined) {
+                probe_master_name(information['name'])
+            }
+            probe_master_url(information['url'])
+            siteWith("Sites With " + probe_master_name())
+            var listOfSite = []
+            for(var i = 0; i < loginModel.probe_list.length; i++) {
+                if(loginModel.probe_list[i].searchName == information['searchName']) {
+                    listOfSite.push({Name: loginModel.probe_list[i].AccountName})
+                }
+            }
+            siteInformation(listOfSite)
+            loginModel.selectLocationByProbe(information['searchName']);
+            
+        }
+
+        function goToMap() {
+            searching(false)
+            tapinfo(false)
+            resultinfo(false)
+            probeInfo(false)
+            wholeList(true)
+            probes(null)
+            navbar.mapTurnOn()
+            loginModel.locationSelected(null)
+            loginModel.resetMap()
+            clearFields()
+        }
+
+        function siteWithProbeWithList(info) {
+            list = getPureInfo(info)
+            siteWithProbe(list)
+        }
+
+        function locationSelectedFromResult(name) {
+            loginModel.locationSelectedFromResult(name.Name)
+            //update the map as well
+        }
+
+
+    </script>
+    <!-- map and search script end {
+    
+    } -->
+
+{% endblock %}
+
+{% block login_content_body %}
+    <!-- Hero banner -->
+    <div class="container-fluid" id="hero-banner" data-bind="visible: !mapOn()">
+        <div class="col-xs-12 col-sm-6 col-sm-offset-6 col-lg-4 col-lg-offset-4 text-center">
+            <img src="http://res.cloudinary.com/sofie/image/upload/v1517436571/7B3928ED-F550-4C5D-A6C4-2DE59C048360_2x_sovvin.png" alt="" id="hero-sofie-logo">
+            <h1 class="hero-banner">SOFIE Probe Network (SPN) is a tool to find PET probes and share knowledge with organizations</h1>
+            <a href="" class="btn btn-primary btn-lg" data-bind="click: goToMap">SEARCH PROBES</a>
+        </div>
+    </div>
+    <!-- Hero banner end -->
+    <!-- Section 2 - icons -->
+    <div class ="featured"></div>
+    <div class="container-fluid" id="description-container" data-bind="visible: !mapOn()">
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">Features</h2>
+        </div>
+        <div class="text-center about-spn-content">
+            <div class="col-md-4 col-xs-12">
+                <img src="/static/img/testtube.svg" alt="">
+                <h6 class="about-spn-text">Share PET probe synthesis, purification, formulation, and quality control protocols between radiochemists</h6>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <img src="/static/img/magnifying glass1.svg" alt="">
+                <h6 class="about-spn-text">Discover new probes from other organizations around the world</h6>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <img src="/static/img/feedback.svg" alt="">
+                <h6 class="about-spn-text">Give and receive feedback about probe protocols on the network and get real-time support for your ELIXYS system</h6>
+            </div>
+        </div>
+    </div>
+    <!-- Section 2 - icons end-->
+    <!-- Section 3 - featured items / banners -->
+  <!--   <div class ="container-fluid grey-bg" id="featured-container" data-bind="visible: !mapOn()">
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">Probe of the Month</h2>
+        </div>
+        <div class="text-center featured-inner-content">
+            <div class="col-xs-12">
+                <div class="col-lg-3 col-lg-offset-3 col-md-12 featured-images"><a href="https://placeholder.com"><img data-bind="attr:{src: '/probe/8/image/'}" class="img-responsive"></a></div>
+                <div class="col-lg-4 col-lg-offset-0 col-md-6 col-md-offset-3 col-xs-12">
+                    <h4 class="text-center">Fallypride</h4>
+                    <h6 class="text-left">
+                    These days there are many kinds of diseases that are just dismissed by people as if they are not important. Discoloration, spots or rashes in any part of the bodies are deemed as irregularities but are not really candidates for urgent treatment. One such occurrence that can turn into diseases is oral thrush. Some people may not even know that what they or their loved ones have is oral thrush but oral thrush and all other kinds of thrush can spread to other parts of the body not originally affected if not treated.
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Section 3 - featured items / banners end -->
+    <!-- Section 4 - probe of the month -->
+    <div class="container-fluid" id="popular-probes-container" data-bind="visible: !mapOn()">
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">Popular probes</h2>
+        </div>
+        <div class="text-center popular-probes-inner-content">
+            <div class="col-xs-12">
+                <div class="col-sm-4 col-xs-12"><a>
+                    <img data-bind="attr:{src: '/probe/20/image/'}"  class="img-responsive">
+                    <h6 class="text-center">Florbetaben</h6>
+                </div>
+                <div class="col-sm-4 col-xs-12"><a>
+                    <img data-bind="attr:{src: '/probe/11/image/'}" class="img-responsive">
+                    <h6 class="text-center">FDHT</h6>
+                </div>
+                <div class="col-sm-4 col-xs-12"><a>
+                    <img data-bind="attr:{src: '/probe/30/image/'}" class="img-responsive">
+                    <h6 class="text-center">MK-6240</h6>
+                </div>
+            </div>
+            <div class="col-xs-12" id="probes-link-div">
+                <a data-bind="click: goToMap" class="btn btn-default">See more probes</a>
+            </div>
+        </div>
+    </div>
+    <!-- Section 4 - probe of the month ends-->
+    <!-- Section 5 - About Elixys -->
+    <div class ="about"></div>
+    <div class="container-fluid grey-bg" id="about-elixys" data-bind="visible: !mapOn()">
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">About ELIXYS</h2>
+        </div>
+        <div class="text-center popular-probes-inner-content">
+            <div class="embed-responsive embed-responsive-16by9 container">
+                <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/48e2pOVvrj8" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+            </div>
+
+            <div class="col-md-4 col-md-offset-2 about-elixys-columns">
+                <h2 class="homepage-headings">FLEX / CHEM</h2>
+                <h6 class="text-left">
+                    ELIXYS FLEX/CHEM is an automated radiochemical synthesizer for the production of preclinical and clinical PET probes. A single platform solution for R&D and production, you can build new syntheses from scratch, and then routinely perform your optimized protocol. It’s the best of flexible and fixed systems, without painful re-plumbing to move between syntheses. It’s also the first of its kind – a fully integrated, three–reactor radiosynthesizer. We designed it to meet the challenging, multi–pot synthesis conditions, but you can also use it to perform three, one–pot syntheses back–to–back–to–back. We’ve spent a lot of time in the details: reduction of tubing and valves, intuitive, chemist–friendly software, and disposable cassettes that are simple to load and remove. From the most seasoned radiochemist to brand new technicians, ELIXYS is easy to learn and operate. We think ELIXYS is the best choice to expand your facilities PET probe production capabilities given limited space and resources.
+                </h6> <br>
+            </div>
+            <div class="col-md-4 col-md-offset-1 about-elixys-columns">
+                <h2 class="homepage-headings">PURE / FORM</h2>
+                <h6 class="text-left">
+                    A companion purification and formulation module to the FLEX/CHEM. Measuring just under 20 cm (8 inches) in width, PURE/FORM delivers new capabilities to the ELIXYS platform in a small footprint. The module interfaces with your existing ELIXYS system, with zero hardware or facility modifications required. PURE/FORM includes a 4-channel gradient HPLC pump, fully integrated UV and radiation detectors, multiple fraction-collection positions to streamline method development, integrated syringe pump to accurately drive probe formulation via solid-phase extraction, and automated sterile filtration of final probe.
+                </h6><br>
+            </div>
+            <div class="col-sm-12 about-elixys-columns"><a href="https://sofie.com/radiochemistry/" class="btn btn-default" target="_blank">Learn more about ELIXYS</a></div>
+        </div>
+    </div>
+    <!-- Section 5 - About Elixys end-->
+    <!-- Contact form -->
+    <div class ="contact"></div>
+    <div class="container-fluid" id="contact-form" data-bind="visible: !mapOn()">
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">Contact us</h2>
+        </div>
+        <div class="col-md-6 col-xs-12" id="map-address">
+            <div class="col-lg-6 col-lg-offset-5 col-md-10 col-md-offset-1 col-xs-12 text-center">
+                <div class="card text-center" id="address-card">
+                    <address>
+                      <strong>SOFIE</strong><br>
+                      6160 Bristol Pkwy Suite 200<br>
+                      Culver City, CA 90230<br>
+                      (310) 215-3159
+                    </address>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12" id="contact-form-group" data-bind="visible: !mapOn()">
+            <div class="col-lg-6 col-lg-offset-1 col-md-10 col-md-offset-1 col-xs-12 text-center">
+                <h6 class="visible-xs-block">Send us a message</h6>
+                <form action="" method="">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Your name">
+                    </div>
+                    <div class="form-group thirty-four">
+                        <input type="text" class="form-control" placeholder="Your email">
+                    </div>
+                    <div class="form-group thirty-four">
+                        <textarea name="" id="" cols="30" rows="10" class="form-control" placeholder="Message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Contact form ends-->
+    <!-- Map -->
+    <div class="map-body col-md-12" data-bind="visible: mapOn()">
+        <!-- Left information card pane -->
+        <div class="col-md-3 left-info-pane" id="left-info-pane">
+            <div class="input-group ui-widget">
+                <span class="input-group-btn input-btn-left">
+                    <a data-bind="click: goToMap"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true" data-bind="click: goToMap"></i> Reset </button></a>
+                </span>
+                
+                <input type="text" id = "inputID" class="form-control" placeholder="Search for a probe" id="probe-search" data-bind="value: keyword">
+                
+
+                <span class="input-group-btn input-btn-right">
+                    <button class="btn btn-default" type="button" onclick="find_probe()" id="probe-search-button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </span>
+            </div>            
+            <!-- probe search result -->
+            <div data-bind="if:!loginModel.featuredOrganization()">
+                <div class="probe-default-headline">
+                    <h3 data-bind="visible:tapinfo">Probes</h3>
+                    <div class="info">
+                        <p data-bind="visible: tapinfo"><i class="fa fa-info-circle" aria-hidden="true"></i> Tap on a card to see sites with that probe</p>
+                        <p data-bind="visible: resultinfo">No probe found. Please try again</p>
+                        <p data-bind="visible: searching">Searching...</p>
+                    </div>
+                </div>
+                <div class="search-results"  data-bind="foreach: probes">
+                    <a data-bind = "click:function(searchName){siteWithProbe(searchName);}">
+                        <div class="probe-card featured-probe-card">
+                            <div class="probe-card-content col-sm-6">
+                                <h6 class="text-left" data-bind="text:master_name">Fallypride</h6>
+                                <img data-bind="attr:{src: url}" alt="">
+                            </div>
+                            <div class="probe-card-content col-sm-3 col-md-offset-2 text-center available-at">
+                                <h5>Available at</h5>
+                                <h3 data-bind="text: number" id="availability-number"></h3>
+                                <h5>Sites</h5>
+                            </div>
+                            <!-- <h4> Show sites with this probe </h4> -->
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- probe search result done -->
+            <!-- site search result -->
+            <div data-bind="if: loginModel.featuredOrganization()">
+                <h3>Site</h3>
+                <div id="featured_sequences" data-bind="with: loginModel.featuredOrganization()">
+                    <div class="probe-card text-center" id="site-main-card">
+                        <h4 class="h4-home" data-bind="text: name"></h4>
+                        <button onclick="goToContact()" class="btn btn-primary" id="go-to-contact-btn">CONTACT</button>
+                    </div>
+                        <div class="m-molecule-details-wrapper" id="probes-offered-by-site">
+                            <h4 data-bind="text: moleculeCount() + ' probes offered by ' + name + ' '" class="text-center"></h4>
+                            <span data-bind="foreach: {data: matchedMolecules(calculatedUniqueMolecules()), as: 'molecule'}">
+                                <a data-bind = "click:function(molecule){siteWithProbeWithList(molecule);}"> 
+                                    <div data-bind="template: { name: 'featured_molecule_template', data: molecule}"></div> 
+                                </a>
+                            </span>
+                        </div>
+                </div>
+            </div>
+
+            <!-- site search result done -->
+            <div data-bind="visible: probeInfo, if: !loginModel.featuredOrganization()">
+                <div class="probe-card featured-probe-card text-center">
+                    <div class="probe-card-content col-sm-12">
+                        <h6 class="text-center" data-bind="text:probe_master_name">Fallypride</h6>
+                        <img data-bind="attr:{src: probe_master_url}" alt="">
+                    </div>
+                </div>
+                <h3 data-bind= "text: siteWith"> Sites with </h3>
+                <div class="search-results"  data-bind="visible: probeInfo,foreach: siteInformation">
+                    <a data-bind="click: function(AccountName) {locationSelectedFromResult(AccountName) }">
+                        <div class="probe-card text-center">
+                            <div class="probe-card-content probe-card-short col-sm-12">
+                                <h6 data-bind="text:Name">Fallypride</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div data-bind="if: !loginModel.featuredOrganization(), visible: wholeList">
+                <h6> List of all Probes </h6>
+                <div class="search-results"  data-bind="foreach: loginModel.pure_probe_list, visible: wholeList">
+                    <a data-bind = "click:function(searchName){siteWithProbe(searchName);}">
+                        <div class="probe-card featured-probe-card text-center">
+                            <div class="probe-card-content col-sm-12">
+                                <h6 data-bind="text:name">Fallypride</h6>
+                                <img data-bind="attr:{src: url}" alt="">
+                                <!-- <a data-bind = "click:function(searchName){siteWithProbe(searchName);}" class="col-sm-12 btn btn-default"> Show sites with this probe </a> -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <!-- end of left pane -- >
+
+        <!-- Map reset button -->
+        <button class="btn btn-default" id="reset-map-button" data-bind="click: goToMap">Reset</button>
+        <!--/   /-->
+
+        <!-- right map pane -->
+        <div id='map' class="col-md-8"></div>
+        <div class="map-legend probe-card col-md-8">
+            <div class="col-sm-12"><h4>Legend</h4></div>
+            <div class="col-sm-4"><img src="https://docs.google.com/uc?id=1n28ewwZiK2eLHyo8r2YfKDOhIrrlzbg4" alt="" class="img-responsive"> : Multiple location group</div>
+            <div class="col-sm-4"><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" alt="" class="img-responsive"> : SOFIE Radiopharmacy</div>
+            <div class="col-sm-4"><img src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" alt="" class="img-responsive"> : Independent site</div>
+        </div>
+
+        <!-- map script -->
+        <script>
+            document.getElementById("map").style.height = ($( window ).height() - 183).toString() + "px";
+            document.getElementById("left-info-pane").style.height = ($( window ).height() - 98).toString() + "px";
+            function clearFields() {
+                 document.getElementById("inputID").value = "";
+            }
+        </script>
+        <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
+        <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
+
+    </div>
+    <!-- Map End -->
+
+{%endblock%}

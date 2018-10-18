@@ -1,0 +1,53 @@
+<script type='text/html' id="sobject-field-template">
+    <div style="display:inline-block;" data-bind="if: col.typeIsKnown()">
+        <span data-bind="if: col.getType() == 'text'">
+            <input type="text" data-bind="textInput: record[col.name]"/>
+        </span>
+        <span data-bind="if: col.getType() == 'textarea'">
+            <textarea style="vertical-align: inherit;" type="text" data-bind="textInput: record[col.name]"></textarea>
+        </span>
+        <span style="position: relative;" data-bind="if: col.getType() == 'DATETIME'">
+            <datetime-picker params="date: record[col.name],
+                                     record: record,
+                                     column: col.name,
+                                     isEdit: true"></datetime-picker>
+        </span>
+        <span data-bind="if: col.getType() == 'lookup'">
+            <lookup params="sObjectType: col.references,
+                            record: record,
+                            column: col.name,
+                            displayLink: true"></lookup>
+        </span>
+        <span data-bind="if: col.getType() == 'PolymorphicLookup'">
+            <polymorphic-lookup params="lookup_driver: col.lookup_driver,
+                                        record: record,
+                                        column: col,
+                                        displayLink: true"></polymorphic-lookup>
+        </span>
+        <span data-bind="if: col.getType() == 'BLOB'">
+            <div style="position: relative;">
+                <binary-field params="record: record,
+                                      column: col.name"></binary-field>
+            </div>
+        </span>
+        <span data-bind="if: col.getType() == 'RandomColor'">
+            <color-selector params="record: record,
+                                    column: col.name"></color-selector>
+        </span>
+
+        <span data-bind="if: col.getType() == 'INTEGER'">
+            <input data-bind="textInput: record[col.name]"/>
+        </span>
+
+        <span data-bind="if: col.getType() == 'SFDC'">
+            <sfdc-lookup params="col: col, record: record"></sfdc-lookup>
+        </span>
+        <span data-bind="if: col.getType() == 'BOOLEAN'">
+            <input type="checkbox" data-bind="checked: record[col.name]"/>
+        </span>
+
+    </div>
+    <div style="display:inline-block;" data-bind="if: !col.typeIsKnown()">
+        <div data-bind="text: record[col.name]"></div>
+    </div>
+</script>

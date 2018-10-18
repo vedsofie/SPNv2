@@ -1,0 +1,82 @@
+//------------------------------------
+//    #Sequence details
+//------------------------------------
+
+
+.d_m {
+    font-size: 14px;
+    word-wrap: break-word;
+	margin-top: 0px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.scheme_box {
+	width: 250px;
+    float: right;
+    background-color: $white;
+    border-radius: $br--default;
+    margin-bottom: 24px;
+
+}
+
+.info_wrap {
+	padding: 12px 20px 20px 20px;
+
+}
+
+.info_wrap--sequence {
+    padding: 12px 20px 0px 20px;
+
+}
+
+
+.reaction_link {
+	text-align: center;
+    position: relative;
+    top: 3px;
+    left: 14px;
+}
+
+.keyword-buttons {
+    width: 100%;
+    padding: 10px;
+    background-color: $color-main-background;
+    margin-bottom: 20px;
+}
+
+.button-footer {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.acct-sequence-lbl {
+    font-size: 13px;
+    display: inline-block;
+    margin: 2px 12px;
+}
+
+/*.sequence-readout {
+        width: 100%;
+        padding-bottom: 16px;
+    @include e(section) {
+        float: left;
+        @include m(padleft) {
+            padding-left: 8px;
+        }
+    }
+    @include e(plusminus) {
+        display: inline-block;
+        width: 100%;
+        text-align: right;
+    }
+}*/
+
+.info-indent-readout {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.display-units {
+    font-size: 11px;
+}

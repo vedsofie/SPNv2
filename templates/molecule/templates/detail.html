@@ -1,0 +1,63 @@
+<script type="text/html" id="molecule-detail-template">
+
+    <div data-bind="css: {'savingBlockUI': molecule.record.isSaving,
+                          'savingBlockHidden': !molecule.record.isSaving()}">
+        <div class="blockUIText">Saving...</div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+        <span class="lbl" data-bind="css: {'required-field': molecule.record.columnRequired('Name')}">Probe Name</span>
+        <div class="validation-error" data-bind="text: molecule.record.errors.Name()"></div>
+        <formula-editor  params="formula: molecule.record.Name,
+                                id: 'molecule_formula_editor_name_' + $parent.idPrefix + '_' + molecule.ID,
+                                userFormatted: molecule.record.DisplayFormat,
+                                edit: true"></formula-editor>
+    </div>
+
+    <div style="position: relative;overflow: auto;">
+        <span class="lbl required-field">Probe Structure</span>
+        <div class="validation-error" data-bind="text: molecule.record.errors.Image()"></div>
+		<div class="m-imageUpload-row">
+            <binary-field params="record: molecule.record,
+                                  column: 'Image',
+                                  uploadText: 'Click here to upload chemical structure',
+                                  url: '/probe/' + molecule.ID + '/image/',
+                                  edit: edit,
+                                  showImage: true,
+								  showClose: true,
+                                  doCrop: true"></binary-field>
+		</div>
+    </div>
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': molecule.record.columnRequired('CAS')}">CAS</span>
+		<div class="validation-error" data-bind="text: molecule.record.errors.CAS()"></div>
+		<input class="input_main" data-bind="textInput: molecule.record.CAS"/>
+	</div>
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': molecule.record.columnRequired('Formula')}">Formula</span>
+		<formula-editor params="formula: molecule.record.Formula,
+								id: 'molecule_formula_editor_formula_' + $parent.idPrefix + '_' + molecule.ID,
+								edit: true"></formula-editor>
+	</div>
+	<div>
+		<span class="lbl"  data-bind="css: {'required-field': molecule.record.columnRequired('Isotope')}">Isotope</span>
+		<div class="validation-error" data-bind="text: molecule.record.errors.Isotope()"></div>
+		<formula-editor params="formula: molecule.record.Isotope,
+								id: 'molecule_isotope_editor_iso_' + $parent.idPrefix + '_' + molecule.ID,
+								superscriptNumbers: true,
+								edit: true"></formula-editor>
+	</div>
+	<div class="input_main" style="background-color: #FFF; border: none; padding: 0;" data-bind="visible: molecule.record.canEdit('Approved')">
+		<span class="lbl" data-bind="css: {'required-field': molecule.record.columnRequired('Approved')}">Approved &nbsp;</span>
+		<input type="checkbox" data-bind="checked: molecule.record.Approved"/>
+	</div>
+	<div>
+		<span class="lbl" data-bind="css: {'required-field': molecule.record.columnRequired('Description')}">Description</span>
+		<textarea class="input_main" style="height: 176px;" data-bind="textInput: molecule.record.Description"/>
+	</div>
+	<div class="keyword-buttons clearfix">
+		<span data-bind="template: {name: 'keyword-detail-popup-template', data: synomynsKeywordViewModel}"></span>
+		<span data-bind="template: {name: 'keyword-detail-popup-template', data: keywordsViewModel}"></span>
+	</div>
+
+</script>

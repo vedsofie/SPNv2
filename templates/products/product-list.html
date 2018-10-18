@@ -1,0 +1,71 @@
+<!--
+    This assumes the parent is an instance of a Cart
+-->
+
+<script type="text/html" id="product-list-template">
+    <div data-bind="foreach: {data: familySelectors, as: 'family'}">
+	    <div class="m-product-pane" data-bind="with: family.selectedProduct">
+            <!-- product header -->
+            <div class="product-header">
+				<h2 class="product-header__h2">
+                    <span class="product-header__h2--bold">ELIXYS&nbsp;</span>
+                    <span class="product-header__h2--span" data-bind="text: Family,
+								     attr: {'id': record.Id}"></span>
+                </h2>
+
+				<picklist params="options: family.productOptions,
+				                     optionsPrimaryText:'Name',
+				                     optionsText:'Name',
+				                     optionsUnitType: 'unitType',
+				                     value: family.selectedProduct"></picklist>
+
+
+                <numeric-input class="product-quant" params="min: 1,
+                                                             max: 30,
+                                                             value:record.quantity,
+                                                             displayUnit: displayUnit"></numeric-input>
+
+            </div>
+
+            <!-- product image -->
+			<div data-bind="template: {name: visualTemplate}"></div>
+
+            <!-- product details -->
+            <div class="product-details">
+				<div class="product-details__section" data-bind="if: record.Description(), visible: record.Description()">
+					<span class="product-details__title">Description</span>
+					<p data-bind="text: record.Description()"></p>
+				</div>
+
+
+				<div class="product-details__section" class="childItems" data-bind="if: breakdown().length > 0, visible: breakdown().length > 0">
+					 <span class="product-details__title">Breakdown</span>
+					<ul class="product-list" data-bind="foreach: {data: breakdown, as: 'breakdownProduct'}">
+                        <li class="breakdown">
+							<span class="breakdown__letter" data-bind="text: breakdownProduct.label"></span>
+							<span class="breakdown__quant" data-bind="text: breakdownProduct.record.quantity"></span>
+							<span data-bind="text: breakdownProduct.Name"></span>
+                        </li>
+					</ul>
+				</div>
+
+				<div class="product-details__section" class="childItems" data-bind="if: addOns().length > 0, visible: addOns().length > 0">
+					<span class="product-details__title">Add-on options</span>
+					<ul class="product-list" data-bind="foreach: {data: addOns, as: 'addOnProduct'}">
+						<li>
+							<numeric-input class="add-on" params="min: 0, max: 30, value: addOnProduct.record.quantity"></numeric-input>
+							<span data-bind="text: addOnProduct.Name"></span>
+						</li>
+					</ul>
+				</div>
+
+                <div class="product-details__section product-details__section--last">
+					<div class="btn-blue btn-blue__products" data-bind="click: $parents[1].addProduct,
+					                                                    text: typeof $parents[1].mappedProducts()[Id] !== 'undefined' ? 'Update Cart' : 'Add to cart'"></div>
+					<span class="product-details__total" data-bind="text: '&#36;' + displayedTotal()"></span>
+                </div>
+
+            </div>
+		</div>
+    </div>
+</script>

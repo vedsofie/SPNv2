@@ -1,0 +1,19 @@
+<script type="text/html" id="account_template">
+    <div class="col-xs-4 col-lg-3 organization-box">
+		<div class="card-no-width" data-bind="attr: { id: 'account_' + id}">
+			<a data-bind="attr: {href: '/account/' + account.id}"><img class="card__img" data-bind="attr: {src: '/account/' + account.id + '/logo/'}" width="210" height="210"/></a>
+			<div class="m-card-info">
+				<div class="company-name" data-bind="text: account.name"></div>
+				<div class="m_company_description">
+					<div class="elipse-overflow account-description-container">
+                <p data-bind="text: account.description"></p>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer__sequences">
+				<div class="card-footer__count" data-bind="text: account.calculated_sequence_count()"></div>
+				<span class="card-footer__count--span">Sequences</span>
+			</div>
+		</div>
+	</div>
+</script>

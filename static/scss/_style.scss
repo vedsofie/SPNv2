@@ -1,0 +1,225 @@
+
+
+
+/*------------------------------------*\
+    #1024 RBOWSER WIDTH 
+\*------------------------------------*/
+
+
+@media only screen
+    and (max-width:800px) {
+	
+	.l-content-wrapper {
+	    width: 100%;
+	}
+}
+
+
+
+/*Contact page*/
+
+
+#controls {
+    width: 190px;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+              
+#controls a {
+    text-decoration: none;
+ }
+ 
+ .title {
+    height: 60px;
+    font-weight: bold;
+
+}
+
+.center-align-content {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+
+}
+
+.center-align-wrapper {
+	display: table;
+	width: 100%;
+
+}
+
+.user-detail .lbl{
+	vertical-align:top;
+	display: inline-block;
+	width: 115px;
+	text-align: left;
+}
+
+
+
+
+
+.sequence-display-name p{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+
+
+/* ------------------------------ Dashboard ------------------------------ */
+
+
+.form_wrap {
+	width: 560px;
+    margin: 0 auto;
+    margin-top: 20px;
+
+}
+
+.main_form {
+	background-color: #f3f6f9;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+	padding: 14px 16px;
+    width: 560px;
+    height: 52px;
+
+}
+
+.main_form:focus {
+    height: 80px;
+
+}
+
+.recent-activity {
+    position: relative;
+    width: 100%;
+    border-top: 3px solid #f2f3f4;
+    padding-top: 10px;
+    font-size: 15px;
+
+}
+
+.existing-posts {
+}
+
+.post-p {
+	padding: 20px;
+}
+
+.posts-container .existing-posts {
+    max-height: 400px;
+    overflow-y: auto;
+
+}
+
+.image_upload_file input[type='file'],
+.image_upload_file .m-thumb-buttons {
+    display: none;
+
+}
+
+.input_main {
+	width: 100%;
+    padding: 14px 12px;
+    border-radius: 3px;
+    border: 1px solid #f3f6f9;
+    background-color: #f3f6f9;
+    outline: none;
+    margin-bottom: 18px;
+}
+
+.input_main--last {
+    margin-bottom: 0;
+}
+
+.sequence-description-overflow{
+    -webkit-line-clamp: 4;
+    max-height: 100px;
+}
+
+.sequence-description-overflow p{
+    margin-top: 0px;
+}
+
+.description-container{
+    word-wrap: break-word;
+    margin-left: 250px;
+    max-height: 100px;
+}
+
+.sequence-name:hover {
+    color: #066ACE !important;
+
+}
+
+.sequence-date {
+    color: #7C8084;
+    font-size: 13px;
+    margin-top: -4px;
+
+}
+
+.sequence-download {
+    color: #7C8084;
+    font-size: 13px;
+    margin-top: -8px;
+    margin-bottom: 0;
+
+}
+
+.sequence-description {
+    color: #53575A;
+    font-size: 14px;
+    margin-top: 8px;
+
+}
+
+.download_link {
+	margin-right: 14px;
+
+}
+
+ul.button_list {
+	
+
+}
+
+ul.button_list li {
+	display: inline-block;
+
+}
+
+/* ------------------------------ Probe Page ------------------------------ */
+
+.keyword-dialog-container .keyword-list-open-dialog-button {
+	display: none;
+
+}
+
+#nav-bar-molecules {
+    background-color: #f2f4f5;
+    color: #434d58;
+
+}
+
+
+.m-map-wrapper .keyword-hints {
+    top: 45px;
+	left: 10px;	
+}
+
+.heading_s > p {
+	font-size: 13px;
+	font-weight: 700 !important;
+
+}
+
+.name_s {
+	margin-bottom: 10px;
+    margin-top: -8px;
+    color: #A8ABAF;
+}
+

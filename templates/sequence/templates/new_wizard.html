@@ -1,0 +1,107 @@
+<style>
+     .title{
+        text-align: center;
+    }
+    #sequenceFile {
+        display: none;
+    }
+
+</style>
+<script type="text/html" id="sequence_wizard_template">
+    <div id="popup-text-button" data-bind="click: open, text: popupText"></div>
+    <div class="popup" data-bind="visible: visible">
+        <div style="top: 20%;" class="popup-box">
+            <div data-bind="click: close" class="popup-box-close-button">X</div>
+            <div class="title center-align-wrapper">
+                <div class="center-align-content" data-bind="text: 'Upload Sequence'"></div>
+            </div>
+
+            <span data-bind="visible: canMakeOnElixys() == null">
+                <div class="title">
+                    <span>Do you make this Sequence on Elixys?</span>
+                </div>
+                <div style="width: 100%;text-align:center;" class="m-molecule-buttons">
+                    <a style="display: inline-block;" class="m-solid-button" data-bind="click: setMakesOnElixys.bind($data, true)">Yes</a>
+                    <a style="display: inline-block;" class="m-solid-button" data-bind="click: setMakesOnElixys.bind($data, false)">No</a>
+                </div>
+            </span>
+
+            <span data-bind="visible: displaySearch">
+                <div class="title">
+                    <span>Select a molecule or type a new search keyword</span>
+                </div>
+                <div data-bind="with: moleculeSearch">
+
+                    <div style="text-align:center;margin-top: 40px;margin-bottom:40px;">
+                        <style>
+                            .molecule-search-container input{
+                                border: none;
+                                width:75%;
+                                background-color: #f2f4f5;
+                            }
+                        </style>
+                        <span class="molecule-search-container" data-bind="template: {name: 'moleculeSearch'}"></span>
+                    </div>
+
+                    <span data-bind="visible: noResultsFound">No Results Found</span>
+                    <span data-bind="visible: isSearching()">Searching...</span>
+
+                    <div style="max-height: 350px;overflow: auto;margin-left:20px;margin-right:20px;margin-bottom:20px;" data-bind="foreach: {data: matches, as: 'chemical'}">
+                        <div style="border-top: 2px solid #f2f4f5;border-bottom: 2px solid #f2f4f5;padding-top: 20px; padding-bottom:20px;margin-top: 25px;">
+                            <span data-bind="text: chemical.Name"></span>
+                            <formula_editor params="formula: chemical.record.Formula, id: 'molecule_formula_editor_' + chemical.ID, edit: false"></formula_editor>
+                            <div data-bind="text: chemical.Description"></div>
+                            <div>
+                                <div style="display:inline-block;">
+                                    <div style="width: 40px; height: 40px; display: inline-block; text-align:center;"
+                                         data-bind="text: chemical.seq_count,
+                                                    style:{ 'background-color': chemical.color() }"></div>
+                                    <div style="display: inline-block;vertical-align: top;">Sequences</div>
+                                </div>
+                                <div style="margin-left: 250px;">
+                                    <div class="m-molecule-buttons">
+                                        <a style="display:inline-block;" class="m-solid-button" data-bind="click: $parents[1].viewMolecule">View</a>
+                                        <a style="display:inline-block;" class="m-solid-button" data-bind="click: $parents[1].selectMolecule">Select</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </span>
+
+            <span data-bind="visible: displayUpload">
+                <div class="title">
+                    Would you like to make your sequence available for Download?
+                </div>
+                <div style="text-align:center;width:100%;" class="m-molecule-buttons">
+                    <a style="display:inline-block;" class="m-solid-button" data-bind="click: submit">No, keep my sequence private</a>
+                    <span>
+                        <label for="sequenceFile">
+                            <a style="display:inline-block;" class="m-solid-button">Yes, share my sequence</a>
+                        </label>
+                        <input id="sequenceFile" type="file" data-bind="event: {change: uploadSequence.bind($data, $element)}">
+                        <a style="display: inline-block;" class="m-solid-button" data-bind="visible: sequenceFile() != null, click: submit">Upload Sequence</a>
+                    </span>
+                </div>
+            </span>
+
+            <div data-bind="visible: displayKeywords">
+                <span>Keywords</span>
+                <input type="text" data-bind="textInput: newKeyword"/>
+                <div class="m-molecules-buttons">
+                    <a class="m-solid-button" data-bind="click: addKeyword">Add Keyword</a>
+                </div>
+
+                <div data-bind="foreach:{data: keywords, as: 'keyword'}">
+                    <div>
+                        <span data-bind="text: keyword"/>
+                    </div>
+                </div>
+                <div class="m-molecule-buttons">
+                    <a class="m-solid-button" data-bind="click: keywordsComplete"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,273 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+
+    <script type="text/javascript">
+        var seq = JSON.parse({{sequence|tojson|safe}});
+        var sequence = new Sequence(seq);
+        var runningUser = new User(JSON.parse({{running_user|tojson|safe}}));
+        var showNotification = {{showNotification|tojson|safe}};
+
+        $(function(){
+            if(showNotification){
+                $.notify("Thank you, the probe you created is being reviewed by Sofie Biosciences.\n" +
+                         "We will review and get back to you shortly.", "success");
+            }
+            navbar.currentlyOpenedTab("tracers");
+        });
+    </script>
+    <style>
+        #nav-bar-molecules{
+            background-color: #f2f4f5;
+            color: #434d58;
+        }
+        #sequence-precursor{
+            background-color: white;
+            padding: 20 20 20 20;
+
+        }
+        #sequence-precursor .title{
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .sequence-banner-color{
+            width: 100%;
+        }
+        #spn-top-section{
+            background-color: #d8d9dd;
+        }
+
+        .sequence-detail-popup .control-option{
+            width: 90px;
+            display: inline-block;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        .form_wrap {
+            /*width: 638px;*/
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-left: 10px;
+            margin-right: 10px;
+
+        }
+        .main_form {
+            background-color: #f3f6f9;
+            border: none;
+            outline: none;
+            border-radius: 3px;
+            padding: 14px 16px;
+            width: 100%;
+            height: 52px;
+
+        }
+        .left_action_box {
+            margin-top: 0px !important;
+
+        }
+    </style>
+{% endblock %}
+
+{% block content_body %}
+    <div class="col-sm-6 col-sm-offset-3 col-xs-12" id="sequence-page">
+        <div class="m-molecule-details-inner col-xs-12 col-sm-12">
+            <img class="molecule-details__img" data-bind="attr:{src: sequence.calculatedMoleculeImageUrl()}"/>
+            <div class="m-molecule-info">
+                <h1 class="molecule-name" data-bind="text: sequence.Name"></h1>
+                <a class="molecule-display-name" data-bind="attr:{href: '/probe/' + sequence.MoleculeID}">
+                    <p data-bind="html: sequence.calculatedMoleculeDisplayName()"></p>
+                </a>
+
+                <div class="description-container">
+                    <div class="elipse-overflow sequence-description-overflow">
+                        <p data-bind="text: sequence.Comment"></p>
+                    </div>
+                </div>
+
+                <div class="i_o">
+                     <span data-bind="if: sequence.account().record.id()">
+                        <img class="avatar-small" data-bind="attr: {src: '/account/' + sequence.account().record.id() + '/logo/'}"/>
+                    </span>
+                    <a class="b_2" data-bind="attr:{href: sequence.accountUrl}">
+                        <p class="acct-sequence-lbl" data-bind="text: sequence.calculatedAccountName()"></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="google-card-4">
+                <div style="display: inline-block;" data-bind="visible: sequence.canEdit()">
+                    <div tabindex="1" data-bind="event: {click: openActionMenu,blur: hideActionMenu}"
+                         class="action-context-menu">
+                        <span class="action-control" style="top: 0px;"><div class="action-control__arrow"></div>Actions</span>
+                    </div>
+                    <div class="m-toggle-menu-wrapper">
+                        <div class="toggle-menu toggle-menu--detail" data-bind="visible: actionMenuOpen"
+                             style="display: none;">
+                            <a data-bind="attr: {href: '/sequence/' + sequence.SequenceID + '?edit=true'}">
+                                <div class="toggle-menu__control-option">Edit</div>
+                            </a>
+                            <div data-bind="click: deleteSequence" class="toggle-menu__control-option toggle-menu__control-option--last">Delete</div>
+                        </div>
+                    </div>
+                    <span data-bind="template: {name: 'sequence-detail-popup-template', data: sequencePopupCtrl}"></span>
+                </div>
+
+                <div class="button_wrap">
+                    <ul class="button_list">
+                        <li data-bind="visible: sequence.record.IsDownloadable() && sequence.record.MadeOnElixys()">
+                            <a class="download_link" data-bind="attr:{href: '/sequence/' + sequence.SequenceID + '/export'}">
+                                <span>Download</span>
+                            </a>
+                        </li>
+                        <li>
+                            <contact-us-popup params="contact: 'Contact ' + sequence.calculated_owner()(),
+                                      contact_url: '/sequence/' + sequence.SequenceID + '/contact',
+                                      btnText: 'Contact'"></contact-us-popup>
+                        </li>
+                        <li>
+                            <span data-bind="visible: !sequence.calculatedUserIsFollowing()">
+                                <a class="btn-blue" data-bind="click: sequence.follow">Follow</a>
+                            </span>
+
+                            <span data-bind="visible: sequence.calculatedUserIsFollowing()">
+                                <a class="btn-blue" data-bind="click: sequence.unfollow">Unfollow</a>
+                            </span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="clear"></div>
+            </div>
+        <div class="wrap_c not_expandable">
+                <posts params="parent_id: sequence.SequenceID,
+                               type: 'Sequences'"></posts>
+            </div>
+    </div>
+    
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 col-lg-offset-1">
+    <div class="scheme_box">
+        <div class="info_wrap">
+            <a data-bind="attr:{href: '/sequence/' + sequence.SequenceID + '/reaction_scheme'},
+                              visible: sequence.record.hasReactionScheme">
+                <span class="reaction_link"><img src="/static/img/web_link_icon.png" class="link_icon" width="25" height="25" alt="">View Reaction Scheme</span>
+            </a>
+            <span data-bind="visible: !sequence.record.hasReactionScheme()" class="reaction_link">No Reaction Scheme</span>
+        </div>
+    </div>
+
+    <div class="right_column_info">
+        <h3>Info</h3>
+        <section class="info_wrap--sequence">
+            <section data-bind="if: sequence.StartingActivity != null">
+                <span class="lbl"><strong>Starting Activity&#58;</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.StartingActivity"></span>
+                <span data-bind="if: sequence.StartingActivity != null && sequence.StartingActivityStandardDeviation">&nbsp;&plusmn;
+                    <span data-bind="text: sequence.StartingActivityStandardDeviation"></span>
+                </span>
+                <span class="display-units">&#8202;mCi</span>
+            </section>
+
+            <section data-bind="if: sequence.SpecificActivity != null">
+                <span class="lbl"><strong>Molar Activity&#58;</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.SpecificActivity"></span>
+                <span data-bind="if: sequence.SpecificActivity != null && sequence.SpecificActivityStandardDeviation">&nbsp;&plusmn;
+                    <span data-bind="text: sequence.SpecificActivityStandardDeviation"></span>
+                </span>
+                <span class="display-units">&#8202;Ci/mmol</span>
+            </section>
+
+            <section data-bind="if: sequence.Yield != null">
+                <span class="lbl"><strong>Yield&#58;</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.Yield"></span>
+                <span data-bind="if: sequence.Yield != null && sequence.YieldStandardDeviation">&nbsp;&plusmn;
+                    <span data-bind="text: sequence.YieldStandardDeviation"></span>
+                </span>
+                <span class="display-units">&#8202;%</span>
+            </section>
+
+            <section data-bind="if: sequence.NumberOfSteps != null && sequence.NumberOfSteps != 0">
+                <span class="lbl"><strong>Number of Cassettes&#58;&nbsp;</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.NumberOfSteps"></span>
+            </section>
+
+            <span class="lbl"><strong>Purification Method&#58;</strong></span><br>
+            <span class="info-indent-readout" data-bind="text: sequence.PurificationMethod"></span>
+
+
+            <section data-bind="if: sequence.SynthesisTime > 0">
+                <span class="lbl"><strong>Synthesis Time&#58;</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.record.SynthesisTime"></span>
+                <span data-bind="if: sequence.SynthesisTime > 0 && sequence.SynthesisTimeStandardDeviation">&nbsp;&plusmn;
+                    <span data-bind="text: sequence.record.SynthesisTimeStandardDeviation"></span>
+                </span>
+                <span class="display-units">&#8202;min</span>
+            </section>
+
+            <div class="sequence-readout" data-bind="if: sequence.NumberOfRuns">
+                <span class="lbl"><strong>Number of Runs</strong></span><br>
+                <span class="info-indent-readout" data-bind="text: sequence.NumberOfRuns"></span>
+            </div>
+        </section>
+    </div>
+
+      <div class="right_column_info" style="margin-top: 24px;">
+            <div data-bind="visible: sequence.record.IsDownloadable() && sequence.record.MadeOnElixys()">
+                <div class="column_heading">
+                    <h3 class="title">Reagents</h3>
+                </div>
+            <div class="info_wrap">
+                <div id="sequence-precursor">
+                    <div data-bind="foreach: {data: sequence.calculatedReagents(), as: 'reagent'}">
+                    <p data-bind="text: reagent.Name"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="clear"></div>
+
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+    <script type="text/javascript">
+        openActionMenu = function(){
+            actionMenuOpen(!actionMenuOpen());
+        }
+        hideActionMenu = function(){
+            setTimeout(function(){
+                actionMenuOpen(false);
+            }, 300);
+        }
+        actionMenuOpen = ko.observable(false);
+
+        var sequencePopupCtrl = new SequenceDetailPopup({hideButton: true,
+                                                         sequence: sequence,
+                                                         idPrefix: 'sequenceToEdit'});
+
+        editSequence = function(){
+            sequencePopupCtrl.open();
+        }
+
+        deleteSequence = function(){
+            applicationConfirmation.prompt("Are you sure you want to delete this sequence?\nThis cannot be undone", function(yes){
+                if(yes){
+                    sequence.delete_self().success(function(){
+                        window.location = '/';
+                    }).fail(function(err){
+                        alert("Failed to delete sequence");
+                        console.log(err);
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock %}

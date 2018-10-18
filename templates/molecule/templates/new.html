@@ -1,0 +1,31 @@
+<script type="text/html" id="molecule-detail-popup-template">
+	<span data-bind="if: showBtn">
+		<div data-bind="if: btnText != ''">
+			<a class="m-solid-button control-option" data-bind="click: open, text: btnText"></a>
+		</div>
+	</span>
+	
+	<div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+	
+		<div class="m-popup create-probe" data-bind="visible: visible">
+			<div class="popup-box">
+				<div data-bind="css: {'savingBlockUI': molecule.record.isSaving,
+									  'savingBlockHidden': !molecule.record.isSaving()}">
+					<div>Saving...</div>
+				</div>
+				
+				<div data-bind="click: close" class="m-close-button">X</div>
+				<span data-bind="template: {name: 'molecule-detail-template', data: moleculeDetailViewModel}"></span>
+				
+				<div class="l-content-wrapper">
+					<span data-bind="if: showBack">
+						<a data-bind="click: close" class="m-solid-button" style="display: inline-block;">Back</a>
+					</span>
+					<a data-bind="click: save,
+								  text: saveBtnText" class="m-solid-button" style="display: inline-block;"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+

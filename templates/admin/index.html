@@ -1,0 +1,167 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+    <script src="/static/js/libs/infinite_scroll.js"></script>
+    <script src="/static/js/knockout-js-infinite-scroll/knockout-js-infinite-scroll.js"></script>
+    <style>
+        .admin-table th{
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .admin-table td{
+            text-align: center;
+        }
+        #itemsUL{
+            display: inline-block;
+            height:550px;
+            overflow-y: auto;
+            border: 3px solid rgb(121, 242, 218);
+            background-color:white;
+        }
+        .item{
+            height:70px;
+            overflow-x: auto;
+        }
+
+        .m-molecule-buttons a.m-solid-button{
+            display: inline-block;
+        }
+        .edited{
+            border: 2px solid black;
+        }
+    </style>
+
+    <script>
+        var tables = ko.observableArray(JSON.parse({{tables|tojson|safe}}));
+        var records = ko.observableArray();
+
+        var table = ko.observable();
+        var selectedTable = ko.observable();
+        getColumns = function(col){
+            $.ajax("/admin/" + col + "/", {methods: "get"}).success(function(res){
+                self.selectedTable(col);
+                console.log(col)
+                console.log(res)
+                table(new Table(res, col));
+            }).fail(function(err){
+                console.log(err);
+            });
+
+            $.ajax("/admin/" + col + "/records", {methods: "get"}).success(function(res){
+                var recs = [];
+                for(var i = 0; i < res.length; i++){
+                    var rec = res[i];
+                    rec = new Record(rec);
+                    rec.isDirty(false);
+                    recs.push(rec);
+                }
+
+
+                records(recs);
+                if(records().length == 0){
+                    // This is a bugfix.  If this is removed; expect the infinite-scroll list to no longer be able to
+                    // populate the list again once you have cleared the records list
+                    
+                    setTimeout(function(){
+                        //model(new InfiniteScroll(records));
+                        model(records);
+                    }, 250);
+                }
+                console.log(records())
+                model(records);
+                
+                setTimeout(function(){
+                    //model().bindDom();
+                    model(records);
+                },250);
+                
+
+            }).fail(function(err){
+                window.x = err;
+                records([]);
+                //model(new InfiniteScroll(records));
+                console.log(err);
+            });
+        }
+
+        saveableRecords = ko.pureComputed(function(){
+            var allToSave = []
+            for(var i = 0; i < records().length; i++){
+                var rec = records()[i];
+                if(rec.isDirty()){
+                    allToSave.push(rec);
+                }
+            }
+            return allToSave;
+        });
+        function save(){
+            var data = saveableRecords();
+            data = JSON.stringify(data);
+            $.ajax("/admin/" + self.selectedTable() + "/", {
+                type: "post",
+                contentType: "application/json",
+                data: data
+            }).success(function(res){
+                var records = saveableRecords();
+                for(var i = 0; i < records.length; i++){
+                    var record = records[i];
+                    record.isDirty(false);
+                }
+            }).fail(function(err){
+                console.log(err);
+            });
+        }
+
+
+        var model = ko.observable();
+        
+        $(function(){
+            //model(new InfiniteScroll(records));
+            model(records);
+        });
+        
+    </script>
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="m-toggle-menu-wrapper">
+        <div class="toggle-menu" data-bind="foreach: {data: tables, as: 'table'}">
+            <a>
+                <div class="toggle-menu__control-option"
+                        data-bind="text: table,
+                                   click: getColumns">
+                    Edit
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div data-bind="if: table() != null" style="display:inline-block;width:80%;vertical-align:top;">
+
+        <span data-bind="with: table">
+            <div data-bind="with: table">
+                <a class="btn-gray" data-bind="click: save">Save</a>
+            </div>
+            <div style="overflow-x:scroll;margin-top:20px;">
+                <div style="display:inline;float:left;width:50000px;">
+                    <div style="overflow:auto;" data-bind="foreach: {data: columns, as: 'col'}">
+                        <div style="float:left;display:inline;width:220px;" data-bind="text: col.name"></div>
+                    </div>
+                    <div>
+                        <div id="itemsUL" data-bind="foreach:{data: model(), as: 'record'}" >
+                            <div class="item" data-bind="css: {'edited': record.isDirty}" >
+                                <div data-bind="foreach: {data: $parent.columns, as: 'col'}">
+                                    <div style="display:inline;float:left;width:220px;">
+                                        <sobject-field params="record: record, column: col"></sobject-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </span>
+    </div>
+{% endblock %}

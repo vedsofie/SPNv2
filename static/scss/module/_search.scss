@@ -1,0 +1,66 @@
+/* Search
+--------------------------------------------- */
+
+.m-search-wrapper {
+    display: block;
+    float: left;
+	padding: em(10px) em(10px);
+    overflow: hidden;
+}
+
+.m-search-wrapper input[type=text] {
+    height: em(38px);
+    font-size: em(14px);
+    line-height: em(38px);
+    font-weight: $font-weight--light;
+    width: em(210px);
+	float: right;
+    padding: 0 2px 0 20px;
+    margin: 0;
+    border: 1px solid lighten($color-secondary, 25%);
+    border-radius: $br--round;
+    outline: none;
+    -webkit-transition: 0.4s;
+}
+
+.m-search-wrapper input[type=text]::-webkit-input-placeholder {
+    color: lighten($color-secondary, 25%);
+    font-weight: $font-weight--light;
+}
+
+.m-search-wrapper input[type=text]:focus {
+	color: $color-primary;	
+	border: 1px solid $color-primary;
+	-webkit-transition: 0.4s;	
+}
+
+.keyword-hints {
+    width: em(300px);
+    max-height: em(200px);
+    background-color: $white;
+    box-shadow: $bs--default;
+    border-radius: $br--default;
+    border: none;
+    z-index: 5;
+    overflow-y: scroll;
+    position: absolute;
+        top: 50px;
+        left: 94px;
+}
+
+h4.heading_main_s {
+    font-size: em(13px);
+	padding: 16px 20px 16px 20px;
+    border-bottom: 1px solid #e9ebed;
+}
+
+.keyword-match > div {
+    padding: 5px 20px 10px 20px;
+ 
+}
+
+.keyword-match > div:hover {
+    background-color: $color-main-background;
+    cursor: pointer;
+
+}

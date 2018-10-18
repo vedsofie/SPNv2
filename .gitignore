@@ -1,0 +1,12 @@
+*.pyc
+*.*~
+*.DS_Store
+.DS_Store
+*.webassets-cache
+.webassets-cache
+gen
+static/.webassets-cache/47c67aa1e4e7409809d35061f9329d23
+static/.webassets-cache/e32dc15848b846b1595a6ea054b32439
+static/gen/application.js
+.DS_Store
+

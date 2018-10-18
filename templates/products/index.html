@@ -1,0 +1,44 @@
+{% extends "application.html" %}
+
+{% block head %}
+    {{super()}}
+    <script text="text/javascript" src="/static/js/products/cart.js"></script>
+    <script text="text/javascript" src="/static/js/products/product.js"></script>
+    <script text="text/javascript" src="/static/js/products/preloaded_products.js"></script>
+    <script>
+        window.simulateProducts = JSON.parse({{simProducts|tojson|safe}});
+        self.cart = new Cart();
+        if(window.simulateProducts){
+            self.cart.availableProducts(createProducts(sampleProducts()));
+        }
+        else{
+            self.cart.getAvailableProducts();
+        }
+    </script>
+    {% include '/products/product-images.html' %}
+{% endblock %}
+
+{% block title_bar %}
+    {{super()}}
+    <div style="clear: both;"></div>
+    <div class="dash-nav dash-nav--products" data-bind="with: cart">
+        <div class="btn-lt-gray btn-lt-gray--cart" data-bind="text: 'Cart (' + products().length + ')',
+                                         click: viewCart">Cart</div>
+    </div>
+{% endblock %}
+
+{% block content_body %}
+    {{super()}}
+    <div data-bind="with: cart">
+        <div data-bind="template: displayPage"></div>
+        <!--
+        <span data-bind="template: 'product-list-template'"></span>
+        <span data-bind="template: 'cart-template'"></span>
+        -->
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+{% endblock %}

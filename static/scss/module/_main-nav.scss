@@ -1,0 +1,33 @@
+/* Main Nav 
+--------------------------------------------- */
+
+.m-main-nav-container {
+	float: right;
+    width: auto;
+    height: 60px;
+}
+
+.main-nav {
+	list-style: none;
+	margin: 0;
+	margin-right: em(68px);
+    float: right;
+
+    @include e(item) {
+        color: $color-secondary;
+		display: inline-block;
+		font-size: 13px;
+		line-height: 60px;
+		cursor: pointer;
+		margin-left: 30px;
+		text-transform: uppercase;
+        @include m(current) {
+			color: $color-accent;
+			height: 60px;
+			border-bottom: 2px solid #066ace;
+        }
+    }
+}
+
+
+

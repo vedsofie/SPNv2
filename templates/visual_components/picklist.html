@@ -1,0 +1,26 @@
+<script type="text/html" id="picklist-template">
+
+    <div class="m-toggle-menu-wrapper m-toggle-menu-wrapper--right">
+        <span style="display: none;" class="toggle-menu toggle-menu--products"
+              data-bind="visible: showCreate,
+                         foreach: {data: sortedOptions, as: 'option'}">
+            <div class="toggle-menu__control-option"
+                 data-bind="click: $parent.onSelect">
+                <span data-bind="text: option[$parent.optionsText]"/>
+            </div>
+
+            <!--
+            <div class="toggle-menu__control-option toggle-menu__control-option--last">
+                9 Cassettes per set
+            </div>
+            -->
+        </span>
+    </div>
+
+    <a href="#" tabindex="0" class="btn-product-dropdown" data-bind="event: {click: toggleCreate, blur: hideCreate}">
+        <strong data-bind="text: selectedOptionPrimaryText"></strong>
+        <span data-bind="text: selectedOptionText"></span>
+        <div class="arrow-down"></div>
+    </a>
+
+</script>

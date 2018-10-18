@@ -1,0 +1,31 @@
+<script type="text/html" id="keyword-detail-popup-template">
+    <span data-bind="if: showBtn">
+        <a class="btn-gray btn-gray--left" data-bind="click: open, text: btnText"></a>
+    </span>
+    <div class="l-popup-overlay" data-bind="visible: visible, style: {'z-index': zIndex}">
+        <div class="m-popup m-keyword-list-popup" style="width: 600px;">
+            <div class="m-popup-box" data-bind="event: {'keypress': checkAddKeyword}">
+                <div data-bind="click: close" class="m-close-button">X</div>
+                <div class="new-keyword" data-bind="template: {'name': 'keyword-detail-template', data: newKeyword(), as: 'keyword'}"></div>
+
+                <div class="keywords" data-bind="template: {'name': 'keyword-detail-template', foreach: keywords, as: 'keyword'}"></div>
+
+
+                <div class="button-footer">
+                    <span data-bind="if: !owned">
+                        <a data-bind="click: close" class="btn-blue btn-blue--right">Done</a>
+                    </span>
+                    <span data-bind="if: owned">
+                        <a data-bind="click: save.bind($data, type, parentId)" class="btn-blue">Save</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="keyword-list-detail-popup-template">
+    <span data-bind="template: {name: 'keyword-detail-popup-template'}"></span>
+</script>
+

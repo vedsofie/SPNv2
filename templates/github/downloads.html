@@ -1,0 +1,115 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+        <script src="{{url_for('github.static',filename='js/releases.js')}}"></script>
+
+        <script>
+            var releases = initReleases(JSON.parse({{releases|tojson|safe}}));
+            var installers = initReleases(JSON.parse({{installers|tojson|safe}}));
+            $(function(){
+                navbar.currentlyOpenedTab("software");
+            });
+        </script>
+        <style>
+            .software-download-container{
+                width: 320px;
+                background-color:white;
+            }
+            .software-title{
+                padding:20px 0px 20px 20px;
+                border-bottom: 1px solid #e9ebed;
+            }
+            .release-title{
+                margin-top:0px;
+                float:left;
+            }
+            .release-download{
+                display: inline-block;
+                float:right;
+            }
+            .release-list{
+                padding: 20px;
+            }
+        </style>
+{% endblock %}
+
+{% block content_body %}
+
+<script type="text/html" id="github-report-issue">
+        <a class="m-solid-button" data-bind="click: release.createIssue">Report Issue</a>
+        <div class="popup" data-bind="visible: release.reportingIssue">
+            <div style="top: 20%;" class="popup-box">
+                <div class="title center-align-wrapper">
+                    <div class="center-align-content">Report Issue</div>
+                </div>
+                <div data-bind="click: release.cancelReport" class="popup-box-close-button">X</div>
+                <div>
+                    <span data-bind="with: release.newIssue">
+                        <div style="text-align:center;padding-bottom:20px;">
+                            <input style="text-align:center;width:90%;" placeholder="Title" type="text" data-bind="text: title"/>
+                        </div>
+                        <div style="text-align: center;padding-bottom:20px;">
+                            <textarea style="width: 90%;height:190px;" placeholder="How do you replicate this issue?" data-bind="text: message">
+
+                            </textarea>
+                        </div>
+                    </span>
+                    <div class="m-molecule-buttons">
+                        <a class="m-solid-button" data-bind="click: release.reportIssue">Report</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>
+
+<div class="downloads">
+    <div class="l-content-wrapper">
+
+        <div class="software-download-container">
+            <h3 class="software-title">Elixys Installer</h3>
+            <div data-bind="foreach: {data: installers, as: 'release'}">
+                <div class="release-list" data-bind="visible: release.canDownload">
+                    <p class="molecule-name release-title" data-bind="text: 'Installer ' + release.name"></p>
+                    <a class="btn-blue release-download" data-bind="click: release.promptVersionToDownload">Download</a>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="l-popup-overlay" data-bind="visible: showReleases" style="display: none;">
+                    <div class="m-popup m-confirm-popup">
+                        <div data-bind="click: release.hideVersions" class="m-close-button">X</div>
+                        <div class="m-popup-box">
+                            <p>What OS would you like to download for?</p>
+                        </div>
+                        <div class="m-submit-buttons" data-bind="foreach: {data: release.versions, as: 'asset'}">
+                            <a class="btn-gray" data-bind="click: $parent.download.bind($data, asset.url), text: asset.os"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="software-download-container">
+            <h3 class="software-title">Elixys Releases</h3>
+            <div data-bind="foreach: {data: releases, as: 'release'}">
+                <div class="release-list" data-bind="visible: release.canDownload">
+                    <p class="molecule-name release-title" data-bind="text: 'Elixys ' + release.name"></p>
+                    <a class="btn-blue release-download" data-bind="click: release.promptVersionToDownload">Download</a>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="l-popup-overlay" data-bind="visible: showReleases" style="display: none;">
+                    <div class="m-popup m-confirm-popup">
+                        <div data-bind="click: release.hideVersions" class="m-close-button">X</div>
+                        <div class="m-popup-box">
+                            <p>What OS would you like to download for?</p>
+                        </div>
+                        <div class="m-submit-buttons" data-bind="foreach: {data: release.versions, as: 'asset'}">
+                            <a class="btn-gray" data-bind="click: $parent.download.bind($data, asset.url), text: asset.os"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

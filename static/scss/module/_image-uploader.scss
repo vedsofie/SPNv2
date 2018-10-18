@@ -1,0 +1,36 @@
+/* Image uploader
+--------------------------------------------- */
+
+.m-thumb-wrapper {
+	width: 120px;
+	height: 120px;
+	margin: 10px;
+	float: left;
+	img {
+		width: 120px;
+		height: 120px;
+	}
+}
+
+.m-thumb-buttons {
+    width: 160px;
+	height: 120px;
+	margin: 10px;
+	float: left;	
+	padding-top: 12px;
+}
+
+/*.m-thumb-buttons a {
+    background-color: #444E58;
+	margin-bottom: 20px;
+}*/
+
+.m-imageUpload-row {
+	background-color: #f3f6f9; 
+	margin-bottom: 18px;
+}
+
+.m-submit-buttons a {
+    float: right;
+	margin-left: 15px;	
+}

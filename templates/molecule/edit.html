@@ -1,0 +1,29 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+{% endblock %}
+
+{% block content_body %}
+
+    <span data-bind="with: moleculeDetailPopup">
+        <div class="m-form-wrapper">
+            <span data-bind="template: {name: 'molecule-detail-template', data: moleculeDetailViewModel}"></span>
+            <div class="m-submit-buttons">
+                <a data-bind="click: save" class="m-solid-button">Save</a>
+                <a data-bind="click: cancel" class="m-solid-button">Cancel</a>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </span>
+
+{% endblock %}
+
+{% block footer %}
+    {{super()}}
+
+    <script>
+        var molecule = new Molecule(JSON.parse({{molecule|tojson|safe}}));
+        var moleculeDetailPopup = new MoleculeDetailPopup({molecule: molecule});
+    </script>
+
+{% endblock %}

@@ -1,0 +1,266 @@
+/* Dash feeds
+--------------------------------------------- */
+
+#news, #popularity {
+    vertical-align: top;
+}
+
+#popularity {
+    margin-left: 34px;
+	h3 {
+		font-size: 16px;
+		padding: 20px;
+		border-bottom: 1px solid #e9ebed;
+		margin: 0;
+	}
+}
+
+.download-container {
+    position: relative;
+    width: 320px;
+   	padding: 20px 15px 20px 24px;
+    border-bottom: 1px solid #e9ebed;
+	&:last-of-type {
+		border-bottom: none;
+	}
+
+}
+
+
+
+/* News feed
+--------------------------------------------- */
+
+#news {
+    width: 600px;
+    min-height: 1px;
+}
+
+#news h2 {
+  margin: 0;
+}
+
+.box {
+	margin-bottom: 20px;
+	background-color: white;
+    border-radius: 3px;
+}
+
+.post-container {
+    width: 100%;
+    border-radius: $br--default;
+    background-color: $white;
+}
+
+.comment-icon {
+	position: relative;
+	top: 16px;
+	margin-right: 8px;
+    float: right;
+}
+
+/* Field service
+--------------------------------------------- */
+
+.support-card-content {
+	padding: 40px 50px 20px 50px;
+}
+
+.support-bold-text {
+	color: #000;
+	font-weight: 600;
+}
+
+
+
+/* Popular - most downloaded
+--------------------------------------------- */
+
+.feed--popular {
+    border-radius: 3px;
+    background-color: white;
+}
+
+.popular-description-container{
+    word-wrap: break-word;
+    overflow: hidden;
+	max-height:60px;
+	-webkit-line-clamp: 2;
+	p{
+		padding-top: 0px;
+	}
+}
+
+.post-description-container{
+	width:343px;
+	max-height:190px;
+	-webkit-line-clamp: 8;
+	p{
+		padding-top: 0px;
+		margin-top: 0px;
+	}
+}
+
+
+
+/* Popular - newest sequeces
+--------------------------------------------- */
+
+.feed--newest {
+    border-radius: 3px;
+    background-color: white;
+    margin-top: 30px;
+
+}
+
+.sequence-name {
+	font-size: 14px;
+    text-transform: uppercase;
+    color: #222425;
+
+}
+
+
+
+
+
+.account-comment-title-header{
+    position: relative;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.account-comment-title-header img{
+    height: 90px;
+	width: 102px;
+	border-radius: 3px;
+}
+
+.account-comment-title-header > span{
+    font-size: 25px;
+    padding-left: 20px;
+}
+
+.wrap_c {
+	width: 680px;
+
+}
+
+.wrap_c .post_type {
+	display: none;
+}
+
+.wrap_c .post-header {
+	display: none;
+}
+
+.wrap_c .existing-posts{
+	overflow-y: auto;
+	margin-bottom: -25px;
+}
+.wrap_c p.comment_link {
+	margin-bottom: 0px;
+	font-size: 16px;
+	float: left;
+	position: relative;
+	top: -39px;
+	font-weight: 600 !important;
+	color: #222425;
+
+}
+.wrap_c.not_expandable p.comment_link{
+	cursor: default;
+}
+.wrap_c .post-description-container{
+	display: none;
+}
+.wrap_c .comment-icon{
+	display: none;
+}
+.wrap_c .comment_icon_wrap{
+	float: left;
+}
+
+
+
+
+
+
+
+
+
+
+.post-title-bar {
+	font-size: 16px;
+    /*text-transform: lowercase;*/
+    display: inline-block;
+
+}
+
+.post_description {
+	font-size: 14px;
+    word-wrap: break-word;
+    margin-top: 12px !important;
+}
+
+.post_type {
+	float: right;
+    position: relative;
+    /*top: -18px;*/
+    font-size: 13px;
+}
+
+.company {
+	margin-top: 16px;
+
+}
+
+.b_n {
+	font-size: 13px;
+    display: inline-block;
+    margin: 10px 12px;
+    font-weight: 700 !important;
+    color: #222425;
+
+}
+
+img.thumb_nail {
+	width: 200px;
+    height: 200px;
+    float: left;
+    /*background-color: #292C2F;*/
+    padding: 10px;
+    margin-top: 16px;
+    margin-right: 16px;
+
+
+}
+
+img.thumb_nail.Sequence,img.thumb_nail.Probe{
+	background-color: #f3f6f9;
+}
+
+.comment_link {
+	float: right;
+	cursor: pointer;
+
+}
+
+.expanded_comments {
+	border-top: 1px solid #e9ebed;
+
+}
+
+#post-new-comment {
+    width: 100%;
+    position: relative;
+    
+}
+
+#post-new-comment textarea {
+    width: 98%;
+    margin-left: 1%;
+    margin-right: 1%;
+
+}

@@ -1,0 +1,39 @@
+<script type="text/html" id="user-detail-popup-template">
+    <div data-bind="if: showBtn">
+        <div data-bind="click: open">
+            <div data-bind="template: {name: openPopupButtonTemplate}"></div>
+        </div>
+    </div>
+	
+	<div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+		<div class="m-popup create-user" data-bind="visible: visible">
+		
+			<div class="m-popup-box">
+				<div data-bind="css: {'savingBlockUI': user.record.isSaving,
+									  'savingBlockHidden': !user.record.isSaving()}">
+					<div>Saving...</div>
+				</div>
+				
+				<div data-bind="click: close" class="m-close-button">X</div>
+				<div data-bind="template: {name: 'user-detail-template', data: userDetailViewModel()}"></div>
+				
+				<a data-bind="click: save" class="m-solid-button">Save</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/html" id="user-edit-button-standard">
+	<div class="m-solid-button" data-bind="text: btnText"></div>
+</script>
+
+<script type="text/html" id="user-image-edit-button">
+	<img class="avatar-small" data-bind="attr: {src: '/user/' + user.UserID + '/avatar',
+	                                            title: user.name}"/>
+</script>
+
+<script type="text/html" id="user-edit-button-icon">
+    <span class="glyphicon glyphicon-pencil"></span>
+</script>
+

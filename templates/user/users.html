@@ -1,0 +1,25 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+
+
+    <script type="text/javascript">
+        var usrs = JSON.parse({{users|tojson|safe}});
+        var users = [];
+        for(var i = 0; i < usrs.length; i++){
+            users.push(new User(usrs[i]));
+        }
+
+        $(function(){
+            ko.applyBindings(users);
+        });
+    </script>
+{% endblock %}
+
+{% block content_body %}
+    <div id="templates">
+        {% include 'user/user.html' %}
+    </div>
+
+    <div data-bind="template: { name: 'user_template', foreach: users, as: 'user'}"></div>
+{% endblock %}

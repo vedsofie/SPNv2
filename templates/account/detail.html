@@ -1,0 +1,176 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+
+    <script type="text/javascript">
+        $(function(){
+            navbar.currentlyOpenedTab("organizations");
+        });
+    </script>
+
+    <style type="text/css">
+        .i_r {
+            margin: 3px -10px;
+        }
+        .action-context-menu {
+            left: -12px;
+            top: 2px;
+
+        }
+        .company_info {
+            height: 84px;
+
+        }
+
+    </style>
+{% endblock %}
+
+{% block content_body %}
+<div class="col-sm-6 col-sm-offset-3" id="organization-page">
+    <div class="m-molecule-details">
+        <img data-bind="attr: {src: '/account/' + account.id + '/logo/'}"/>
+        <div class="m-molecule-info">
+            <h1 class="molecule-name" data-bind="text: account.name"></h1>
+            <h3 style="font-size: 15px;" data-bind="text: account.LabName"></h3>
+            <p class="mol_d" data-bind="text: account.description"></p>
+            <div class="location" data-bind="visible: account.City && account.State">
+                <span class="location_icon"><img src="/static/img/location_icon.png" alt="" height="12" width="16"/></span>
+                <span data-bind="text: account.City + ','"></span>
+                <span data-bind="text: account.State"></span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="google-card-3">
+        <div class="i_r col-sm-4">
+            <ul class="list-unstyled" id="org-action-right">
+            <li><span data-bind="if: runningUser.AccountID==account.id && runningUser.calculatedRole() == 'admin' || runningUser.calculatedRole() == 'super-admin'">
+                <div tabindex="1" data-bind="event: {click: openActionMenu,blur: hideActionMenu}"
+                     class="action-context-menu">
+                    <span class="action-control"><div class="action-control__arrow"></div>Actions</span>
+                </div>
+                <div class="m-toggle-menu-wrapper">
+                    <div class="toggle-menu toggle-menu--org" data-bind="visible: actionMenuOpen"
+                         style="display: none;">
+                        <a data-bind="attr: {href: '/account/' + account.id + '?edit=true'}">
+                            <div class="toggle-menu__control-option">
+                                Edit
+                            </div>
+                        </a>
+                        <a data-bind="attr:{href: '/user/new/?account_id=' + account.id}">
+                            <div class="toggle-menu__control-option toggle-menu__control-option--last">
+                                Create User
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <span data-bind="template: {name: 'user-detail-popup-template', data: newUserCtrl}"></span>
+                <span data-bind="template: {name: 'account-detail-popup-template', data: organizationCtrl}"></span>
+            </span>
+            </li>
+            <li>
+            <span data-bind="if: account.primary_contact_id">
+                    <contact-us-popup params="contact: 'Contact ' + account.name,
+                                        contact_url: '/account/' + account.id + '/contact',
+                                        btnText: 'Contact Us'"></contact-us-popup>
+            </span>
+            </li>
+            </ul>
+        </div>
+        <div class="i_l col-sm-8">
+            <!--
+            <p class="employees" data-bind="visible: account.users().length > maxEmployees,
+                             text: '' + account.users().length + '+ Users'"></p>
+            -->
+            <ul class="avatar_list" data-bind="foreach: {data: account.calculatedUsers(), as: 'user'}">
+                <li>
+                    <user-detail-popup params="user: user,
+                                               openPopupButtonTemplate: 'user-image-edit-button'"></user-detail-popup>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="m-molecule-details-wrapper">
+        <!--<div class="m-horizontal-scroll-title">
+            <span data-bind="text: account.name"></span>
+        </div>
+        <div class="m-card-wrapper">
+            <div class="m-horizontal-scrolling">
+                <div class="m-horizontal-list" data-bind="template: {name: 'user_template', foreach: account.calculatedUsers(), as: 'user'}"></div>
+                <div class="clear"></div>
+            </div>
+        </div>-->
+        <div class="clear"></div>
+        <div data-bind="with: account,
+                        visible: account.publicSequences().length > 0" class="m-account-sequences">
+            <div class="divider_title col-sm-12">
+                <span>Public ELIXYS Sequences</span>
+            </div>
+            <div data-bind="foreach: {data:  calculatedPublicSequences(), as: 'sequence'}">
+                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
+            </div>
+            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
+                                        'currentPage': account.publicSequencePage,
+                                        'items': account.publicSequences().length}"></div>-->
+        </div>
+        <div class="clear"></div>
+        <div data-bind="with: account,
+                        visible: account.privateElixysSequences().length > 0" class="m-account-sequences">
+            <div class="divider_title col-sm-12">
+                <span>Private ELIXYS Sequences</span>
+            </div>
+            <div data-bind="foreach: {data: calculatedPrivateElixysSequences(), as: 'sequence'}">
+                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
+            </div>
+            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
+                                        'currentPage': account.privateElixysSequencePage,
+                                        'items': account.privateElixysSequences().length}"></div>-->
+        </div>
+        <div class="clear"></div>
+        <div data-bind="with: account,
+                        visible: account.privateSequences().length > 0" class="m-account-sequences">
+            <div class="divider_title col-sm-12">
+                <span>Other Sequences</span>
+            </div>
+            <div data-bind="foreach: {data: calculatedPrivateSequences(), as: 'sequence'}">
+                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
+            </div>
+            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
+                                        'currentPage': account.privateSequencePage,
+                                        'items': account.privateSequences().length}"></div>-->
+        </div>
+    </div>
+    <div class="clear"></div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}
+    {{super()}}
+    <script type="text/javascript">
+        var account = initAccounts([JSON.parse({{account|tojson|safe}})])[0];
+        var maxEmployees = 5;
+        openActionMenu = function(){
+            actionMenuOpen(!actionMenuOpen());
+        }
+        hideActionMenu = function(){
+            setTimeout(function(){
+                actionMenuOpen(false);
+            }, 300);
+        }
+        actionMenuOpen = ko.observable(false);
+        var newUserCtrl = new UserDetailPopupCtrl({AccountID: account.id,
+                                                   hideButton: true});
+        var organizationCtrl = new AccountDetailPopup({hideButton: true, account: account});
+        createUser = function(){
+            newUserCtrl.open();
+        }
+        editAccount = function(){
+            organizationCtrl.open();
+        }
+    </script>
+{% endblock %}
+

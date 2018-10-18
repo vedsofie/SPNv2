@@ -1,0 +1,150 @@
+/* Comments
+--------------------------------------------- */
+
+.m-toggle-menu-wrapper {
+	position: relative;
+    display: inline-block;
+    @include m(right) {
+        float: right;
+    }
+}
+
+.toggle-menu {
+    width: 180px;
+    background-color: $white;
+    border-radius: $br--default;
+    z-index: 20;
+    border: 1px solid $color-main-background;
+    box-shadow: $bs--default;
+    @include e(control-option) {
+        color: $color-primary;
+        font-weight: $font-weight--medium;
+		cursor: pointer;
+		text-align: left;
+		text-transform: uppercase;
+		font-size: em(12px);
+		border-bottom: 1px solid $color-main-background;
+		padding: 13px 16px;
+        @include m(posts) {
+			display: block;
+			text-align: right;
+        }
+        @include m(last) {
+			border-bottom: none;
+        }
+    }
+    @include m(create) {
+        position: absolute;
+			top: 40px;
+			left: 465px;
+    }
+    @include m(posts) {
+        width: 140px;
+        position: absolute;
+			top: 6px;
+			left: 20px;
+    }
+    @include m(org) {
+        position: absolute;
+		top: 20px;
+		left: -200px;
+    }
+    @include m(account) {
+		position: absolute;
+			top: -20px;
+			left: 490px;
+    }
+    @include m(probe) {
+		position: absolute;
+			top: 32px;
+			left: -70px;
+    }
+    @include m(detail) {
+		position: absolute;
+			top: 32px;
+			left: -70px;
+    }
+    @include m(products) {
+        width: 210px;
+        position: absolute;
+			top: 42px;
+			right: 20px;
+    }
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: $br--round;
+    outline: none;
+    float: right;
+    cursor: pointer;
+    margin-top: -25px;
+    margin-right: em(4px);
+    margin-left: em(14px);
+}
+
+.action-control {
+	position: relative;
+    width: 74px;
+    line-height: 36px;
+    vertical-align: middle;
+    display: inline-block;
+    color: $color-secondary;
+    @include e(arrow) {
+		width: 0;
+		height: 0;
+		border-left: 4px solid transparent;
+		border-right: 4px solid transparent;
+		border-top: 4px solid #A1A4A9;
+		float: right;
+		position: relative;
+		top: 15px;
+		margin: 0 15px 0 4px;
+        @include m(posts) {
+            top: 8px;
+            margin: 0 0 0 4px;
+
+        }
+    }
+    @include m(150) {
+        width: 150px;
+    }
+}
+
+.dropdown-arrow {
+    width: 12px;
+    height: 8px;
+    display: block;
+    float: right;
+    margin: 6px 0 0 12px;
+    background-image: url(#{$path--rel}/dropdown-icon.svg);
+    background-repeat: no-repeat;
+}
+
+.btn-product-dropdown {
+    width: 225px;
+    display: block;
+	background-color: $color-main-background; 
+    padding: 12px 18px;
+    font-size: em(14px);
+    line-height: 14px;
+    color: $color-primary !important;
+    border-radius: $br--round;
+    text-align: center;
+    cursor: pointer;
+    float: right;
+    margin-right: 15px;
+}
+
+.arrow-down {
+	width: 0; 
+	height: 0; 
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-top: 10px solid $color-secondary;
+	display: inline-block;
+    float: right;
+    margin-top: 2px;
+}
+

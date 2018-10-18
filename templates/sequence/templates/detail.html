@@ -1,0 +1,196 @@
+<script type="text/html" id="sequence-detail-template">
+    <div data-bind="css: {'savingBlockUI': sequence.record.isSaving,
+                      'savingBlockHidden': !sequence.record.isSaving()}">
+        <div class="blockUIText">Saving...</div>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('Name')}">Sequence Name</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.Name()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.Name"/>
+        </span>
+    </div>
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('MoleculeID')}">Probe Name</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.MoleculeID()"></div>
+        <span>
+            <lookup class="molecule-lookup" params="sObjectType: 'Molecules',
+                            record: sequence.record,
+                            column: 'MoleculeID',
+                            hints: getMoleculeHints,
+                            selectHint: selectHint,
+                            displayLink: false,
+                            standardUser: true,
+                            lookupRef: lookupRef"></lookup>
+        </span>
+    </div>
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('Comment')}">Description</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.Comment()"></div>
+        <textarea class="input_main" style="height: 118px;" data-bind="textInput: sequence.record.Comment"/>
+    </div>
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('NumberOfSteps')}"># Cassettes</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.NumberOfSteps()"></div>
+        <span>
+            <input class="input_main" type="text" data-bind="textInput: sequence.record.NumberOfSteps"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('SpecificActivity')}">Molar Activity (Ci/mmol)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.SpecificActivity()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.SpecificActivity"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('SpecificActivityStandardDeviation')}">Molar Activity Standard Deviation (Ci/mmol)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.SpecificActivityStandardDeviation()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.SpecificActivityStandardDeviation"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('StartingActivity')}">Starting Activity (mCi)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.StartingActivity()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.StartingActivity"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('StartingActivityStandardDeviation')}">Starting Activity Standard Deviation (mCi)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.StartingActivityStandardDeviation()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.StartingActivityStandardDeviation"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('SynthesisTime')}">Synthesis Time (minutes)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.SynthesisTime()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.SynthesisTime"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('SynthesisTimeStandardDeviation')}">Synthesis Time Standard Deviation (minutes)</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.SynthesisTimeStandardDeviation()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.SynthesisTimeStandardDeviation"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('Yield')}">Yield (%)</span>
+        <div class="help-tooltip" title="Enter the yield using as the decay corrected results">
+            <img class="help-icon-img" src="/static/img/help-icon.png"/>
+        </div>
+        <div class="validation-error" data-bind="text: sequence.record.errors.Yield()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.Yield"/>
+        </span>
+    </div>
+
+    <div>
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('YieldStandardDeviation')}">Yield Standard Deviation(%)</span>
+        <div class="help-tooltip" title="Enter the yield standard deviation using as the decay corrected results">
+            <img class="help-icon-img" src="/static/img/help-icon.png"/>
+        </div>
+        <div class="validation-error" data-bind="text: sequence.record.errors.YieldStandardDeviation()"></div>
+        <span>
+            <input class="input_main" data-bind="textInput: sequence.record.YieldStandardDeviation"/>
+        </span>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('PurificationMethod')}">Purification Method</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.PurificationMethod()"></div>
+        <div>
+            <select data-bind="options: ['PURE/FORM', '3rd Party HPLC', 'Other'],
+                               value: sequence.record.PurificationMethod,
+                               optionsCaption: 'Choose Purification Method'"></select>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+        <span class="lbl" data-bind="css: {'required-field': sequence.record.columnRequired('SynthesisModule')}">Module</span>
+        <div class="validation-error" data-bind="text: sequence.record.errors.SynthesisModule()"></div>
+        <div>
+            <select data-bind="options: sequence.calculatedModuleOptions(),
+                               value: sequence.record.SynthesisModule,
+                               valueAllowUnset: false,
+                               optionsCaption: 'Choose Synthesis Module'"></select><br>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 18px;">
+        <span data-bind="if: sequence.record.MadeOnElixys">
+                Click icon to upload your ELIXYS sequence
+                <label for="sequenceFile2">
+                    <div class="help-tooltip" title="Upload your ELIXYS sequence to make it public">
+                        <img class="help-icon-img clickable" src="/static/img/upload.svg"/>
+                    </div>
+                </label>
+            <input class="input_main" style="display: none;" id="sequenceFile2" type="file" data-bind="event: {change: uploadSequence.bind($data, $element)}">
+        </span>
+        <span data-bind="if: canClearSequenceFile">
+            <img class="help-icon-img clickable" src="/static/img/delete_message.svg" data-bind="click: deleteSequenceFile"/>
+        </span>
+    </div>
+
+    <div style="margin-bottom: 18px;" data-bind="if: canClearSequenceFile">
+        <span data-bind="css: {'required-field': sequence.record.columnRequired('MadeOnElixys')}">
+            <input type="checkbox" data-bind="checked: sequence.termAndConditionAgreementCheckbox,
+                                              enable: sequence.termsAndConditionsCanBeAltered" />
+            <span class="lbl">I agree to the</span>
+
+            <a target="_blank" data-bind="click: sequence.termsAndConditionsPopup.open">terms &amp; conditions</a>
+
+            <div class="validation-error" data-bind="text: sequence.record.errors.TermsAndConditions()"></div>
+        </span>
+    </div>
+
+    <section data-bind="with: sequence.termsAndConditionsPopup">
+        <div class="yes-no popup l-popup-overlay" data-bind="visible: visible">
+
+            <div class="m-popup m-confirm-popup" style="max-height: 220px;margin: -110px 0 0 -300px">
+                    <div class="m-close-button" data-bind="click: close">X</div>
+                <div class="m-popup-box">
+                    <h2>NOTICE:</h2>
+                    <div style="width: 100%;text-align: left;">
+                        <span>Uploading information to the Sofie Probe Network will make it
+                              available to other users resulting in a public disclosure. You represent that you
+                              have the right to publicly disclose this information and you acknowledge that
+                              uploading this information may prevent you from obtaining protection for
+                              disclosed inventions under certain intellectual property laws.
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <span class="lbl">Reaction Scheme</span>
+        <span data-bind="if: !sequence.canClearStrategy()">
+            <div style="display: inline-block;">
+                <label data-bind="attr:{for: 'sequenceChemStrategy' + sequence.record.SequenceID()}">
+                    <img class="help-icon-img clickable" src="/static/img/upload.svg"/>
+                </label>
+            </div>
+            <input class="input_main" style="display: none;" type="file"
+                   data-bind="event: {change: sequence.uploadStrategy.bind($data, $element)},
+                              attr: {id: 'sequenceChemStrategy' + sequence.record.SequenceID()}">
+        </span>
+        <span data-bind="if: sequence.canClearStrategy">
+            <img class="help-icon-img clickable" src="/static/img/delete_message.svg" data-bind="click: deleteStrategy"/>
+        </span>
+    </div>
+</script>

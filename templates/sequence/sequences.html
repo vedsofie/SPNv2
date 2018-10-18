@@ -1,0 +1,28 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+    <script src="{{url_for('static', filename='js/moleculeSearch.js')}}"></script>
+    <script src="{{url_for('static', filename='js/sequenceSearch.js')}}"></script>
+    <script src="{{url_for('static', filename='js/sequenceUploadWizard.js')}}"></script>
+
+    <script type="text/javascript">
+        var sequences = ko.observableArray( initSequences(JSON.parse({{sequences|tojson|safe}})) );
+    </script>
+
+{% endblock %}
+
+{% block content_body %}
+
+    <div class="l-content-wrapper">
+        <div class="m-search-wrapper">
+            <input type="text" placeholder="Search..."/>
+            <div class="clear"></div>
+        </div>
+        <div class="m-card-wrapper" data-bind="foreach: {data: sequences, as: 'sequence'}">
+            <div data-bind="template: {name: 'sequence_template', with: 'sequence'}"/>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endblock %}
+
+<html>

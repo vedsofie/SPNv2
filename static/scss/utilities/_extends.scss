@@ -1,0 +1,101 @@
+//------------------------------------
+//    #Extends
+//------------------------------------
+
+
+// Nav items
+//---------------------------------------------
+
+%nav-item-disp {
+	list-style: none;
+	margin: 0;
+	margin-right: em(68px);
+    float: right;
+}
+
+%nav-item {
+	display: inline-block;
+	font-size: 13px;
+	line-height: 60px;
+	cursor: pointer;
+	margin-left: 30px;
+	text-transform: uppercase;
+}
+
+%nav-item-on {
+	color: $color-accent;
+	height: 60px;
+	border-bottom: 2px solid #066ace;
+}
+
+// Headlines
+//---------------------------------------------
+
+%hdln-prim {
+    font-weight: $font-weight--bold;
+    font-size: em(36px);
+    line-height: (36px / 40px);
+    margin-bottom: em(70px, 42px);
+    color: palette(primary);
+}
+
+// Gradients
+//---------------------------------------------
+
+%gradient-border {
+	background-image: 
+		-webkit-gradient(linear, 0 0, 0 100%, from($mirage), to($cello));
+	background-image: 
+		-webkit-linear-gradient(180deg, $mirage, $cello),
+		-webkit-linear-gradient(180deg, #161C28, $cello)
+	;
+	background-image: 
+		-moz-linear-gradient(180deg, $mirage, $cello),
+		-moz-linear-gradient(180deg, $mirage, $cello)
+	;
+	background-image:
+		-o-linear-gradient(180deg, $mirage, $cello),
+		-o-linear-gradient(180deg, #161C28, $cello)
+	;
+	background-image: 
+		linear-gradient(90deg, $mirage, $cello),
+		linear-gradient(90deg, $mirage, $cello)
+	;
+	-moz-background-size: 100% 1px; /* This get flipped. */
+	background-size: 100% 1px; /* This gets flipped. */
+	background-position: 0 0, 0 100%; /* The last argument gets flipped. */
+	background-repeat: no-repeat;
+}
+
+//%home-overlay-gradient {
+//    background: rgba(22, 28, 40, 0.0); /* Old browsers */
+//	background: -moz-linear-gradient(top,  rgba(22, 28, 40, 0.0) 0%, $mirage 100%); /* FF3.6+ */
+//	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(22, 28, 40, 0.0)), color-stop(100%,$mirage)); /* Chrome,Safari4+ */
+//	background: -webkit-linear-gradient(top,  rgba(22, 28, 40, 0.0) 0%, $mirage 100%); /* Chrome10+,Safari5.1+ */
+//	background: -o-linear-gradient(top,  rgba(22, 28, 40, 0.0) 0%, $mirage 100%); /* Opera 11.10+ */
+//	background: -ms-linear-gradient(top,  rgba(22, 28, 40, 0.0) 0%, $mirage 100%); /* IE10+ */
+//	background: linear-gradient(to bottom,  rgba(22, 28, 40, 0.0) 0%, $mirage 100%); /* W3C */
+//	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(22, 28, 40, 0.0)', endColorstr='$mirage',GradientType=0 ); /* IE6-9 */
+//}
+
+%home-overlay-gradient {
+    background: rgba(22, 28, 40, 0.0); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(0, 0, 0, 0.0) 0%, $black 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0, 0, 0, 0.0)), color-stop(100%,$black)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(0, 0, 0, 0.0) 0%, $black 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(0, 0, 0, 0.0) 0%, $black 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(0, 0, 0, 0.0) 0%, $black 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(0, 0, 0, 0.0) 0%, $black 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(0, 0, 0, 0.0)', endColorstr='$black',GradientType=0 ); /* IE6-9 */
+}
+
+%home-background-gradient {
+    background: $mirage; /* Old browsers */
+	background: -moz-linear-gradient(top,  $firefly 0%, $mirage 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$firefly), color-stop(100%,$mirage)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  $firefly 0%, $mirage 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  $firefly 0%, $mirage 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  $firefly 0%, $mirage 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  $firefly 0%, $mirage 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$firefly', endColorstr='$mirage',GradientType=0 ); /* IE6-9 */
+}

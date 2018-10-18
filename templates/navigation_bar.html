@@ -1,0 +1,152 @@
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig"></script>
+
+<div class="l-header">
+    <div class="l-header__main-logo">
+        <a href="/">
+            <img src="/static/img/spn-logo-top.png" alt="PET Imaging Users Network" width="70" />
+        </a>
+    </div>
+
+    <div class="m-search-wrapper">
+        <global-search params="searchType: 'local',
+                               redirect: true,
+                               placeHolder: 'Search for a Probe'">
+        </global-search>
+    </div>
+
+    <div class="m-main-nav-container" data-bind="with: navbar">
+        <ul class="main-nav">
+            
+
+            <li class="main-nav__item" onclick="loading()" data-bind="click: visit.bind($data, '/user/dashboard'),
+                           css: { 'main-nav__item--current' : currentlyOpenedTab() == 'dashboard'}">Dash</li>
+
+<!--             <li class="main-nav__item" data-bind="click: visit.bind($data, '/issue/'),
+                           css: { 'main-nav__item--current' : currentlyOpenedTab() == 'support'}">Support</li> -->
+
+           <li class="main-nav__item" onclick="loading()" data-bind="click: visit.bind($data, '/user/dashboard?support=true'),
+           css: { 'main-nav__item--current' : currentlyOpenedTab() == 'support_dashboard'}">Support</li>
+        
+                <li class="main-nav__item" data-bind="click: visit.bind($data, '/probe/'),
+                           css: { 'main-nav__item--current' : currentlyOpenedTab() == 'tracers'}">Probes</li>
+           <li class="main-nav__item" data-bind="click: visit.bind($data, '/account/'),
+                           css: { 'main-nav__item--current' : currentlyOpenedTab() == 'organizations'}">Organizations</li>
+    
+
+            <li class="main-nav__item">
+                <a href="#" tabindex="0" class="btn-blue"
+                   data-bind="event: {click: toggleCreate, blur: hideCreate}">
+                    Create
+                </a>
+
+            </li>
+            <li class="main-nav__item">
+                <div tabindex="1" class="avatar" data-bind="event: {click: toggleSettings, blur: hideSettings}">
+                    <img class="avatar" data-bind="attr:{src: '/user/' + runningUser.UserID + '/avatar'}"/>
+                </div>
+            </li>
+        </ul>
+        <div class="m-toggle-menu-wrapper">
+            <span style="display: none;" class="toggle-menu toggle-menu--create" data-bind="visible: showCreate">
+                <a data-bind="attr:{href: '/account/new/'}">
+                    <div class="toggle-menu__control-option"
+                         data-bind="visible: canCreateOrg">
+                        Organization
+                    </div>
+                </a>
+                <a data-bind="attr: {href: '/probe/new/'}">
+                    <div class="toggle-menu__control-option">
+                        Probe
+                    </div>
+                </a>
+                <a data-bind="attr: {href: '/sequence/new/'}">
+                    <div class="toggle-menu__control-option toggle-menu__control-option--last">
+                        Sequence
+                    </div>
+                </a>
+            </span>
+        </div>
+        <div class="l-header__divider"></div>
+
+        <div class="m-toggle-menu-wrapper">
+            <span style="display: none;" class="toggle-menu toggle-menu--account" data-bind="visible: showApplicationSettings">
+                <a data-bind="attr: {href: '/user/' + runningUser.UserID + '/edit'}">
+                <div class="toggle-menu__control-option">
+                    My Profile
+                </div>
+                </a>
+                <a data-bind="attr: {href: '/account/' + runningUser.AccountID}">
+                    <div class="toggle-menu__control-option">
+                       My Organization
+                    </div>
+                </a>
+                <!--
+                <span data-bind="if: runningUser.can_order_products">
+                    <a href='/product'>
+                        <div class="toggle-menu__control-option">Order</div>
+                    </a>
+                </span>
+                -->
+
+                <!--<a href="/issue/">
+                    <div class="toggle-menu__control-option">
+                        Report Issue
+                    </div>
+                </a>-->
+
+<!--                 <a href="/github/releases">
+                    <div class="toggle-menu__control-option">
+                        Software Downloads
+                    </div>
+                </a> -->
+                <a href="/user/logout">
+                    <div class="toggle-menu__control-option toggle-menu__control-option--last">Logout</div>
+                </a>
+            </span>
+        </div>
+
+        <!--span data-bind="template: {name: 'report-issue-popup-template', data:issueCtrl}"></span>-->
+    </div>
+</div>
+
+<div class=""></div>
+{% include 'comment/posts.html' %}
+{% include 'comment/comment.html' %}
+{% include 'contact_us.html' %}
+{% include 'keywords/list.html' %}
+{% include 'keywords/keyword.html' %}
+{% include 'keywords/list_read_only.html' %}
+{% include '/visual_components/datepicker.html' %}
+{% include '/visual_components/timer-input.html' %}
+{% include '/visual_components/numeric-input.html' %}
+{% include '/visual_components/lookup.html' %}
+{% include '/visual_components/sfdc_lookup.html' %}
+{% include '/visual_components/color_selector.html' %}
+{% include '/visual_components/sobject_field.html' %}
+{% include '/visual_components/polymorphic_lookup.html' %}
+{% include '/visual_components/binary_image.html' %}
+{% include '/visual_components/report_issue.html' %}
+{% include '/visual_components/picklist.html' %}
+
+{% include 'notification/popup.html' %}
+
+{% include 'sequence/templates/detail.html' %}
+{% include 'sequence/templates/sequence.html' %}
+{% include 'sequence/templates/new.html' %}
+
+{% include '/user/templates/detail.html' %}
+{% include '/user/templates/new.html' %}
+{% include '/user/templates/user.html' %}
+{% include '/account/templates/new.html' %}
+{% include '/account/templates/account.html' %}
+{% include '/account/templates/contact_us_about.html' %}
+{% include '/account/templates/detail.html' %}
+{% include '/molecule/templates/new.html' %}
+{% include '/molecule/templates/detail.html' %}
+{% include '/molecule/templates/molecule.html' %}
+{% include '/molecule/templates/search.html' %}
+{% include '/visual_components/formula_editor.html' %}
+{% include '/visual_components/confirm_yes_no.html' %}
+
+{% include '/products/product-list.html' %}
+{% include '/products/cart.html' %}

@@ -1,0 +1,84 @@
+<script type="text/html" id="cropper-template">
+    <div class="l-popup-overlay" data-bind="visible: showCrop">
+		<div class="m-popup m-image-cropper">
+			<span data-bind="if: showClose">
+				<div data-bind="click: closeCropWindow" class="m-close-button">X</div>
+			</span>
+			<div class="m-canvas-cropper">
+				<!--This parent div is very important.  Changing the CSS will require significant testing to validate behavior-->
+				<img class="canvas-image" alt="Probe Image" style="display: hidden;width:500px;height:500px;" data-bind="visible: displayImage">
+			</div>
+
+			<div class="m-cropper-toolbar">
+				<div class="m-zoom-controls">
+					<span data-bind="click: $data.zoomImage.bind($data, .2)">+</span>
+					<span data-bind="click: $data.zoomImage.bind($data, -.2)">-</span>
+				</div>
+				<div class="m-move-arrows">
+					<div class="m-move-down" data-bind="event: {'mousedown': $data.moveImage.bind($data, 0, 2),
+											 'mouseup': $data.stopMoving,
+											 'mouseout': $data.stopMoving}"></div>
+					<div class="m-move-right" data-bind="event: {'mousedown': $data.moveImage.bind($data, 2, 0),
+											 'mouseup': $data.stopMoving,
+											 'mouseout': $data.stopMoving}"></div>
+					<div class="m-move-left" data-bind="event: {'mousedown': $data.moveImage.bind($data, -2, 0),
+											 'mouseup': $data.stopMoving,
+											 'mouseout': $data.stopMoving}"></div>
+					<div class="m-move-up" data-bind="event: {'mousedown': $data.moveImage.bind($data, 0, -2),
+											 'mouseup': $data.stopMoving,
+											 'mouseout': $data.stopMoving}"></div>
+				</div>
+				<a data-bind="click: $data.cropImage,
+							  text: cropperApplyText"
+				   class="m-solid-button m-crop-button">
+				</a>
+				<div class="clear"></div>
+			</div>
+		</div>
+    </div>
+</script>
+
+<script type="text/html" id="binary-image-upload-template">
+	<div data-bind="template: {name: 'cropper-template', afterRender: initCropImage}"></div>
+	<div class="m-thumb-wrapper" data-bind="visible: showImage">
+		<img data-bind="attr: {src: $data.imageDataURL}"/>
+	</div>
+
+    <div data-bind="visible: !showImage && edit()">
+        <div data-bind="if: !styledButton">
+            <input type="file" data-bind="attr:{'accept': $data.acceptedTypes}, event: {change: $data.uploadImage.bind($data, $element.files[0])}"/>
+        </div>
+        <div data-bind="if: styledButton">
+            <label data-bind="attr:{'for': 'avatar_' + identifier}" >
+                <div class="m-molecule-buttons">
+                    <a class="m-solid-button" data-bind="text: styledButton"></a>
+                </div>
+            </label>
+            <input style="display:none;" type="file" data-bind="attr: {'id': 'avatar_' + identifier, 'accept': $data.acceptedTypes},
+                                                               event: {change: $data.uploadImage.bind($data, $element.files[0])}"/>
+        </div>
+    </div>
+
+    <div class="m-thumb-buttons">
+		<div data-bind="if: showCropButton">
+			<div data-bind="visible: edit() && doCrop">
+				<a class="btn-gray" data-bind="click: $data.cropImage,
+													text: 'Crop Image'"></a>
+			</div>
+		</div>
+		
+		<div data-bind="visible: showImage">
+			<label data-bind="attr:{'for': 'avatar_' + identifier}">
+				<div>
+					<a class="btn-gray btn-gray--margin">Upload New</a>
+				</div>
+			</label>
+			<input style="display:none;" type="file" data-bind="attr: {'id': 'avatar_' + identifier, 'accept': $data.acceptedTypes}, event: {change: $data.uploadImage.bind($data, $element.files[0])}"/>
+		</div>
+	</div>
+	<div class="clear"></div>
+</script>
+
+<script type="text/html" id="binary-image-template">
+    <span data-bind="template: {name: 'binary-image-upload-template'}"></span>
+</script>

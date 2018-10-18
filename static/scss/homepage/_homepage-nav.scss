@@ -1,0 +1,44 @@
+/* Homepage Nav
+--------------------------------------------- */
+
+.m-home-nav-container {
+	float: right;
+    width: 800px;
+    height: 60px;
+    @include media('<=tablet'){
+		width: 60%;
+	}
+}
+
+.home-nav {
+	list-style: none;
+	margin: 0;
+	margin-right: em(12px);
+    float: right;
+    @include e(item) {
+		display: inline-block;
+		margin-left: em(30px);
+        a {
+			color: $white;
+			font-size: em(13px);
+			line-height: 60px;
+			cursor: pointer;
+			text-transform: uppercase;
+            text-decoration: none;
+        }
+        a:hover {
+            color: $white;
+        }
+    }
+    @include m(mobile) {
+        display: none;	
+        @include media('<=tablet'){
+            display: inline-block;
+        }
+    }
+    @include m(desktop) {	
+        @include media('<=tablet'){
+            display: none;
+        }
+    }
+}

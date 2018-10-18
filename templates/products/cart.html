@@ -1,0 +1,70 @@
+<script type="text/html" id="cart-template">
+    <div data-bind="css: {'savingBlockUI': record.isSaving,
+                      'savingBlockHidden': !record.isSaving()}">
+        <div class="blockUIText">Saving...</div>
+    </div>
+
+    <a class="back-products" data-bind="click: viewProducts">&lt; Back to products</a>
+
+    <div class="m-product-pane m-product-pane--cart">
+        <div class="cart-header">
+		    <h2 class="cart-header__h2">Order Breakdown:</h2>
+        </div>
+
+		<div data-bind="foreach: {data: products, as: 'product'}">
+            <div class="cart-details__section--main">
+				<div class="cart-details__section">
+					<span class="cart-details__title" data-bind="text: 'ELIXYS&nbsp;' + Family,
+																   attr: {'id': product.record.Id}"></span>
+				   
+					<span class="cart-details__quant" data-bind="text: product.record.quantity"></span>
+                    <span class="cart-details__quant" data-bind="text: product.displayUnit"></span>
+
+					<span class="cart-details__prod" data-bind="text: product.record.Name,
+									 attr: {'id': product.record.Id}"></span>
+                    
+					<span class="cart-details__prod" data-bind="text: product.unitDisplayText"></span>
+					<span class="cart-details__subtotal" data-bind="text: product.displayedTotal"></span>
+
+				</div>
+	
+		
+				<div class="cart-details__section" data-bind="if: product.breakdown().length > 0,
+														visible: product.breakdown().length > 0">
+					 <span class="cart-details__title cart-details__title--secondary">Breakdown</span>
+					<ul data-bind="foreach: {data: product.breakdown, as: 'breakdownProduct'}">
+						<li class="cart-details__li">
+							<span class="cart-details__extras" data-bind="text: breakdownProduct.record.quantity"></span>
+							<span class="cart-details__extras cart-details__extras--lbl" data-bind="text: breakdownProduct.Name"></span>
+
+						</li>
+					</ul>
+				</div>
+				<div class="cart-details__section" data-bind="if:
+				product.includedAddons().length > 0,
+														visible:
+														product.includedAddons().length > 0">
+					<span class="cart-details__title cart-details__title--secondary">Add-on options</span>
+					<ul data-bind="foreach: {data: product.includedAddons, as: 'addOnProduct'}">
+						<li class="cart-details__li">
+							<span class="cart-details__extras" data-bind="text: addOnProduct.record.quantity"></span>
+							<span class="cart-details__extras cart-details__extras--lbl" data-bind="text: addOnProduct.Name"></span>
+						</li>
+					</ul>
+				</div>
+	        </div>
+		</div>
+	
+		<div class="cart-footer">
+            <div class="cart-footer__total">            
+                <span class="cart-footer__total--number" data-bind="text: displayedTotal"></span>
+				<span class="cart-footer__total--lbl">Total:</span>
+            </div>
+			
+            <div class="cart-footer__buttons">
+				<div class="btn-blue btn-blue__products btn-blue__products--cart" data-bind="click: placeOrder">Place Order</div>
+				<div class="btn-gray btn-gray__products btn-gray__products--cart" data-bind="click: clearCart">Cancel</div>
+            </div>
+		</div>
+    </div>
+</script>

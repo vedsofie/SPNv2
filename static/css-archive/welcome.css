@@ -1,0 +1,35 @@
+#accounts-table-container{
+  max-width: 500px;
+}
+
+#accounts-table{
+  background-color: white;
+  width: 90%;
+}
+
+#nav-user-settings{
+  margin-right:10px;
+}
+
+#welcome-user-text{
+  margin-right: 12px;
+}
+
+#welcome-user-dropdown{
+  color: white;
+}
+
+.add-btn{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+#add-account-command{
+  float: right;
+}
+
+.account-save{
+  margin-left: 20px;
+  cursor: pointer;
+}

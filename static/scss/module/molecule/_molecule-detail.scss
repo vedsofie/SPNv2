@@ -1,0 +1,338 @@
+/* Molecule Details
+--------------------------------------------- */
+
+.m-molecule-details-wrapper {
+	width: 1005px;
+    margin: 0 auto;	
+	@include media('<=desktop'){
+		width:  670px;
+	}
+	@include media('<=tablet'){
+		width:  335px;
+	}
+}
+
+.m-molecule-description-wrapper {
+	width: 1005px;
+    margin: 0 auto;
+    overflow: hidden;	
+}
+
+
+.m-molecule-details {
+    padding: 20px;
+    background-color: $white;
+    border-radius: $br--default;
+}
+
+.divider_title {
+	width: 960px;
+    border-bottom: 1px solid #d7dde2;
+    margin-bottom: 50px;
+    margin-top: -36px;
+    text-align: center;
+    display: inline-block;
+
+}
+
+.divider_title > span {
+	color: #929598;
+    position: relative;
+    top: 15px;
+    background-color: #F3F6F9;
+    padding-right: 26px;
+    padding-left: 26px;
+    font-weight: 600 !important;
+    margin-top: -32px;
+    font-size: 16px;
+
+}
+
+
+.company_info {
+	padding: 20px;
+    background-color: $white;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border-radius: $br--default;
+
+}
+
+
+.m-molecule-details-inner {
+	padding: 20px;
+    background-color: #F5F5F5;
+    background-color: white;
+    border-radius: 3px;
+	width: 680px;
+    float: left;	
+
+}
+
+.molecule-details__img {
+	background-color: #f3f6f9;
+    width: 230px;
+    height: 230px;
+    float: left;
+    margin-right: 20px;
+    border-radius: 3px;
+
+}
+
+.m-molecule-buttons {
+	margin: 10px 10px;
+
+}
+
+.right_column_info {
+	width: 250px;
+    float: right;
+    background-color: white;
+    border-radius: $br--default;
+
+}
+
+.right_column_info h3 {
+	font-size: 16px;
+    padding: 20px;
+    border-bottom: 1px solid $color-main-background;
+    margin: 0;
+}
+
+.info_name {
+	color: #53575A;
+	margin-top: 6px;
+    display: inline;
+
+}
+
+.left_action_box {
+    width: 680px;
+    /*
+    overflow-x: hidden;
+    overflow-y: auto;
+    */
+    background-color: white;
+    margin-bottom: 30px;
+    border-radius: $br--default;
+    margin-top: 30px;
+    height: 69px;
+
+}
+
+.reaction_link {
+	text-align: center;
+    position: relative;
+    top: 3px;
+    left: 33px;
+	
+}
+
+.button_wrap {
+	float: right;
+    margin: 16px 16px;
+    position: relative;
+}
+
+.action-context-menu {
+	position: relative;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+}
+
+.action-context-menu-list {
+	left: 250px;
+    top: 470px;	
+
+} 
+
+.m-molecule-buttons a.m-solid-button,
+#molecule-upload-sequence #popup-text-button {
+	width: 140px;
+	display: block;
+    color: #FFF;
+    background-color: #09192F;
+    font-size: 14px;
+    line-height:32px;
+    vertical-align: middle;
+	text-align: center;
+	text-decoration: none;
+	margin: 0;
+	padding: 0;
+    cursor: pointer;	
+}
+
+.m-molecule-details img {
+    width: 230px;
+    height: 230px;
+    float: left;
+    margin-right: 20px;
+
+}
+
+.m-molecule-details .m-molecule-info {
+	width: 600px;
+    float: left;
+
+}
+
+.m-molecule-info span {
+	color: #444E58;
+	font-size: 16px;
+	line-height: 21px;
+	display: block;	
+}
+
+.m-molecule-info .molecule-display-name span{
+    display: inline-block;
+}
+
+.m-molecule-info span.molecule-name {
+	font-size: 48px;
+	font-weight: bold;
+	line-height: 48px;
+	margin-bottom: 22px;
+}
+
+.m-molecule-info > p {
+	margin: 0px 20px 0px 20px;
+
+}
+
+.m-molecule-banner-color {
+    width: 100%;
+	height: 10px;	
+}
+
+.m-card-container-small {
+   	margin-bottom: 30px;
+    margin-right: 30px;
+
+}
+
+.m-card-info {
+	padding: 0px 20px 6px 20px;
+    margin-top: -16px;
+    height: 150px;
+
+}
+
+.molecule-name {
+	font-size: 21px;
+    margin-bottom: 0;
+}
+
+.i_r {
+	float: right;
+    margin: 22px -12px;
+
+}
+
+.employees {
+	float: left;
+    margin-right: 16px;
+    margin-top: 8px;
+
+}
+
+.company_info > .i_r > span {
+	display: inline-block;
+
+}
+
+.company_info .m-solid-button {
+	margin-right: 10px !important;
+
+}
+
+.b_2 {
+	position: relative;
+    top: 8px;
+    left: -5px;
+
+}
+
+.mol_d {
+	margin: 10px 0px 0px 0px !important;
+
+}
+
+.location {
+	margin-top: 6px;
+
+}
+
+.location > span {
+	display: inline;
+    font-size: 13px;
+    color: #929394;
+}
+
+.location > span > img {
+	width: 12px;
+    height: 16px;
+    position: relative;
+    top: 3px;
+    margin-right: 10px;
+	
+}
+
+.contact_test {
+	background-color: red !important; 
+
+}
+
+.post-Probe-img {
+	position: relative;
+	top: -1px;
+    left: -2px;
+}
+
+.post-Probe-txt {
+	color: #10a6a1;
+
+}
+
+.post-Sequence-img {
+	position: relative;
+	top: -1px;
+    left: -2px;
+}
+
+.post-Sequence-txt {
+	color: #0A4F94;
+
+}
+
+.comment_icon_wrap {
+    float: right;
+    position: relative;
+    top: -2px;
+
+}
+
+.molecule-description {
+	height: 205px;
+	-webkit-line-clamp: 9;
+}
+
+.molecule-description p{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.m-molecule-info .probe-name {
+    display: inline-block;
+    p {
+		font-weight: $font-weight--bold !important;
+		margin: -4px 20px 14px 0 !important;
+	} 
+}
+
+
+
+
+

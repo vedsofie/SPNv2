@@ -1,0 +1,72 @@
+<script type="text/html" id="sequence_template">
+    <div class="m-card-container col-sm-5">
+        <div class="card-no-width" data-bind="attr: { id: 'sequence_' + sequence.SequenceID}">
+            <div class="elipse-overflow" style="height: 31px;overflow: hidden;-webkit-line-clamp: 1;margin-top:18px;">
+                <a data-bind="attr: {href: sequence.detailsURL}">
+                    <span class="card-title" style="display: inline;" data-bind="text: sequence.record.Name"></span>
+                </a>
+            </div>
+            <div class="elipse-overflow sequence-description-container">
+                <p class="d_m" data-bind="text: sequence.Comment"></p>
+            </div>
+            <div class="line-break"></div>
+            <div class="clear"></div>
+
+            <div class="card-description--org-detail">
+                <div>
+                    <span class="lbl">Yield:</span>
+                    <span style="display: inline-block;" data-bind="text: sequence.Yield"></span>
+
+                    <span data-bind="if: sequence.Yield != null && sequence.YieldStandardDeviation">
+                        &plusmn;
+                        <span data-bind="text: sequence.YieldStandardDeviation"></span>
+                    </span>
+                    <span class="display-units" data-bind="if: sequence.Yield != null">%</span>
+
+                </div>
+                <div>
+                    <span class="lbl">Synthesis Time:</span>
+                    <span data-bind="text: sequence.record.SynthesisTime"></span>
+                    <span data-bind="if: sequence.SynthesisTime != null && sequence.SynthesisTimeStandardDeviation">
+                        &plusmn;
+                        <span data-bind="text: sequence.record.SynthesisTimeStandardDeviation"></span>
+                    </span>
+                    <span class="display-units">minutes</span>
+                </div>
+                <div>
+                    <span class="lbl"># Cassettes:</span>
+                    <span style="display: inline-block;" data-bind="text: sequence.NumberOfSteps"></span>
+                </div>
+                <div>
+                    <span class="lbl">Purification:</span>
+                    <span style="display: inline-block;" data-bind="text: sequence.PurificationMethod"></span>
+                </div>
+                <div>
+                    <span class="lbl">Module:</span>
+                    <span style="display: inline-block;" data-bind="text: sequence.SynthesisModule"></span>
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <div class="elipse-overflow" style="height: 45px;overflow: hidden;-webkit-line-clamp: 2;">
+
+                    <span data-bind="if: sequence.account().record.id()">
+                        <a data-bind="attr: {href: '/account/' + sequence.account().record.id()}">
+                            <img class="avatar-small" style="cursor: default;" data-bind="attr: {src: '/account/' + sequence.account().record.id() + '/logo/'}"/>
+                            <p class="b_n" style="display: inline;" data-bind="visible: displayAccountName, text: sequence.calculatedAccountName"></p>
+                        </a>
+
+                    </span>
+
+
+                    <a data-bind="attr: {href: '/probe/' + sequence.MoleculeID}">
+                        <span style="display: none;" data-bind="text: sequence.calculatedAccountName"></span>
+                        <p class="b_n sequence-display-name" data-bind="visible: !displayAccountName, html: sequence.calculatedMoleculeDisplayName"></p>
+                    </a>
+                </div>
+            </div>    
+        </div>
+    </div>
+</script>
+
+

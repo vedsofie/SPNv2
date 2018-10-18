@@ -1,0 +1,163 @@
+{% extends "application.html" %} 
+{% block head %} 
+    {{super()}}
+    <script>
+    $(function() {
+        navbar.currentlyOpenedTab("support_dashboard");
+    });
+    
+    $(function() {
+         var hash = window.location.hash;
+         hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+    
+         $('.nav-tabs a').click(function(e) {
+             $(this).tab('show');
+             var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+             window.location.hash = this.hash;
+             $('html,body').scrollTop(scrollmem);
+         });
+     });
+    </script>
+    <script src="{{url_for('github.static',filename='js/releases.js')}}"></script>
+    <script>
+        var releases = initReleases(JSON.parse({{releases|tojson|safe}}));
+        var installers = initReleases(JSON.parse({{installers|tojson|safe}}));
+        $(function() {
+            navbar.currentlyOpenedTab("support_dashboard");
+        });
+        function download_software(index) {
+            releases[index].download(releases[index].assets_url)
+        }
+    </script>
+{% endblock %} 
+{% block title_bar %}
+    {{super()}}
+    <div class="dash-nav" id="support-nav-container">
+        <ul class="nav nav-tabs" id="support-nav-ul">
+            <li class="support-nav-li active" class="support-nav-li"><a data-toggle="tab" href="#documentation">Documentation</a></li>
+            <li class="support-nav-li"><a data-toggle="tab" href="#field-support">Field Support</a></li>
+            <li class="support-nav-li"><a data-toggle="tab" href="#software">Software</a></li>
+            <li class="support-nav-li"><a data-toggle="tab" href="#faq">FAQ & Videos</a></li>
+        </ul>
+    </div>
+{% endblock %} 
+{% block content_body %}
+    <div class="tab-content">
+        <div id="documentation" class="tab-pane fade in active">
+            {% include 'support/documentation.html' %}
+        </div>
+        <div id="field-support" class="tab-pane fade">
+            {% include 'support/new_request.html' %}
+        </div>
+        <div id="software" class="tab-pane fade">
+            <div class="col-sm-6 col-sm-offset-3">
+                <h1 class="text-center">Software</h1>
+                <div class="col-sm-12" id="latest-software-release1">
+                    <h4 class="text-center"><u>Latest software release</u></h4>
+                    <br>
+                    <div class="col-sm-12 software-card">
+                        <div class="row software-top-row">
+                            <div class="col-xs-12 col-md-6">
+
+                                <h4 id="recentSoftwareVersion">Version</h4>
+                                <p id="recentReleaseDate">Release Date:</p>
+                                <p id="recentDownloadSize">Download Size: 400 MB</p>
+                            </div>
+                            <div class="col-xs-12 col-md-6 text-right">
+                                <a id="recentDownloadVersion" "href="#" class="btn btn-primary" onclick="download_software(0)">Download version</a>
+                                <br>
+                                <br>
+                                <a href="">View installation instructions</a>
+                            </div>
+                        </div>
+                        <div class="row software-bottom-row">
+                            <div class="col-sm-12">
+                                <h4>Release notes</h4>
+                                <p id = "recentNote">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="col-sm-12 software-card text-center" id="download-installer-card">
+                    <a href="" title=""><button type="" class="btn btn-primary">Download installer</button></a>
+                </div>
+                <br>
+                <br>
+                <div class="col-sm-12" id="previous-software-release">
+                    <br><br>
+                    <h4 class="text-center"><u>Older versions</u></h4>
+                    <br>
+                    <!-- repeatable component -->
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        {% for n in range(5) %}
+                        <div class="panel panel-default col-sm-12">
+                            <div class="panel-heading row software-panel-heading" role="tab" id="heading1">
+                                <div class="text-left col-sm-8">
+                                    <p class="panel-title text-left">
+                                        <b id="SoftwareVersion{{n}}">Version 2.3.4</b>
+                                    </p>
+                                    <p class="text-left" id="ReleaseDate{{n}}">
+                                        Release date: 10/10/2017
+                                    </p>
+                                    <p class="text-left" id="DownloadSize{{n}}">
+                                        Download Size: 400 MB
+                                    </p>
+                                </div>
+                                <div class="col-sm-4 text-center previous-software-download">
+                                    <a href="#" class="btn btn-primary download-update-button" id="DownloadVersion{{n}}" onclick="download_software({{n}}-1)">Download</a>
+                                    <br>
+                                    <p><a href="">View installation instructions</a></p>
+                                    <p>
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{n}}" aria-expanded="false" aria-controls="collapse-{{n}}" class="collapsed">
+                                    View release notes
+                                    </a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="collapse-{{n}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{n}}">
+                                <div class="panel-body">
+                                    <div class="col-sm-12">
+                                        <h4>Release notes</h4>
+                                            <p id="Note{{n}}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Right sidebar -->
+            <div class="col-sm-2 col-sm-offset-1 text-center right-sidebar">
+                <h4><u>Quick links</u></h4>
+                <br>
+                <ul class="list-unstyled">
+                    <li><a href="" >View software manual</a></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        <div id="faq" class="tab-pane fade">
+            {% include 'support/faq.html' %}
+        </div>
+    </div>
+    <script>
+        //software update
+
+        document.getElementById("recentSoftwareVersion").innerHTML = releases[0].name
+        document.getElementById("recentReleaseDate").innerHTML = releases[0].published_at.split('T')[0]
+        document.getElementById("recentDownloadSize").innerHTML = "Download Size: " + releases[0].size + " MB"
+        document.getElementById("recentDownloadVersion").innerHTML = "Download version " + releases[0].name
+        document.getElementById("recentNote").innerHTML = releases[0].body
+        for(var i = 0; i < 5; i++) {
+            document.getElementById("SoftwareVersion"+""+i).innerHTML = releases[i+1].name
+            document.getElementById("ReleaseDate"+""+i).innerHTML = releases[i+1].published_at.split('T')[0]
+            document.getElementById("DownloadSize"+""+i).innerHTML = "Download Size: " + releases[i+1].size + " MB"
+            document.getElementById("DownloadVersion"+""+i).innerHTML = "Download version " + releases[i+1].name
+            document.getElementById("Note"+""+i).innerHTML = releases[i+1].body
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,84 @@
+<style>
+    div.operation-adjust-container input[type="button"]:disabled {
+
+    }
+
+    div.operation-adjust-container div.operation-upbutton {
+        margin-bottom: 15px;
+    }
+
+    div.operation-adjust-container input[type="button"].operation-upbutton {
+
+    }
+
+    .operation-upbutton {
+        background-image: url("/static/img/edit-up-arrow.png");
+        width: 45px;
+        height: 45px;
+    }
+
+    .operation-upbutton:disabled {
+        background-image: url("/static/img/edit-up-arrow-gray.png");
+        width: 45px;
+        height: 45px;
+    }
+
+    .operation-downbutton {
+        background-image: url("/static/img/edit-down-arrow.png");
+        width: 45px;
+        height: 45px;
+    }
+
+    .operation-downbutton:disabled {
+        background-image: url("/static/img/edit-down-arrow-gray.png");
+        width: 45px;
+        height: 45px;
+    }
+
+    .operation-time-input {
+        height: 45px;
+        float: right;
+        font-size: 45px;
+        line-height: 45px;
+        padding: 0;
+        background: inherit;
+        border: 0;
+        text-align: right;
+    }
+
+    input.operation-time-input {
+        width: 50px;
+    }
+
+    input.operation-time-input:disabled + span.operation-time-input {
+        color: #D7D9DC;
+        cursor: default;
+    }
+
+</style>
+
+<script type="text/html" id="timer-input-template">
+    <div style="display:inline-block;">
+
+        <span data-bind="visible: edit">
+            <div style="display:inline-block;">
+                <input type="text" class="operation-time-input" data-bind="valueUpdate: 'keyup',
+                                                                           value: second,
+                                                                           enable: enable" maxlength="2"/>
+                <span class="operation-time-input">:</span>
+                <input type="text" class="operation-time-input" data-bind="valueUpdate: 'keyup', value: minute,
+                                                                           enable: enable" maxlength="2"/>
+            </div>
+            <div style="display:inline-block;">
+                <input type="button" class="operation-upbutton" value="" data-bind="enable: canIncrement, click: increment"/>
+                <input type="button" class="operation-downbutton" value="" data-bind="enable: canDecrement, click: decrement"/>
+            </div>
+        </span>
+
+        <span data-bind="if: !edit">
+            <span data-bind="text: minute"></span>
+            <span>:</span>
+            <span data-bind="text: second"></span>
+        </span>
+    </div>
+</script>

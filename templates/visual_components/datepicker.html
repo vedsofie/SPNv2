@@ -1,0 +1,21 @@
+<script type="text/html" id="date-picker-template">
+    <div id="date-field" class='input-group date' data-bind="attr: {'data-ko-value': $data}">
+        <input type='text' class="form-control"/>
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+</script>
+
+<template id="date-picker">
+    <!--<span data-bind="if: isEdit">
+        <div style="position: relative;display:inline-block;width:200px;">
+            <div data-bind="template:{name: 'date-picker-template',
+                                      data: date,
+                                      afterRender: bindDateTime}"></div>
+        </div>
+    </span>
+    <span data-bind="if: !isEdit">
+        <span data-bind="text: displayDateTime()"></span>
+    </span>-->
+</template>

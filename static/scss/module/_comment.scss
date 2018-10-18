@@ -1,0 +1,79 @@
+/* Comments
+--------------------------------------------- */
+
+.comment-box {
+	border-bottom: 1px solid #e9ebed;
+    padding: 20px;
+
+}
+
+.attachment-box {
+	border-bottom: 1px solid #e9ebed;
+    padding: 20px 20px 20px 0;
+    @include e(text) {
+         display: inline-block;
+         @include m(label) {
+			width: 100px;
+			font-style: italic;
+			font-weight: 300;
+         }
+         @include m(clear) {
+            float: right;
+            cursor: pointer;           
+         }
+    }
+}
+
+.comment-message {
+    padding-left: 55px;
+    margin-top: 6px;
+    word-break: break-all;
+
+}
+
+.comment_actions {
+	position: relative;
+    top: -32px;
+
+}
+
+.time_stamp {
+	float: right;
+	margin-left: 10px;
+	color: #b3b8bd;
+
+}
+
+.delete_icon {
+	float: right;
+	color: #b3b8bd;
+
+}
+
+.delete {
+	cursor: pointer;
+
+}
+
+.account-comment-title-header{
+    position: relative;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.account-comment-title-header img{
+    height: 90px;
+	width: 102px;
+	border-radius: 3px;
+}
+
+.account-comment-title-header > span{
+    font-size: 25px;
+    padding-left: 20px;
+}
+
+.attachment-container {
+    max-height: 189px;
+    overflow-y: auto;
+}

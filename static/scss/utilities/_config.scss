@@ -1,0 +1,113 @@
+//------------------------------------
+//    #Global Config
+//------------------------------------
+
+
+// Font stacks
+//---------------------------------------------
+
+$font-family--primary   : 'proxima-nova', sans-serif;
+$font-family--homepage  : 'Gotham SSm A', 'Gotham SSm B', 'proxima-nova', sans-serif !important;
+
+
+// Font weights
+//---------------------------------------------
+
+$font-weight--xlight    : 200;
+$font-weight--light     : 300;
+$font-weight--book      : 400;
+$font-weight--medium    : 500;
+$font-weight--bold      : 700;
+
+
+
+// Descriptive base colors
+//---------------------------------------------
+
+$white                  : #FFFFFF;
+$black                  : #000000;
+$shark                  : #222425;
+$oslo-gray              : #8E9398;
+$catskill-white         : #F3F6F9;
+$science-blue           : #066ACE;
+$science-blue-darker    : #0562BF;
+$blue-chill             : #10A6A1;
+$tall-poppy             : #C0392B;
+
+
+
+// Descriptive base colors - Home
+//---------------------------------------------
+
+$mirage                 : #080E1A;
+$cello                  : #192D45;
+$concrete               : #F2F2F2;
+$river-bed	            : #444E58;
+$fog                    : #E5D7FF;
+$sofie-blue             : #2f83bb;
+$firefly                : #081323;
+$regent-st-blue         : #ACCEE4;
+
+
+
+// Color usage
+//---------------------------------------------
+
+$color-primary              : $shark;
+$color-secondary            : $oslo-gray;
+$color-accent               : $science-blue;
+$color-main-background      : $catskill-white;
+
+
+// Color palette Modifiers
+//---------------------------------------------
+
+$palettes: (
+    primary: (
+        light: lighten($shark , 12%),
+        base: $shark
+    ),
+
+    secondary: (
+        light: lighten($oslo-gray , 12%),
+        base: $oslo-gray,
+        dark: darken($oslo-gray , 8%),
+    )
+);
+
+
+// UI Colors
+//---------------------------------------------
+
+$btn-colors: (
+    default       : $science-blue,
+    secondary     : $oslo-gray
+);
+
+
+// Text
+//---------------------------------------------
+
+$base__font-size               : 14px;
+$base__line                    : 22px;
+
+
+// Path to assets
+//--------------------------------------------- 
+
+$path--rel                      : "/static/img";
+
+
+
+// Radius
+//---------------------------------------------
+
+$br--default           : 3px;
+$br--round             : 50px; 
+
+
+// Box Shadow
+//---------------------------------------------
+
+$bs--default           : 3px 3px 0 0 rgba(215, 217, 220, 0.1);
+

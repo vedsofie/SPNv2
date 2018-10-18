@@ -1,0 +1,44 @@
+<script>
+    /*
+    ConfirmationPopup = function(params){
+        var self = this;
+        $.extend(self, new PopupBox(params));
+        self.title = ko.observable(params.title);
+        self.response = params.response;
+
+        self.confirm = function(confirmed){
+            self.response(confirmed);
+            self.close();
+        }
+
+        self.prompt = function(title, respondTo){
+            self.title(title);
+            self.response = respondTo;
+            self.open();
+        }
+    }
+
+    ko.components.register('confirmation-popup', {
+        viewModel: function(params){
+            return new ConfirmationPopup(params);
+        },
+        template: {element: 'confirm-yes-no-popup-template'}
+    });
+    */
+</script>
+<!--
+<script type="text/html" id="confirm-yes-no-popup-template">
+    <div class="yes-no popup l-popup-overlay">
+        <div class="m-popup m-confirm-popup">
+            <div class="m-popup-box">
+                <p data-bind="text: title"></p>
+                <div class="button-footer">
+                    <a data-bind="click: confirm.bind($data, true)" class="btn-blue btn-blue--right">Yes</a>
+                    <a data-bind="click: confirm.bind($data, false)" class="btn-blue btn-blue--right">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+-->
+

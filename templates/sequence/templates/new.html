@@ -1,0 +1,23 @@
+<script type="text/html" id="sequence-detail-popup-template">
+	<span data-bind="if: showBtn">
+            <a class="m-solid-button" data-bind="click: open, text: btnText"></a>
+	</span>
+	
+	<div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+		<div class="m-popup create-synthesis" data-bind="visible: visible">
+		
+			<div class="m-popup-box">
+				<div data-bind="css: {'savingBlockUI': sequence.record.isSaving,
+									  'savingBlockHidden': !sequence.record.isSaving()}">
+					<div>Saving...</div>
+				</div>
+				
+				<div data-bind="click: close" class="m-close-button">X</div>
+				<span data-bind="template: {name: 'sequence-detail-template', data: sequenceDetailViewModel}"></span>
+				<a data-bind="click: save" class="m-solid-button">Save</a>
+			</div>
+		</div>
+	</div>
+
+</script>
+

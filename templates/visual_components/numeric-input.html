@@ -1,0 +1,11 @@
+<script type="text/html" id="numeric-input-template">
+    <div class="numeric-input">
+		<div type="button" id="dec-button" class="numeric-input__inc-dec" value="" data-bind="enable: canDecrement, click: decrement">-</div>
+		<input type="text" class="numeric-input__input" data-bind="valueUpdate: 'keyup',
+																	 textInput: input,
+																	 enable: enable,
+																	 attr: { maxlength: maxlength }"/>
+        <span class="numeric-input__text" data-bind="text: displayUnit"></span>
+		<div type="button" class="numeric-input__inc-dec numeric-input__inc" value="" data-bind="enable: canIncrement, click: increment">+</div>
+    </div>
+</script>

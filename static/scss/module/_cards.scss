@@ -1,0 +1,176 @@
+/* Card
+--------------------------------------------- */
+
+.m-card-container {
+	margin: 0px 45px 45px 0;
+	padding: 0;
+	text-align: center;	
+	display: block;
+	float: left;
+	vertical-align: top;
+}
+
+.card {
+    width: 290px;
+    margin: 0 auto;
+    background-color: $white;
+    display: block;
+    vertical-align: top;
+    text-align: left;
+    overflow: hidden;
+    -webkit-border-radius: $br--default ;
+    -moz-border-radius: $br--default ;
+    border-radius: $br--default ;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+	@include e(img) {
+		width: 290px;
+		height: 290px;
+		padding: 20px;
+	}
+	a {
+		color: $color-primary;	
+		text-decoration: none;
+	}
+	@include media('<=tablet'){
+		float: left;
+	}
+}
+
+.card-title {
+	color: $color-primary;
+    padding: 20px 14px 10px 20px;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: $font-weight--bold !important;
+    text-transform: uppercase;
+    margin-bottom: -2px;
+}
+
+.card-description {
+	color: $color-primary;
+    min-height: 150px;
+	word-wrap: break-word;
+    @include m(org-detail) {
+        font-size: $base__font-size;
+		color: $color-secondary;
+		padding: 20px;
+		border-bottom: 1px solid $catskill-white;
+    }	
+    p {
+		width: 100%;
+		margin-top: 25px;
+        &:first-child {
+			padding-bottom: 25px;
+			border-bottom: 1px solid $catskill-white;
+		}	
+	}
+    &molecule-description {
+		height: 185px;	
+	}
+    &sequence-description {
+		height: 120px;	
+	}
+}
+
+.line-break{
+    border-bottom: 1px solid $catskill-white;
+}
+
+.card-footer {
+    padding: 16px 18px 18px 18px;
+    @include e(sequences) {     
+		border-top: 1px solid $catskill-white;
+		padding-top: 12px;
+		color: $color-secondary;
+		font-size: 14px;
+		line-height: 32px;
+		padding: 20px 20px;
+	
+	}
+	@include e(count) {
+		color: $white;
+		width: 32px;
+		float: left;
+		margin-right: 10px;
+		background-color: $color-secondary;
+		text-align: center;
+		-webkit-border-radius: $br--default; 
+		-moz-border-radius: $br--default; 
+		border-radius: $br--default;
+		font-weight: $font-weight--bold;
+        @include e(span) {
+            color: $color-secondary;
+        }
+	}
+}
+
+
+
+/* Probe cards
+--------------------------------------------- */
+
+.probe-name {
+    display: inline-block;
+    p {
+		font-weight: $font-weight--bold !important;
+		margin: 16px 20px -8px 20px;
+        display: inline-block;
+        span {
+            color: $color-secondary;
+            display: inline;
+            font-weight: $font-weight--bold !important;
+        }
+	} 
+}
+
+.sequence-description-container {
+	height: 48px;
+    -webkit-line-clamp: 2;
+}
+
+.btn-card {
+	padding: 20px;
+	.control-option {
+		width: 100%;
+		display: block;
+		color: $color-secondary;
+		font-size: 13px;
+		padding: 10px 0;
+		margin: 0;
+		border: 1px solid $color-secondary;
+		border-radius: $br--round;
+		text-align: center;
+		font-weight: $font-weight--medium !important;
+		margin-top: -3px;
+		&:hover {
+			color: $white;
+			background-color: $color-secondary;
+			text-decoration: none;
+		}
+	}
+
+}
+
+
+
+/* Acount cards
+--------------------------------------------- */
+
+.company-name {
+	font-size: 15px;
+    color: $color-primary;
+    font-weight: $font-weight--bold !important;
+    margin: 12px 0px;
+	max-height: 50px;
+	overflow: hidden;
+}
+
+.m_company_description {
+	margin-top: -18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 95px;
+    /*overflow-y: auto;*/
+}

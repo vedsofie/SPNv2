@@ -1,0 +1,76 @@
+/* Molecule Details
+--------------------------------------------- */
+
+.dash-nav {
+    display: block;
+	background-color: $color-primary;
+    height: em(50px);
+    /*margin-top: -60px;*/
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    cursor: pointer;
+    @include e(item) {
+		float: left;
+		margin: 12px 18px 0px 16px;
+        span {
+			color: $white !important;
+			font-size: em(13px);
+			font-weight: $font-weight--medium !important;
+        }
+        .notification{
+			color: $tall-poppy !important;
+			font-size: em(23px);
+			margin-top: -13px;
+			margin-right: -3px;
+			float: right;
+        }
+        @include m(current) {
+			border-bottom: 2px solid $white;
+			padding-bottom: 14px;
+        }
+    }
+    /*@include m(products) {
+         padding: 5px 50px 0 0;
+        
+    }*/
+}
+
+.m-support-nav-container {
+    /*float: left;*/
+    width: 100%;
+    height: 60px;
+    background-color: $white;
+}
+
+.support-nav {
+    list-style: none;
+    margin: 0;
+    /*margin-left: em(68px);
+    float: left;*/
+
+    @include e(item) {
+        color: $color-secondary;
+        display: inline-block;
+        font-size: 13px;
+        line-height: 60px;
+        cursor: pointer;
+        margin-left: 30px;
+        text-transform: uppercase;
+        @include m(current) {
+            color: $color-accent;
+            height: 60px;
+            border-bottom: 2px solid #066ace;
+        }
+    }
+}
+
+/*.vertical-line {
+    margin-top: 30px;
+    margin-bottom: 80px;
+    margin-left: 20px;
+    position: absolute;
+    height: 20px;
+    border-left: 5px solid #f1f3f4;
+    display: table-cell;
+
+}*/

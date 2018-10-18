@@ -1,0 +1,14 @@
+<div id="controls">
+    <div data-bind="if: canCreateOrg">
+        <account-detail-popup></account-detail-popup>
+    </div>
+    <div data-bind="if: canCreateUser">
+        <user-detail-popup params="AccountID: runningUser.record.AccountID"></user-detail-popup>
+    </div>
+    <div data-bind="if: canCreateMolecule">
+        <molecule-detail-popup></molecule-detail-popup>
+    </div>
+    
+    <sequence-detail-popup params="btnText: 'New Synthesis', idPrefix: 'sequence'"></sequence-detail-popup>
+    <report-issue-popup></report-issue-popup>
+</div>

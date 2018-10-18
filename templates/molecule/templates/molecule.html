@@ -1,0 +1,27 @@
+<script type="text/html" id="molecule_template">
+    <div class="col-md-4 col-lg-3 organization-box">
+		<div class="card-no-width" data-bind="attr: { id: 'molecule_' + molecule.ID}">
+            <a data-bind="attr: {href: molecule.detailsURL}">
+				<formula-editor params="formula: molecule.record.Formula,
+				                        userFormatted: molecule.record.DisplayFormat,
+				                        id: 'molecule_formula_editor_' + molecule.ID,
+				                        edit: false"></formula-editor>
+			</a>		
+			<div class="clear"></div>
+			<div>
+				<a data-bind="attr: {href: molecule.detailsURL}">
+					<img class="card__img" data-bind="attr:{src: molecule.image_url()}"/>
+				</a>
+			</div>
+			<div class="card-button-row">
+				<div class="text-center col-sm-6">
+					<keyword-list-read-only-popup params="btnText: 'View Synonyms', parent_id: molecule.ID, type: 'Molecules', category: 'Synonym'" class="btn btn-default"></keyword-list-read-only-popup>
+				</div>
+				<div class="text-center col-sm-6">
+					 <a data-bind="attr: {href: molecule.detailsURL}" class="btn btn-primary">View Probe <span class="glyphicon glyphicon-chevron-right white"></span></a>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</script>

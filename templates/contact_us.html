@@ -1,0 +1,39 @@
+<script type="text/html" id="contact-template">
+    <div>
+        <input placeholder="Name" data-bind="textInput: myMessage.record.name" class="form-control input_main" aria-describedby="sizing-addon2" name="name"/>
+        <div class="validation-error" data-bind="text: myMessage.record.errors.name()"></div>
+    </div>
+
+    <div>
+        <input placeholder="Email" data-bind="textInput: myMessage.record.email" class="form-control input_main" aria-describedby="sizing-addon2" name="email"/>
+        <div class="validation-error" data-bind="text: myMessage.record.errors.email()"></div>
+    </div>
+
+    <textarea placeholder="Message" data-bind="textInput: myMessage.record.message" class="form-control m-contact-message input_main" aria-describedby="sizing-addon2" name="message"></textarea>
+    <div class="validation-error" data-bind="text: myMessage.record.errors.message()"></div>
+
+	<div class="clear"></div>
+
+    <div data-bind="if: showSend">
+        <a class="btn-blue login-button" data-bind="click: send">Submit</a>
+    </div>
+</script>
+
+<script type="text/html" id="contact-us-popup-template">
+    <div data-bind="if: showOpenButton">
+        <a class="button_link" data-bind="click: open,
+                                             text: btnText"></a><img src="/static/img/comment_icon.png" class="bubble_icon" width="16" height="16" alt="">
+    </div>
+    <div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
+			<div class="m-popup simple-contact" data-bind="visible: visible">
+						<div data-bind="css: {'savingBlockUI savingBlockUI--popup': ctrl.myMessage.record.isSaving,
+						  'savingBlockHidden': !ctrl.myMessage.record.isSaving()}">
+			</div>
+            <div class="m-login-header" data-bind="text: ctrl.to_contact_name()"></div>
+			<div data-bind="click: close" class="m-close-button">X</div>
+            <div class="m-contact-form" data-bind="template: {name: 'contact-template', data: ctrl}"></div>
+            <a class="btn-blue btn-blue--right-margin" data-bind="click: send">Submit</a>
+		</div>
+	</div>
+</script>
+

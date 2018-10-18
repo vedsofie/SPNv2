@@ -1,0 +1,41 @@
+<script type="text/html" id="keyword-detail-template">
+    <div class="keyword-detail">
+        <span data-bind="if: useFormulaEditor">
+            <div data-bind="if: keyword.canEdit">
+				<formula-editor params="id: keyword.htmlID,
+										formula: keyword.record.Keyword,
+										userFormatted: keyword.record.DisplayFormat,
+										edit: true"></formula-editor>
+            </div>
+
+            <span data-bind="if: !keyword.canEdit()">
+                <span class="keyword-row" data-bind="html: keyword.record.Keyword"></span>
+            </span>
+
+            <a class="btn-gray btn-gray--delete" data-bind="visible: keyword.canDelete(), click: $parent.delete.bind($data)">Delete</a>
+
+            <a class="btn-gray btn-gray--add-synonyms" data-bind="visible: !keyword.canDelete(),
+                                                 click: $parent.addKeyword,
+                                                 text: $parent.addKeywordBtnText"></a>
+
+        </span>
+
+        <span data-bind="if: !useFormulaEditor">
+            <span data-bind="if: keyword.canEdit">
+                <input data-bind="textInput: keyword.record.Keyword,
+                                  attr:{id: keyword.htmlID}"/>
+            </span>
+            <span data-bind="if: !keyword.canEdit()">
+                <span class="keywords__readout" data-bind="text: keyword.record.Keyword"></span>
+            </span>
+
+            <a class="btn-gray btn-gray--delete" data-bind="visible: keyword.canDelete(), click: $parent.delete.bind($data)">Delete</a>
+
+            <a class="btn-gray btn-gray--add-keywords" data-bind="visible: !keyword.canDelete(),
+                                                 click: $parent.addKeyword,
+                                                 text: $parent.addKeywordBtnText"></a>
+        </span>
+        <div class="clear"></div>
+        
+    </div>
+</script>

@@ -1,0 +1,89 @@
+<script src="/static/js/libs/ckeditor/ckeditor.js"></script>
+
+<style>
+    .cke_bottom{
+        display: none!important;
+    }
+    .cke_toolbar_break{
+        display: inline;
+    }
+    .cke_chrome{
+        border: none;
+    }
+</style>
+
+<script>
+    ko.components.register('formula-editor', {
+        viewModel: function(params){
+            var self = this;
+            self.id = params.id;
+            self.edit = params.edit;
+            self.formula = params.formula;
+            self.userFormatted = params.userFormatted;
+            self.is_setter = false;
+            self.subscriptNumbers = !params.superscriptNumbers;
+            self.usersFormat = false;
+            if(self.userFormatted){
+                self.usersFormat = true;
+            }
+
+            self.formattedFormula = ko.pureComputed(function(){
+                var data = self.data();
+                var formatted = "";
+                if(data){
+                    if(self.subscriptNumbers){
+                        formatted = data.replace(/([0-9])/g, "<sub>$1</sub>");
+                    }
+                    else{
+                        formatted = data.replace(/([0-9])/g, "<sup>$1</sup>");
+                    }
+                }
+                return formatted;
+            });
+
+            self.ckEditorInit = function(element){
+                self.editor = CKEDITOR.replace(self.id);
+
+                self.editor.on( 'change', function( evt ) {
+                     self.is_setter = true;
+                     var markup = evt.editor.getData();
+                     self.userFormatted(markup);
+                     self.formula(markup);
+                     self.is_setter = false;
+                });
+            }
+
+            self.data = ko.computed(function(){
+                if( typeof self.formula == "function" ){
+                    return self.formula();
+                }
+                return self.formula;
+            });
+        },
+        template: {element: 'formula_editor_template'}
+    });
+
+</script>
+
+ <script type="text/html" id="formula-editor-template">
+     <textarea data-bind="attr:{id: id, rows: 1}, textInput: userFormatted"></textarea>
+  </script>
+
+<script type="text/html" id="formula_editor_template">
+    <span data-bind="if: edit">
+        <span data-bind="if: usersFormat">
+            <span data-bind="template: {name: 'formula-editor-template', afterRender: ckEditorInit}"></span>
+        </span>
+        <span data-bind="if: !usersFormat">
+            <input class="input_main" type="text" data-bind="textInput: formula"/>
+        </span>
+    </span>
+    <span data-bind="if: !edit">
+        <span dir="if: usersFormat">
+            <span class="probe-name" data-bind="html: userFormatted"></span>
+        </span>
+        <span data-bind="if: !usersFormat">
+            <span data-bind="html: formattedFormula()"></span>
+        </span>
+    </span>
+</script>

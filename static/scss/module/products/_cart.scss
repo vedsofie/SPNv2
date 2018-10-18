@@ -1,0 +1,126 @@
+//------------------------------------
+//    #Cart 
+//------------------------------------
+
+.back-products {
+    color: $color-secondary;
+    font-size: 18px;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
+    margin-top: -50px;
+    cursor: pointer;
+        &:hover {
+            color: $color-primary;    
+        }
+}
+
+.cart-header {
+    margin: 20px 0 70px 0;
+		@include e(h2) {
+            display: inline;
+			font-size: 28px;
+			line-height: 28px;
+			font-weight: $font-weight--xlight;
+			padding: 0;
+			margin: 0;
+		}
+}
+
+.cart-details {
+    @include e(section) {
+        border-top: 1px solid $color-secondary;
+        margin-bottom: 36px;
+        @include m(main) {
+            margin-bottom: 150px;
+        }
+    }
+    @include e(title) {
+        display: block;
+        width: 250px;
+        text-align: center;
+        padding: 2px 0;
+        color: $color-primary;
+        font-size: 18px;
+        line-height: 18px;
+        margin: -11px auto 24px auto;
+        background-color: $white;
+            @include m(secondary) {
+                color: $color-secondary;
+            }
+    }
+    @include e(quant) {
+        color: $color-primary;
+        font-size: 16px;
+        line-height: 24px;
+        vertical-align: middle;
+        font-weight: $font-weight--bold;
+    }
+    @include e(prod) {
+        color: $color-primary;
+        font-size: 16px;
+        line-height: 24px;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+    @include e(subtotal) {
+        color: $color-primary;
+        font-size: 24px;
+        line-height: 24px;
+        vertical-align: middle;
+        float: right;
+        &::before {
+            content: '$';
+        }
+    }
+    @include e(li) {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    @include e(extras) {
+        color: $color-primary;
+        font-size: 14px;
+        line-height: 27px;
+            @include m(lbl) {
+                margin-left: 10px;
+                    &::before {
+                        color: $color-secondary;
+                        content: '-';
+                        margin-right: 10px;
+                    }
+            }
+    }   
+}
+
+.cart-footer {
+    @include e(total) {
+        width: 100%;
+        @extend %clearfix;
+		@include m(lbl) {
+            color: $color-primary;
+            font-weight: $font-weight--xlight;
+	        font-size: 18px;
+            line-height: 36px;
+            padding-top: 4px;
+            float: right;
+		}
+		@include m(number) {
+            color: $color-primary;
+	        font-size: 36px;
+            line-height: 36px;
+            vertical-align: bottom;
+            float: right;
+            &::before {
+                content: '$';
+                margin-left: 15px;
+            }	
+		}
+    }
+    @include e(buttons) {
+        width: 100%;
+        margin: 50px 0;
+         @extend %clearfix;
+    }
+}

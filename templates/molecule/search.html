@@ -1,0 +1,49 @@
+{% extends "application.html" %}
+{% block head %}
+    {{super()}}
+    <script src="{{url_for('static', filename='js/pathsearch.js')}}"></script>
+    <script src="{{url_for('static', filename='js/moleculeSearch.js')}}"></script>
+    <script type="text/javascript">
+
+        var molecule = new MoleculeSearch();
+        var pathwaySearch = new PathwaySearch();
+
+    </script>
+
+{% endblock %}
+
+{% block content_body %}
+    <script type="text/html" id="tree-template">
+        <div>
+            <span data-bind="visible: pathway.hasChildren,
+                             text: pathway.displayingChildren() ? '-' : '+',
+                             click: pathway.toggleViewChildren"></span>
+            <span data-bind="text: pathway.displayName,
+                             click: pathway.toggleViewChildren"></span>
+            <div data-bind="visible: pathway.displayingChildren">
+                <div data-bind="foreach: {data: pathway.children, as: 'c_pathway'}">
+                    <div style="margin-left: 20px;" data-bind="template: {name: 'tree-template', data: c_pathway, as: 'pathway'}"></div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <div data-bind="with: molecule">
+        <div>
+            <input data-bind="textInput: text" name="chemical_name"/>
+            <div style="width: 150px;display: inline-block;margin-left:20px;" class="wireframe-button" data-bind="click: search">Search</div>
+        </div>
+        <span data-bind="visible: noResultsFound">No Results Found</span>
+
+        <span data-bind="visible: isSearching()">Searching...</span>
+        <div data-bind="foreach: {data: matches, as: 'chemical'}">
+            <div style="margin-bottom: 20px;">
+                <div data-bind="text: chemical.IUPACName"></div>
+                <div data-bind="text: chemical.MolecularFormula"></div>
+                <div data-bind="text: chemical.MolecularWeight"></div>
+                <div data-bind="text: chemical.CanonicalSMILES"></div>
+                <div data-bind="text: chemical.CID"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

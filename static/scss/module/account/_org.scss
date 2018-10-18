@@ -1,0 +1,21 @@
+//------------------------------------
+//    #Org Detail
+//------------------------------------
+
+
+.account-description-container {
+	height: 175px;
+    -webkit-line-clamp: 4;
+}
+
+.m-account-sequences {
+    width: 33%;
+    display: inline;
+    vertical-align: top;
+    border-radius: 3px;
+    text-align: center;
+    color: $color-secondary;
+    margin-bottom: 40px;
+    font-size: 18px;
+    padding: 10px 0;
+}

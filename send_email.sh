@@ -1,0 +1,9 @@
+export SPARKPOST_API_KEY=laksdjflkasdjfldafjlkajsdflkajsdfl
+export SPARKPOST_API_URL=https://api.sparkpost.com/api/v1
+export SPARKPOST_SANDBOX_DOMAIN=sparkpostbox.com
+export SPARKPOST_SMTP_HOST=smtp.sparkpostmail.com
+export SPARKPOST_SMTP_PASSWORD=alkdjf;alksdjflasdkjfl
+export SPARKPOST_SMTP_PORT=587
+export SPARKPOST_SMTP_USERNAME=SMTP_Injection
+source ../bin/activate
+python email_sender.py

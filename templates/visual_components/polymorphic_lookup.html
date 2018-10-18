@@ -1,0 +1,9 @@
+<script type="text/html" id="polymorphic-lookup-template">
+    <select data-bind="options: availableSObjectTypes,
+                       value: sObjectType,
+                       optionsCaption: 'Choose...'"></select>
+    <lookup params="sObjectType: sObjectType(),
+                    record: record,
+                    column: column.name,
+                    displayLink: displayLink"></lookup>
+</script>
