@@ -167,91 +167,91 @@ with app.app_context():
     app.register_blueprint(supportcontroller)
 
     assets = Environment(app)
-    js = Bundle(
-'js/libs/jquery.min.js',
-'js/libs/bootstrap.min.js',
-'js/libs/bootstrap-datetimepicker-4.17.37/build/js/moment-with-locales.min.js',
-'js/libs/knockout-debug.js',
+#     js = Bundle(
+# 'js/libs/jquery.min.js',
+# 'js/libs/bootstrap.min.js',
+# 'js/libs/bootstrap-datetimepicker-4.17.37/build/js/moment-with-locales.min.js',
+# 'js/libs/knockout-debug.js',
 
-'js/libs/bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js',
-'js/libs/simplePagination.js-master/jquery.simplePagination.js',
-'js/libs/validate.min.js',
-'js/admin/column.js',
-'js/admin/record.js',
-'js/admin/table.js',
+# 'js/libs/bootstrap-datetimepicker-4.17.37/build/js/bootstrap-datetimepicker.min.js',
+# 'js/libs/simplePagination.js-master/jquery.simplePagination.js',
+# 'js/libs/validate.min.js',
+# 'js/admin/column.js',
+# 'js/admin/record.js',
+# 'js/admin/table.js',
 
-'js/visual_components/popupbox.js',
-'js/commentsCtrl.js',
+# 'js/visual_components/popupbox.js',
+# 'js/commentsCtrl.js',
 
-'js/account/account.js',
-'js/account/account_detail.js',
-'js/account/account_detail_popup.js',
-'js/account/contact_us_about.js',
-'js/account/components.js',
-
-
-'js/sequence/sequence.js',
-'js/sequence/sequence_edit_detail.js',
-'js/sequence/sequence_detail_popup.js',
-'js/sequence/search.js',
-'js/sequence/components.js',
-
-'js/user/user.js',
-'js/user/user_edit_detail.js',
-'js/user/user_detail_popup.js',
-'js/user/components.js',
+# 'js/account/account.js',
+# 'js/account/account_detail.js',
+# 'js/account/account_detail_popup.js',
+# 'js/account/contact_us_about.js',
+# 'js/account/components.js',
 
 
-'js/posts.js',
-'js/contact_us.js',
-'js/notifications.js',
+# 'js/sequence/sequence.js',
+# 'js/sequence/sequence_edit_detail.js',
+# 'js/sequence/sequence_detail_popup.js',
+# 'js/sequence/search.js',
+# 'js/sequence/components.js',
+
+# 'js/user/user.js',
+# 'js/user/user_edit_detail.js',
+# 'js/user/user_detail_popup.js',
+# 'js/user/components.js',
 
 
-
-'js/keyword/keyword.js',
-'js/keyword/keyword_list_popup_ctrl.js',
-'js/keyword/keyword_list_read_only_popup_ctrl.js',
-'js/keyword/components.js',
-
-'js/molecule/molecule.js',
-'js/molecule/molecule_detail.js',
-'js/molecule/molecule_edit_detail.js',
-'js/molecule/molecule_detail_popup.js',
-'js/molecule/search.js',
-'js/molecule/components.js',
+# 'js/posts.js',
+# 'js/contact_us.js',
+# 'js/notifications.js',
 
 
 
-'js/golden-colors/golden-colors-amd.min.js',
-'js/golden-colors/golden-colors.min.js',
-'js/libs/lodash.js',
+# 'js/keyword/keyword.js',
+# 'js/keyword/keyword_list_popup_ctrl.js',
+# 'js/keyword/keyword_list_read_only_popup_ctrl.js',
+# 'js/keyword/components.js',
+
+# 'js/molecule/molecule.js',
+# 'js/molecule/molecule_detail.js',
+# 'js/molecule/molecule_edit_detail.js',
+# 'js/molecule/molecule_detail_popup.js',
+# 'js/molecule/search.js',
+# 'js/molecule/components.js',
 
 
-#'js/knockout-js-infinite-scroll/knockout-js-infinite-scroll.js',
+
+# 'js/golden-colors/golden-colors-amd.min.js',
+# 'js/golden-colors/golden-colors.min.js',
+# 'js/libs/lodash.js',
+
+
+# #'js/knockout-js-infinite-scroll/knockout-js-infinite-scroll.js',
 
 
 
-#'js/libs/infinite_scroll.js',
-'js/libs/notify.js',
-'js/visual_components/navigation_bar.js',
+# #'js/libs/infinite_scroll.js',
+# 'js/libs/notify.js',
+# 'js/visual_components/navigation_bar.js',
 
-'js/visual_components/datetime_picker.js',
-'js/visual_components/color_selector.js',
-'js/visual_components/sobject_field.js',
-'js/visual_components/timerinput.js',
-'js/visual_components/numericinput.js',
-'js/visual_components/lookup.js',
-'js/visual_components/polymorphic_lookup.js',
-'js/visual_components/sfdc_lookup.js',
-'js/visual_components/binary_field.js',
-'js/visual_components/report_issue.js',
-'js/visual_components/picklist.js',
-'js/cropper/cropper.js',
-'js/news_tab_component.js',
-'js/dashboard.js',
-            output='gen/application.js')
+# 'js/visual_components/datetime_picker.js',
+# 'js/visual_components/color_selector.js',
+# 'js/visual_components/sobject_field.js',
+# 'js/visual_components/timerinput.js',
+# 'js/visual_components/numericinput.js',
+# 'js/visual_components/lookup.js',
+# 'js/visual_components/polymorphic_lookup.js',
+# 'js/visual_components/sfdc_lookup.js',
+# 'js/visual_components/binary_field.js',
+# 'js/visual_components/report_issue.js',
+# 'js/visual_components/picklist.js',
+# 'js/cropper/cropper.js',
+# 'js/news_tab_component.js',
+# 'js/dashboard.js',
+#             output='gen/application.js')
 
-assets.register('js_all', js)
+# assets.register('js_all', js)
 
 
 if __name__ == "__main__":

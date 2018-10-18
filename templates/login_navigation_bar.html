@@ -1,5 +1,5 @@
 <!-- Static navbar -->
-<nav class="navbar navbar-default navbar-static-top">
+<!-- <nav class="navbar navbar-default navbar-static-top">
   <div class="container-fluid navbar-container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -18,7 +18,33 @@
         <li data-bind="click: visitSection.bind($data, 'contact')"><a href="#contact" class="link-text" data-bind="click: mapTurnOff">CONTACT</a></li>
         <li><a href="#" class="link-text btn btn-primary" data-bind="click: visit">SIGN IN</a></li>
       </ul>
-    </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="/static/img/spn-logo-top.png" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse flex-grow-1 text-righ" id="navbarNav">
+    <ul class="navbar-nav ml-auto flex-nowrap">
+      <li class="nav-item">
+        <a class="nav-link" href="#about">About Elixys <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Find a Probe</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#featured">Featured</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-primary" href="/user/login">Sign In</a>
+      </li>
+    </ul>
   </div>
 </nav>
 <!-- Static navbar end -->
