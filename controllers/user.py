@@ -44,7 +44,9 @@ ENCRYPTION_KEY = '1234567890123456'
 
 @usercontroller.route('/')
 def welcome():
-    return redirect("/account")
+    #return redirect("/account")
+    return "hello"
+
 
 @usercontroller.route('/user/login')
 def authenticate():
@@ -56,7 +58,7 @@ def authenticate():
     if redirect_url:
         redirect_url += '?'
         redirect_url += '&'.join(cross_product_join(request.args.keys(), request.args.values(), '='))
-    return render_template("UserLogin.html", redirect_url=redirect_url, sequence_data=json.dumps(data), password_reset=json.dumps(password_reset))
+    return render_template("index.html", redirect_url=redirect_url, sequence_data=json.dumps(data), password_reset=json.dumps(password_reset))
 
 @usercontroller.route('/user/terms/')
 def get_user_terms():

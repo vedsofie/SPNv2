@@ -118,6 +118,7 @@ def featured_sequences():
 @app.route('/')
 def welcome():
     return redirect(url_for("usercontroller.dashboard"))
+    
 
 @app.errorhandler(500)
 def server_error(err):
