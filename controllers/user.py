@@ -335,10 +335,6 @@ def running_user():
 def privacy_policy():
     return render_template('/user/privacy-policy.html', runninguser=json.dumps(g.user.to_hash()))
 
-@usercontroller.route("/user/forgot_password/", methods=["GET"])
-def do_reset_password():
-    return render_template('/user/forgot_password.html')
-
 @usercontroller.route("/user/password_reset/<reset_url>", methods=["GET"])
 def reset_for_user(reset_url):
     user_reset_path = User.query.filter_by(ResetCode=reset_url).first()
@@ -350,7 +346,7 @@ def reset_for_user(reset_url):
     else:
         return redirect(url_for(".login"))
 
-@usercontroller.route("/user/forgot_password/", methods=["POST"])
+@usercontroller.route("/user/forgot_password", methods=["POST"])
 def reset_password():
     data = request.form
     username = data['username']

@@ -70,12 +70,14 @@ def do_authenticate():
 
     else: # only allow public pages to be excluded from the redirect
         if request.path == url_for('usercontroller.login') or \
-            request.path == url_for('usercontroller.do_reset_password') or \
+            request.path == url_for('usercontroller.reset_password') or \
             re.match('[/]user[/]password_reset[/][A-Za-z0-9]*', request.path) is not None or\
             request.path == url_for('moleculecontroller.find') or \
             request.path == url_for('account_sequences') or \
             re.match('[/]account[/][0-9,]*[/]contact', request.path) is not None or\
             request.path.startswith("/static") or \
+            request.path.startswith("/login") or \
+            request.path.startswith("/forgot_password") or \
             request.path == url_for("account_sequences") or \
             request.path == url_for("featured_sequences") or \
             request.path == url_for("usercontroller.running_user") or \
@@ -108,7 +110,7 @@ def account_sequences():
     return Response("No", 403)
 
 
-
+# Links for public facing pages out here
 @app.route('/featured_sequences')
 def featured_sequences():
   seqs = Sequence.query.all()
@@ -118,7 +120,14 @@ def featured_sequences():
 @app.route('/')
 def welcome():
     return redirect(url_for("usercontroller.dashboard"))
-    
+
+@app.route('/login')
+def login():
+    return render_template("user/login.html")
+
+@app.route('/forgot_password')
+def forgot_password():
+    return render_template("user/forgot_password.html")
 
 @app.errorhandler(500)
 def server_error(err):

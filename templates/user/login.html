@@ -1,0 +1,19 @@
+{% extends "login_layout.html" %}
+{% block content_body %}
+<div class="login-page">
+<form class="form-signin" action="/user/login" method="POST">
+      <h1 class="h3 mb-3 font-weight-normal text-center">SPN Login</h1>
+      <label for="inputEmail" class="sr-only">Username</label>
+      <input type="text" id="inputEmail" class="form-control mb-3" placeholder="Username" required="" autofocus="" name="username">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control mb-3" placeholder="Password" required="" name="password">
+      <div class="checkbox mb-3">
+	       <a href="/forgot_password">Forgot Password?</a>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+</div>
+<div class="alert alert-secondary mt-3" role="alert">
+  A simple secondary alert—check it out!
+</div>
+{%endblock%}
