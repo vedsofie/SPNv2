@@ -93,7 +93,7 @@ div#hero-banner{
 }
 
 div#hero-banner h1.hero-banner {
-  font-family: 'Nunito Sans';
+  /*font-family: 'Nunito Sans';*/
   font-size: 24px;
   font-weight: 300;
   letter-spacing: 1.2px;
