@@ -11,12 +11,14 @@ nav.navbar img{
 
 .form-signin {
    	width: 100%;
-    max-width: 400px;
+    /*max-width: 400px;*/
     padding: 38px;
     margin: auto;
     background: #f9fbfc;
     border: 1px solid #e8e8e8;
     border-radius: 3px;
+    margin-top: 30%;
+    /*transform: translateY(-50%);*/
 }
 
 .login-page {
