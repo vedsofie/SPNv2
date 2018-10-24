@@ -348,6 +348,10 @@ h3#availability-number {
     margin-left: 50%;
 }
 
+#contact-form iframe{
+  width: 100%;
+}
+
 /* Responsive */
 
 /* Phones */
@@ -396,7 +400,7 @@ h3#availability-number {
 @media (min-device-width: 834px) {
 
     div.embed-responsive{
-      padding-bottom: 315px !important;
+      /*padding-bottom: 315px !important;*/
       max-width: 500px !important;
     }
   }
