@@ -78,6 +78,7 @@ def dashboard():
     runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
     running_user = g.user.to_hash()
     running_user['RoleType'] = g.user.role.Type
+
     notification = request.args.get("notificationMessage", "")
     do_password_reset = True if 'password_reset' in request.args else False
     tab_to_load = None
@@ -102,12 +103,11 @@ def dashboard():
     response = requests.get(url,headers=git_headers())
     resp = response.json()
     releases = json.dumps(as_assets(resp))
-
+    userid = session["userid"]
     url = INSTALLER_BASE_DIR + "releases"
     response = requests.get(url,headers=git_headers())
     resp = response.json()
     installers = json.dumps(as_assets(resp))
-
     if (support == "true") or issue != None: 
         #if support
         isSupport = True
@@ -121,7 +121,9 @@ def dashboard():
                                releases=releases, 
                                installers=installers,
                                probes=False,
-                               sequences=False)
+                               sequences=False,
+                               uid = userid
+                               )
     else:                
         #if main dash board
         isSupport = False
@@ -142,7 +144,8 @@ def dashboard():
                                releases=releases, 
                                installers=installers,
                                probes=isProbes,
-                               sequences=isSequences)
+                               sequences=isSequences,
+                               uid = userid)
 
 @usercontroller.route('/user/<int:user_id>/role/')
 def get_role(user_id):

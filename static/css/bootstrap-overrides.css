@@ -9,12 +9,8 @@
 .voffset8 { margin-top: 100px; }
 .voffset9 { margin-top: 150px; }
  
-.btn {
-  background-color: transparent;
-  border: solid 1px #4a90e2;
-}
 
-.btn-primary{
+.btn-alt-blue{
 	background-color: #4a90e2;
 	color: #fff;
 }
@@ -32,6 +28,10 @@
     background-color: #ffffff;
     border-color: #ffffff;
     margin-bottom: 0px;
+}
+
+.navbar-brand {
+     padding: 0 !important; 
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -56,8 +56,4 @@ h6{
   line-height: 1.2;
   letter-spacing: 1px;
   text-align: center;
-}
-
-.navbar-brand{
-  padding: 10px 10px !important;
 }

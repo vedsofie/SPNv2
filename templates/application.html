@@ -9,43 +9,13 @@
         {% include 'header_dependencies.html'%}
     </head>
     <body>
-        <script>
-        var loading_dashboard = ko.observable(true);
-        function loading(){
-            loading_dashboard(true)
-        }
-        function unLoading() {
-            loading_dashboard(false)
-        }
-        </script>
         {% block title_bar %}
             {% if runninguser is defined %}
-                {% include 'navigation_bar.html' %}
+                {% with userid = uid %}
+                {% include 'logged_in_navbar.html' %}
+                {% endwith %}
             {% endif %}
         {% endblock %}   	
-        
-        <script>
-            //application confirmation
-            ConfirmationPopup = function(params){
-                var self = this;
-                console.log(self)
-                $.extend(self, new PopupBox(params));
-                self.title = ko.observable(params.title);
-                self.response = params.response;
-
-                self.confirm = function(confirmed){
-                    self.response(confirmed);
-                    self.close();
-                }
-
-                self.prompt = function(title, respondTo){
-                    self.title(title);
-                    self.response = respondTo;
-                    self.open();
-                }
-            }
-            var applicationConfirmation = new ConfirmationPopup({title: 'Are you sure?'});
-        </script>
         <script>
             {% if reset_password is defined %}
                 var resetPassword = JSON.parse({{reset_password|tojson|safe}})
@@ -65,10 +35,7 @@
             {% endblock %}
         </div>
         {% else %}
-        <script>
-            var navbar = new LoginNavbar();
-        </script>
-        <div data-bind="with: navbar">
+        <div>
 			{% include 'login_navigation_bar.html' %}
 			{% block login_content_body %}
 			{% endblock %}
