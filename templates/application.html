@@ -74,7 +74,18 @@
             
             {% include 'footer_dependencies.html'%}
         </div>
-
+        <!-- script to add active class on navbar click -->
+        <script>
+            var currentPage = window.location.pathname;
+            // alert(currentPage);
+            $('.nav-item a').each(function(){
+                console.log(this); 
+                // if($(this).attr('href') == currentPage){
+                //     $(this).addClass('active');
+                //     console.log(this);
+                // }
+            });
+        </script>
         <!-- application confirmation -->
     </body>
 </html>
