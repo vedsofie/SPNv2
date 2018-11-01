@@ -1,11 +1,66 @@
 {% extends "application.html" %}
 {% block title_bar %}
 {{super()}}
-<nav class="nav navbar d-flex navbar-dark bg-dark justify-content-end">
-	<a class="p-2 nav-link text-light" href="#">SOFIE</a>
+<!-- <nav class="nav navbar d-flex navbar-dark bg-dark justify-content-end">
+	<a class="p-2 nav-link text-light" href="#">Newsfeed</a>
 	<a class="p-2 nav-link text-light" href="#">My Probes</a>
     <a class="p-2 nav-link text-light" href="#">My Sequences</a>
-</nav>
+</nav> -->
 {% endblock %}
+
 {% block content_body %}
+<div class="container-fluid pt-3">
+	<div class="row">
+	<div class="col-6 offset-md-3" id="newsfeed">
+		<div class="card mt-3">
+			<img class="card-img-top" src="/static/img/2_elixys_v2.4.png" alt="Card image cap">
+		    <div class="card-body">
+		      <h5 class="card-title">ELIXYS Software v2.4.0 Released!</h5>
+		      <p class="card-text">Update your system to the latest ELIXYS software featuring UI improvements, increased stability, and bug fixes. Download v2.4.0 from the Software section under the Support tab.</p>
+		      <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
+		  </div>
+		</div>
+
+		<div class="card mt-3">
+		    <div class="card-body">
+		      <h5 class="card-title">ELIXYS Software v2.4.0 Released!</h5>
+		      <img class="card-img-top" src="/static/img/2_elixys_v2.4.png" alt="Card image cap">
+		      <p class="card-text">Update your system to the latest ELIXYS software featuring UI improvements, increased stability, and bug fixes. Download v2.4.0 from the Software section under the Support tab.</p>
+		      <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
+		  </div>
+		</div>
+
+		<div class="card mt-3">
+		    <div class="card-body">
+
+		      <h5 class="card-title">ISRS 2019 Conference Presentation Award</h5>
+		      <img class="card-img-top" src="/static/img/isrs2019_banner_spn.png" alt="Card image cap">
+		      <p class="card-text">We would like to announce another Conference Presentation Award for ISRS 2019 in Beijing, China! If you’re planning to attend, SOFIE could help! Present an ELIXYS-focused presentation (poster or oral) at ISRS 2019 for a chance to win $1,500 USD!    <br><br>
+	                <strong>Submit your accepted abstract</strong> to <a href="mailto:eric.schopf@sofie.com">eric.schopf@sofie.com</a> by March 22, 2019 to enter the contest. <br><br>
+
+	                <strong>The deadline for submitting an abstract to ISRS 2019 is November 30th.</strong> Check out the conference website for more information: <a href="https://www.srsweb.org/isrs2019/" target="_blank">https://www.srsweb.org/isrs2019/</a></p>
+		      <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
+		  	</div>
+		</div> <!-- /end of card container div -->
+		
+		
+	</div>
+	<div class="col-3" id="newest-sequences">
+			<h5 class="text-center">New sequences</h5>
+			<ul class="list-group mb-3">
+
+			{% for seq in new_seq %}
+
+			<li class="list-group-item d-flex justify-content-between lh-condensed">
+              <div class="mx-auto">
+                <h6 class="my-0">{{ seq.Name }}</h6>
+                <small class="text-muted"></small>
+              </div>
+            </li>
+			{% endfor %}
+            
+          </ul>
+		</div>
+		</div>
+</div>
 {% endblock %}

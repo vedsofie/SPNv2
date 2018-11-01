@@ -71,14 +71,14 @@ def cross_product_join(a1, a2, join_by):
         pdt.append(str(a1[i])+ join_by + str(a2[i]))
     return pdt
 
-@usercontroller.route('/user/dashboard')
+@usercontroller.route('/dashboard')
 @back.anchor
 def dashboard():
     back.set_back_url("/user/dashboard")
     runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
     running_user = g.user.to_hash()
     running_user['RoleType'] = g.user.role.Type
-
+    newest_sequences = Sequence.query.order_by(Sequence.CreationDate.desc()).limit(6).all()
     notification = request.args.get("notificationMessage", "")
     do_password_reset = True if 'password_reset' in request.args else False
     tab_to_load = None
@@ -122,7 +122,8 @@ def dashboard():
                                installers=installers,
                                probes=False,
                                sequences=False,
-                               uid = userid
+                               uid = userid,
+                               new_seq = newest_sequences
                                )
     else:                
         #if main dash board
@@ -145,7 +146,8 @@ def dashboard():
                                installers=installers,
                                probes=isProbes,
                                sequences=isSequences,
-                               uid = userid)
+                               uid = userid,
+                               new_seq = newest_sequences)
 
 @usercontroller.route('/user/<int:user_id>/role/')
 def get_role(user_id):
