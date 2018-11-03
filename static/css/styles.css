@@ -47,3 +47,7 @@ nav.navbar img{
 #avatar-button img{
 	max-width: unset;
 }
+
+div#newest-sequences, div#dashboard-quick-links {
+    margin-top: 48px;
+}

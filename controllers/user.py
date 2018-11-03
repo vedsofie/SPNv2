@@ -98,7 +98,10 @@ def dashboard():
     issue = request.args.get('issue')
     probes = request.args.get('myprobes')
     sequences = request.args.get('mysequences')
-   
+    if g.user.role.Type == 'super-admin' :
+        is_super_admin = True
+    else:
+        is_super_admin = False
     url = PYELIXYS_BASE_DIR + "releases"
     response = requests.get(url,headers=git_headers())
     resp = response.json()
@@ -123,7 +126,8 @@ def dashboard():
                                probes=False,
                                sequences=False,
                                uid = userid,
-                               new_seq = newest_sequences
+                               new_seq = newest_sequences,
+                               is_admin = is_admin
                                )
     else:                
         #if main dash board
@@ -147,7 +151,9 @@ def dashboard():
                                probes=isProbes,
                                sequences=isSequences,
                                uid = userid,
-                               new_seq = newest_sequences)
+                               new_seq = newest_sequences,
+                               is_super_admin = is_super_admin
+                               )
 
 @usercontroller.route('/user/<int:user_id>/role/')
 def get_role(user_id):
