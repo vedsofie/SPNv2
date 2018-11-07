@@ -58,8 +58,9 @@ def index():
 
     #molecules_list.reverse()
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
-    resp = json.dumps(molecules_list)
-    return render_template("molecule/molecules.html", molecules=resp, runninguser=json.dumps(g.user.to_hash()))
+    resp = molecules_list
+    userid = session["userid"]
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid,runninguser=json.dumps(g.user.to_hash()))
 
 @moleculecontroller.route("/<int:cid>/auto_fill/", methods=["GET"])
 def autofill(cid):

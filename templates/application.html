@@ -70,22 +70,19 @@
 					<p>© 2017 Sofie</p>
 				</div>
 			</div>
-            {% endblock %}
-            
             {% include 'footer_dependencies.html'%}
+            {% endblock %}
         </div>
         <!-- script to add active class on navbar click -->
+        <!-- application confirmation -->
+        {% block footer_scripts %}
         <script>
-            var currentPage = window.location.pathname;
-            // alert(currentPage);
-            $('.nav-item a').each(function(){
-                console.log(this); 
-                // if($(this).attr('href') == currentPage){
-                //     $(this).addClass('active');
-                //     console.log(this);
-                // }
+            $(function () {
+              $('[data-toggle="popover"]').popover({
+                container: 'body'
+              })
             });
         </script>
-        <!-- application confirmation -->
+        {% endblock %}
     </body>
 </html>

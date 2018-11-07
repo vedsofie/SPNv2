@@ -17,23 +17,12 @@
       <li class="nav-item">
         <a class="nav-link" href="/user/support">Support</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/user/probes">Probes</a>
+      <li {% if request.path == "/probe/" %}   class="nav-item active" {% else %} class="nav-item" {% endif %} >
+        <a class="nav-link" href="/probe">Probes</a>
       </li>
       <li class="nav-item border-right">
         <a class="nav-link" href="/user/organizations">Organizations</a>
       </li>
-      <li class="nav-item dropdown border-right pl-2">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Create
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Organization</a>
-          <a class="dropdown-item" href="#">Probe</a>
-          <a class="dropdown-item" href="#">Sequence</a>
-        </div>
-      </li>
-
       <li class="nav-item dropdown" id='avatar-button'>
         <a href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <div tabindex="1" class="avatar">

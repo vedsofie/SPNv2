@@ -44,10 +44,13 @@ nav.navbar img{
     /*margin-right: 0.28571em;*/
     margin-left: 1em; 
 }
+
 #avatar-button img{
 	max-width: unset;
 }
-
+div.sidebar-padding{
+    margin-top: 48px;
+}
 div#newest-sequences, div#dashboard-quick-links {
     margin-top: 48px;
 }
