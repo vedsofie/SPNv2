@@ -3,6 +3,7 @@ import requests
 import json
 import random
 import httpagentparser
+import math
 from Crypto.Cipher import AES
 from flask import Blueprint, render_template, request, Response, session, g, flash, redirect
 from models.keyword import Keyword, db
@@ -23,6 +24,7 @@ def index():
     specific_ids = request.args.get("MoleculeIDs", '')
     specific_ids = specific_ids.split(',')
     specific_ids = specific_ids if specific_ids[0] != '' else []
+    page_number = request.args.get("page", 1, type=int)
     ids = []
     for specific_id in specific_ids:
         try:
@@ -34,7 +36,11 @@ def index():
     if len(specific_ids) > 0:
         sql_filter = and_(sql_filter, Molecule.ID.in_(ids))
 
-    all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).limit(9)
+    all_molecules = all_molecules.offset((page_number*9) - page_number)
+    all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
+    number_of_pages = int(math.ceil(all_molecules_count / 9))
 
     sorted_molecules = []
     for molecule in all_molecules:
@@ -60,7 +66,7 @@ def index():
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
     resp = molecules_list
     userid = session["userid"]
-    return render_template("molecule/molecules.html", molecules=resp, uid = userid,runninguser=json.dumps(g.user.to_hash()))
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=json.dumps(g.user.to_hash()))
 
 @moleculecontroller.route("/<int:cid>/auto_fill/", methods=["GET"])
 def autofill(cid):

@@ -29,7 +29,7 @@
                 <ul class="list-group text-center list-group-flush">
                     <li class="list-group-item lh-condensed">
                         <div class="mx-auto">
-                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                            <a href=""><i class="fas fa-vial"></i> My Probes {{ page_number }}</a>
                         </div>
                     </li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
@@ -40,7 +40,7 @@
 
 
         <div class="col-9">
-            <h5 class="text-center mt-2">Probes List</h5>
+            <h5 class="text-center mt-2">Probes List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
             <div class="card-columns mt-3">
             {% for molecule in molecules %}
                 <div class="card text-center">
@@ -56,6 +56,16 @@
 
             {% endfor %}
             </div>
+            <nav aria-label="Page navigation example" class="text-center">
+              <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                {% for page in range(number_of_pages) %}
+                <li {% if current_page_number == (page + 1) %}   class="page-item active" {% else %} class="page-item" {% endif %}><a class="page-link" href="/probe/?page={{ page + 1 }}">{{ page + 1 }}</a></li>
+                {% endfor %}
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+            </nav>
+
         </div>
     </div>
 </div>
