@@ -29,7 +29,7 @@
                 <ul class="list-group text-center list-group-flush">
                     <li class="list-group-item lh-condensed">
                         <div class="mx-auto">
-                            <a href=""><i class="fas fa-vial"></i> My Probes {{ page_number }}</a>
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
                         </div>
                     </li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
@@ -51,7 +51,7 @@
                   </div>
                   <div class="card-footer">
                     <button href="#" class="btn btn-outline-dark" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">View Synonyms</button>
-                    <a href="#" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
+                    <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                 </div>
 
             {% endfor %}

@@ -17,7 +17,7 @@
       <li class="nav-item">
         <a class="nav-link" href="/user/support">Support</a>
       </li>
-      <li {% if request.path == "/probe/" %}   class="nav-item active" {% else %} class="nav-item" {% endif %} >
+      <li {% if "/probe/" in request.path  %}   class="nav-item active" {% else %} class="nav-item" {% endif %} >
         <a class="nav-link" href="/probe">Probes</a>
       </li>
       <li class="nav-item border-right">

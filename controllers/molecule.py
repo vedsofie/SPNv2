@@ -89,15 +89,18 @@ def get_details(molecule_id):
     edit_page = request.args.get('edit', False)
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     usr = g.user.to_hash()
+    userid = session["userid"]
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
-        resp = json.dumps(molecule.to_hash())
+        resp = molecule.to_hash()
         if "Accept" in request.headers and request.headers['Accept'] == "application/json":
             return Response(resp, headers={"Content-Type": "application/json"})
 
         if edit_page and molecule.can_save(g.user):
-            return render_template("molecule/edit.html", molecule=resp, runninguser=json.dumps(usr))
+            return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
+    
+
     else:
         if(molecule):
             message = urllib.quote("%s is being reviewed by Sofie Biosciences,\n" % molecule.Name +
