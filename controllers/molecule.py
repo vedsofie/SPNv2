@@ -90,8 +90,9 @@ def get_details(molecule_id):
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     # Get sequences for this molecule
     sequences = Sequence.query.filter_by(MoleculeID=molecule_id).all()
-    seq_resp = [seq.to_hash() for seq in sequences]
-
+    all_seq_resp = [seq.to_hash() for seq in sequences if seq.downloadable]
+    private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
+    public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
     usr = g.user.to_hash()
     userid = session["userid"]
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
@@ -102,7 +103,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, sequences=seq_resp,uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences,uid = userid,runninguser=json.dumps(usr))
     
 
     else:

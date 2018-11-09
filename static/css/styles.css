@@ -59,3 +59,22 @@ div.sidebar-padding{
 div#newest-sequences, div#dashboard-quick-links {
     margin-top: 48px;
 }
+.divider_title {
+    /* width: 960px; */
+    border-bottom: 1px solid #d7dde2;
+    margin-bottom: 50px;
+    /* margin-top: -36px; */
+    text-align: center;
+    display: inline-block;
+}
+.divider_title>span {
+    /* color: #929598; */
+    position: relative;
+    top: 13px;
+    background-color: #f8f9fa;
+    padding-right: 26px;
+    padding-left: 26px;
+    font-weight: 600 !important;
+    margin-top: -32px;
+    font-size: 18px;
+}

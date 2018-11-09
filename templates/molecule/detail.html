@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="col-6 page-contents">
-            <h5 class="text-center mt-2">Probe Details</h5>
+            <h5 class="text-center mt-3">Probe Details</h5>
             <div class="card p-3 mt-3">
                 <div class="row">
                     <div class="col-5"><img src="/probe/{{ molecule.ID }}/image" alt="" class="img-fluid bg-light"></div>
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="card mt-3 p-3">
+            <div class="card mt-3 mb-3 p-3">
                 <div class="row">
                     <div class="dropdown col-6">
                       <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -91,9 +91,39 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="divider_title col-sm-12">
+                <span>Sequences available for download</span>
+            </div>
+            <div class="card-columns column-count-2 mb-3">
+                {% for sequence in public_sequences %}
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ sequence.Name }}</h5>
+                    <p>{{ sequence.Comment }}</p>
+                    <div class="dropdown-divider"></div>
+                    <div>
+                        <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
+                    </div>
+                    <div>
+                        <span>Synthesis Time: {{ sequence.SynthesisTime }}{% if sequence.SynthesisTime != None and sequence.SynthesisTimeStandardDeviation %} ± {{ sequence.SynthesisTimeStandardDeviation }} {% endif %}</span>
+                        minutes
+                    </div>
+                    <div><span># Cassettes: {{ sequence.NumberOfSteps }}</span></div>
+                    <div><span>Purification: {{ sequence.PurificationMethod }}</span></div>
+                    <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
+                  </div>
+                  <div class="card-footer">
+                  </div>
+                </div>
 
-            <div class="card-columns column-count-2 mt-3">
-                {% for sequence in sequences %}
+                {% endfor %}
+            </div>
+            <div class="divider_title col-sm-12">
+                <span>Contact for further information</span>
+            </div>
+            <div class="card-columns column-count-2">
+                {% for sequence in private_sequences %}
                 <div class="card text-center">
                   <div class="card-body">
                     <h5 class="card-title">{{ sequence.Name }}</h5>
