@@ -93,6 +93,8 @@ def get_details(molecule_id):
     all_seq_resp = [seq.to_hash() for seq in sequences if seq.downloadable]
     private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
     public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+
+    # Get account of the user who uploaded a sequence (this is used to get logo of that )
     usr = g.user.to_hash()
     userid = session["userid"]
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):

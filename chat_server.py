@@ -17,8 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.secret_key = os.environ['SESSION_KEY']
 db = modules.database.generate_db(app)
 from models.user import User
-from models.sequence import Sequence
 from models.account import Account
+from models.sequence import Sequence
 from models.labsystem import  LabSystem
 from flask.ext.assets import Environment, Bundle
 

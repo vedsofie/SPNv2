@@ -11,14 +11,12 @@ nav.navbar img{
 
 .form-signin {
    	width: 100%;
-    /*max-width: 400px;*/
     padding: 38px;
     margin: auto;
     background: #f9fbfc;
     border: 1px solid #e8e8e8;
     border-radius: 3px;
     margin-top: 30%;
-    /*transform: translateY(-50%);*/
 }
 
 .login-page {
@@ -40,8 +38,6 @@ nav.navbar img{
     outline: none;
     float: right;
     cursor: pointer;
-    /* margin-top: -25px; */
-    /*margin-right: 0.28571em;*/
     margin-left: 1em; 
 }
 
@@ -59,16 +55,15 @@ div.sidebar-padding{
 div#newest-sequences, div#dashboard-quick-links {
     margin-top: 48px;
 }
+
+/* Probe Detail page */
 .divider_title {
-    /* width: 960px; */
     border-bottom: 1px solid #d7dde2;
     margin-bottom: 50px;
-    /* margin-top: -36px; */
     text-align: center;
     display: inline-block;
 }
 .divider_title>span {
-    /* color: #929598; */
     position: relative;
     top: 13px;
     background-color: #f8f9fa;
@@ -77,4 +72,12 @@ div#newest-sequences, div#dashboard-quick-links {
     font-weight: 600 !important;
     margin-top: -32px;
     font-size: 18px;
+}
+.sequence-card-footer img {
+    max-width: 30px;
+}
+
+.sequence-card-footer a {
+    color: black;
+    text-decoration: none;
 }

@@ -99,7 +99,7 @@
                 {% for sequence in public_sequences %}
                 <div class="card text-center">
                   <div class="card-body">
-                    <h5 class="card-title">{{ sequence.Name }}</h5>
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
                     <p>{{ sequence.Comment }}</p>
                     <div class="dropdown-divider"></div>
                     <div>
@@ -114,6 +114,11 @@
                     <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
                   </div>
                   <div class="card-footer">
+                    <div class="sequence-card-footer">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
                   </div>
                 </div>
 
@@ -126,8 +131,8 @@
                 {% for sequence in private_sequences %}
                 <div class="card text-center">
                   <div class="card-body">
-                    <h5 class="card-title">{{ sequence.Name }}</h5>
-                    <p>{{ sequence.Comment }}</p>
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
+                    <p>{% if sequence.Comment != None %}  {{ sequence.Comment }} {% endif %}</p>
                     <div class="dropdown-divider"></div>
                     <div>
                         <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
@@ -141,6 +146,11 @@
                     <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
                   </div>
                   <div class="card-footer">
+                    <div class="sequence-card-footer text-center">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
                   </div>
                     
                 </div>
@@ -154,6 +164,11 @@
 
     </div><!-- end of row -->
 </div>
+
+
+
+
+
 <div class="col-sm-6 col-sm-offset-3 col-xs-12" id="probe-page">
     <div class="m-molecule-details">
         <img class="molecule-details__img" data-bind="attr:{src: molecule.image_url}" />
