@@ -88,6 +88,10 @@ def new():
 def get_details(molecule_id):
     edit_page = request.args.get('edit', False)
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    # Get sequences for this molecule
+    sequences = Sequence.query.filter_by(MoleculeID=molecule_id).all()
+    seq_resp = [seq.to_hash() for seq in sequences]
+
     usr = g.user.to_hash()
     userid = session["userid"]
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
@@ -98,7 +102,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, sequences=seq_resp,uid = userid,runninguser=json.dumps(usr))
     
 
     else:

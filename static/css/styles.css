@@ -48,6 +48,11 @@ nav.navbar img{
 #avatar-button img{
 	max-width: unset;
 }
+
+.column-count-2{
+    column-count: 2 !important;
+}
+
 div.sidebar-padding{
     margin-top: 48px;
 }
