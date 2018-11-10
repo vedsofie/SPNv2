@@ -93,7 +93,9 @@ def get_details(molecule_id):
     all_seq_resp = [seq.to_hash() for seq in sequences if seq.downloadable]
     private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
     public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
-
+    #fetching synonyms for probe
+    keywords = Keyword.query.filter_by( ParentID=molecule_id, Type="Molecules").all()
+    keywords_hash = [keyword.to_hash() for keyword in keywords ]
     # Get account of the user who uploaded a sequence (this is used to get logo of that )
     usr = g.user.to_hash()
     userid = session["userid"]
@@ -105,7 +107,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences,uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
     
 
     else:

@@ -1,52 +1,9 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-    <script>
-        var molecule = new Molecule(JSON.parse({{molecule|tojson|safe}}));
-        var moleculeDetail = new MoleculeDetailView({molecule: molecule});
-        var paginationSize = 3;
-        var keywordPaginationSize = 5;
-        var keywordCurrentPage = ko.observable(1);
-        var synonymsCurrentPage = ko.observable(1);
-        var sequences = JSON.parse({{sequences|tojson|safe}})
-
-        $(function(){
-            navbar.currentlyOpenedTab("tracers");
-        });
-    </script>
-    <style>
-        #molecule-upload-sequence #popup-text-button {
-            display: inline-block;
-        }
-
-        .form_wrap {
-            /*width: 638px;*/
-            margin: 0 auto;
-            margin-top: 20px;
-                margin-left: 10px;
-    margin-right: 10px;
-
-        }
-
-        .main_form {
-            background-color: #f3f6f9;
-            border: none;
-            outline: none;
-            border-radius: 3px;
-            padding: 14px 16px;
-            width: 100%;
-            height: 52px;
-
-        }
-
-    </style>
-{% endblock %}
-
 {% block content_body %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-3 sidebar-padding">
-            <div class="card page-contents">
+            <div class="card">
                 <div class="card-header bg-secondary text-center">
                     <h5 class="mb-0 text-white">Quick links</h5>
                 </div>
@@ -158,151 +115,50 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-3" id="probe-right-sidebar">
-            
+        <div class="col-3 sidebar-padding" id="probe-right-sidebar">
+            <div class="card text-center">
+
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Info</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <b>CAS:</b>
+                       <div> {{ molecule.CAS }}</div>
+                    </li>
+                    <li class="list-group-item lh-condensed">
+                        <b>Isotope:</b>
+                        <div> {{ molecule.Isotope }}</div>
+                    </li>
+                    <li class="list-group-item lh-condensed">
+                        <b>Formula:</b>
+                        <div>{{ molecule.Formula }}</div>
+                    </li>
+                    {% for keyw in keywords if keyw.Category == "Synonym" %}
+                    <li class="list-group-item lh-condensed">
+                        <b>Synonym {{ loop.index }}</b>
+                        <div>{{ keyw.DisplayFormat|safe}}</div>    
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item lh-condensed">
+                         <b>Keywords</b>
+                    {% for keyw in keywords if keyw.Category == "Keyword" %}
+                        <div>{{ keyw.DisplayFormat|safe}}</div>    
+                    {% endfor %}
+                    </li>
+                </ul>
+            </div>
         </div>
 
     </div><!-- end of row -->
 </div>
 
-
-
-
-
-<div class="col-sm-6 col-sm-offset-3 col-xs-12" id="probe-page">
-    <div class="m-molecule-details">
-        <img class="molecule-details__img" data-bind="attr:{src: molecule.image_url}" />
-        <div class="probe-content-styles">
-            <formula-editor params="formula: molecule.record.Name,
-                                        userFormatted: molecule.record.DisplayFormat,
-                                        edit: false"></formula-editor>
-            <div class="elipse-overflow molecule-description">
-                <p data-bind="text: molecule.Description"></p>
-            </div>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <div class="left_action_box google-card-4">
-        <div style="display: inline-block;" data-bind="visible: molecule.canEdit()">
-            <div tabindex="1" data-bind="event: {click: openActionMenu,
-                                                                 blur: hideActionMenu}" class="action-context-menu">
-                <span class="action-control"><div class="action-control__arrow"></div>Actions</span>
-            </div>
-            <div class="m-toggle-menu-wrapper">
-                <div class="toggle-menu toggle-menu--probe" data-bind="visible: actionMenuOpen" style="display: none;">
-                    <a data-bind="attr: {href: '/probe/' + molecule.ID + '?edit=true'}">
-                        <div data-bind="visible: molecule.canEdit()" class="toggle-menu__control-option">Edit
-                        </div>
-                    </a>
-                    <div data-bind="visible: molecule.canEdit(),
-                                                    click: molecule.delete_self" class="toggle-menu__control-option toggle-menu__control-option--last">Delete
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="button_wrap">
-            <a class="m-solid-button" data-bind="visible: !molecule.calculatedUserIsFollowing(),
-                                                                 click: molecule.follow" style="display: none;">Follow</a>
-            <a class="m-solid-button" data-bind="visible: molecule.calculatedUserIsFollowing(),
-                                                                 click: molecule.unfollow" style="display: none;">Unfollow</a>
-        </div>
-    </div>
-</div>
-
-<div class="col-xs-12 col-sm-3 col-lg-2 col-lg-offset-1 right-sidebar" id="probe-sidebar">
-    <h3>Info</h3>
-    <div class="info_wrap">
-        <div>
-            <span class="info_name">CAS:</span>
-            <span data-bind="text: molecule.CAS"></span>
-        </div>
-        <div>
-            <span class="info_name">Isotope:</span>
-            <formula-editor params="formula: molecule.Isotope,
-                                            edit: false,
-                                            superscriptNumbers: true"></formula-editor>
-        </div>
-        <div>
-            <span class="info_name">Formula:</span>
-            <formula-editor params="formula: molecule.Formula, edit: false"></formula-editor>
-        </div>
-        <span data-bind="if: molecule.calculatedKeywords()">
-            <div>
-                <keyword-list-read-only-popup params="btnText: 'View Synonyms',parent_id: molecule.ID,template: 'molecule_keyword_list_read_only_open_button',
-                                                      type: 'Molecules',category: 'Synonym',autoCalculate: true"></keyword-list-read-only-popup>
-            </div>
-            <div>
-                <span class="info_name">Keywords:</span>
-            <div data-bind="foreach: {data: molecule.keywordKeywords, as: 'keyword'}">
-                <span data-bind="if: parseInt($index() / keywordPaginationSize) + 1 == keywordCurrentPage()">
-                                        <div data-bind="text: keyword.record.Keyword"></div>
-                                    </span>
-            </div>
-            <div data-bind="pagination: {'itemsOnPage': keywordPaginationSize,
-                                                         'currentPage': keywordCurrentPage,
-                                                         'items': molecule.keywordKeywords().length}">
-            </div>
-            </div>
-        </span>
-    </div>
-</div>
-
-<div class="clear"></div>
-
-<div class="col-sm-6 col-sm-offset-3">
-    <span data-bind="with: moleculeDetail">
-           
-    <div class="l-content-wrapper col-sm-12" id="availableForDownload" data-bind="if: publicSequences().length > 0">
-        <div class="divider_title col-sm-12">
-            <span>Available for Download</span>
-    </div>
-    <div class="">
-        <div data-bind="foreach: {data: publicSequences, as: 'sequence'}">
-            <sequence-detail-card params="sequence: sequence,displayAccountName: true"></sequence-detail-card>
-        </div>
-        <div class="clear"></div>
-    </div>
-    </div>
-    <div class="" id="contactForFurtherInformation" data-bind="if: privateSequences().length > 0">
-        <div class="divider_title col-sm-12">
-            <span>Contact For Further Information</span>
-        </div>
-        <div class="">
-            <span data-bind="foreach: {data: privateSequences(), as: 'sequence'}">
-                            <sequence-detail-card params="sequence: sequence,displayAccountName: true"></sequence-detail-card>
-                        </span>
-            <div class="clear"></div>
-        </div>
-    </div>
-    </span>
-    <div class="posts-wrapper col-sm-12">
-        <div class="wrap_c not_expandable">
-            <posts params="parent_id: molecule.ID,
-                               type: 'Molecules'"></posts>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block footer %}
     {{super()}}
     <script type="text/javascript">
-        openActionMenu = function(){
-            actionMenuOpen(!actionMenuOpen());
-        }
-        hideActionMenu = function(){
-            setTimeout(function(){
-                actionMenuOpen(false);
-            }, 300);
-        }
-        actionMenuOpen = ko.observable(false);
-        editKeywords = function(){
-            viewModel.synomynsKeywordViewModel.open();
-        }
-        editSyns = function(){
-            viewModel.keywordsViewModel.open();
-        }
-        var viewModel = new MoleculeDetailViewModel({molecule: molecule});
+        
     </script>
 {% endblock %}
 
