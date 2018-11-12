@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            
+            {% if public_sequences|length > 0 %}
             <div class="divider_title col-sm-12">
                 <span>Sequences available for download</span>
             </div>
@@ -78,9 +78,10 @@
                     </div>
                   </div>
                 </div>
-
+        
                 {% endfor %}
             </div>
+            {% endif %}
             <div class="divider_title col-sm-12">
                 <span>Contact for further information</span>
             </div>
