@@ -22,10 +22,10 @@
         <div class="col-9 page-contents sidebar-padding">
             <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
                 <li class="nav-item pl-0 pr-0 col-6 text-center">
-                    <a {% if "videos-tab" in request.path  %} class="nav-link" {% else %} class="nav-link active" {% endif %} id="faq-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">FAQs</a>
+                    <a class="nav-link active" id="faq-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">FAQs</a>
                 </li>
                 <li class="nav-item pl-0 pr-0 col-6 text-center">
-                    <a {% if "videos-tab" in request.path  %} class="nav-link active show" {% else %} class="nav-link" {% endif %} id="videos-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Troubleshooting Videos</a>
+                    <a class="nav-link" id="videos-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Troubleshooting Videos</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -404,8 +404,8 @@
                             </div>
                             <div id="video2" class="collapse" aria-labelledby="videoHeadingTwo" data-parent="#accordionExample2">
                                 <div class="card-body">
-                                    <p class="w-100">These videos highlight the most common errors encountered when using the ELIXYS platform based on actual customer usage. Each video explains what causes the software to display the error message, the most typical root causes of the error, and potential solutions to prevent these errors from happening in the future.</p>
-                                    <div class="card-columns">
+                                    <p class="w-100 mb-3">These videos highlight the most common errors encountered when using the ELIXYS platform based on actual customer usage. Each video explains what causes the software to display the error message, the most typical root causes of the error, and potential solutions to prevent these errors from happening in the future.</p>
+                                    <div class="card-columns mt-3">
                                         <div class="card">
                                             <iframe height="205" src="https://www.youtube.com/embed/gwCvC56vZOA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                                             <div class="card-body">
@@ -450,7 +450,7 @@
                             <div class="card-header" id="videoHeadingThree">
                                 <h5 class="mb-0 text-center">
                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#video3" aria-expanded="false" aria-controls="video3">
-                                  <b>Maintenance
+                                  <b>Maintenance</b>
                                 </button>
                               </h5>
                             </div>
