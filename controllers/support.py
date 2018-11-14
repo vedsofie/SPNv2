@@ -43,7 +43,6 @@ supportcontroller = Blueprint("supportcontroller", __name__, url_prefix="/suppor
 
 @supportcontroller.route("/",methods=["GET"])
 def report_issue_forum():
-    
     url = PYELIXYS_BASE_DIR + "releases"
     response = requests.get(url,headers=git_headers())
     resp = response.json()
@@ -54,7 +53,28 @@ def report_issue_forum():
     print response
     resp = response.json()
     installers = json.dumps(as_assets(resp))
-    return render_template('/support/support_dashboard.html', releases=releases, installers=installers, runninguser=json.dumps(g.user.to_hash()))
+    userid = session["userid"]
+    return render_template('/support/support_dashboard.html', releases=releases, uid = userid, installers=installers, runninguser=json.dumps(g.user.to_hash()))
+
+@supportcontroller.route("/documentation",methods=["GET"])
+def documentation():
+    userid = session["userid"]
+    return render_template("/support/documentation.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+
+@supportcontroller.route("/faq",methods=["GET"])
+def faq():
+    userid = session["userid"]
+    return render_template("/support/faq.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+
+@supportcontroller.route("/field_support",methods=["GET"])
+def field_support():
+    userid = session["userid"]
+    # code for fetching open support requests
+
+    # code for fetching closed support requests
+
+
+    return render_template("/support/field_support.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
 
 def as_assets(resp):
     spn_domain = os.environ['SOFIE_PROBE_DOMAIN']

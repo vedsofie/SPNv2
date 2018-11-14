@@ -63,7 +63,13 @@ div#newest-sequences, div#dashboard-quick-links {
     text-align: center;
     display: inline-block;
 }
-.divider_title>span {
+.divider_title-2 {
+    border-bottom: 1px solid #d7dde2;
+    margin-bottom: 25px;
+    text-align: center;
+    display: inline-block;
+}
+.divider_title>span, .divider_title-2>span {
     position: relative;
     top: 13px;
     background-color: #f8f9fa;
@@ -80,4 +86,9 @@ div#newest-sequences, div#dashboard-quick-links {
 .sequence-card-footer a {
     color: black;
     text-decoration: none;
+}
+/* FAQ page */
+.txt-wrap{
+    white-space: normal;
+    text-align: left;
 }
