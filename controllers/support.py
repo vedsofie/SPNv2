@@ -66,6 +66,12 @@ def faq():
     userid = session["userid"]
     return render_template("/support/faq.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
 
+
+@supportcontroller.route("/software",methods=["GET"])
+def software():
+    userid = session["userid"]
+    return render_template("/support/software.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+
 @supportcontroller.route("/field_support",methods=["GET"])
 def field_support():
     userid = session["userid"]
