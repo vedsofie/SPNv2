@@ -92,3 +92,6 @@ div#newest-sequences, div#dashboard-quick-links {
     white-space: normal;
     text-align: left;
 }
+#faq-videos iframe{
+    width:100%;
+}

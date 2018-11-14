@@ -1,6 +1,6 @@
 {% extends "application.html" %}
 {% block content_body %}
-<div class="container-fluid">
+<div class="container-fluid" id="faq-videos">
     <div class="row">
         <div class="col-2 sidebar-padding">
             <div class="card">
@@ -248,14 +248,20 @@
                             <div class="card-header" id="heading16">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse16" aria-expanded="false" aria-controls="collapse16">
-                              16) PURE/FORM – Communication to the PURE/FORM module is very slow or “not responding”
+                              16) FLEX/CHEM: It’s hard to see the contents in my reactor vial (either too dark or too bright). How can I adjust the brightness?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse16" class="collapse" aria-labelledby="heading16" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    The PURE/FORM module requires the HPLC pump to be powered on in order to communicate properly with the ELIXYS software. Unfortunately, the pump will not automatically turn on when the power strip is turned on. The power button on the front of the pump must be pressed. This turns the button blue and will allow communication with the software.
-                                    If the “PF system is not responding” message appears, this indicates that the software cannot connect to the PURE/FORM. Check that power is being supplied; the fans on the back of the PURE/FORM should be on. Also, check that the ethernet cable from the PURE/FORM into the airport router is plugged in securely and has not become disconnected. If the problem persists, contact ELIXYS Support.
+                                    The brightness observed in the reactor vial is a combination of the presence (or absence) of ambient light plus light provided by an LED on a small circuit board mounted on the side of the reactor. The brightness on the camera feed can also be adjusted in the software by navigating to the System  Video tab and adjusting the contrast/brightness. Often times, tweaking the brightness in the software will allow you to see the liquid level within the reactor vial during all unit operations. <br><br>
+                                    If you would like to adjust the brightness of the LED which provides light into the reactor vial, please see the linked PDF below. The LED is controlled by a small potentiometer which can be easily adjusted to control the output of light. You should make sure that you can see the liquid level at both “unit operation extremes” within the instrument: at the “darkest” position (Evaporate) and the “brightest” position (Transfer). As the reactor moves further back, the ambient light decreases and the camera feed will naturally darken. While increasing the LED’s brightness will help you see the liquid level at the evaporate position, it may be too bright to see the liquid level during the Transfer operation. You will need to adjust, test, and re-adjust as necessary.
+                                    <br><br>
+                                    One item to note: the light inside the hot cell/mini cell can greatly affect the camera feed shown on the software. If you have recently installed or replaced lighting within your cell, you may need to re-adjust your brightness settings. This is especially apparent on the Transfer operation where the reactor is all the way at the front of the instrument. We recommend always keeping the same lighting in your hot cell so you don’t have to keep adjusting the reactor’s LED brightness level.
+                                    <br><br>
+                                    <span class="text-center">
+Related files:<br>
+<b>ELIXYS Field Service - Adjusting Brightness Level on a Reactor.pdf</b> manual <br><a href="https://www.dropbox.com/s/1tfjcdc4pxmkbd1/ELIXYS%20Field%20Service%20-%20Adjusting%20Brightness%20Level%20on%20a%20Reactor.pdf?dl=0" target="_blank" class="btn btn-primary">Download PDF</a></span>
                                 </div>
                             </div>
                         </div>
@@ -263,14 +269,13 @@
                             <div class="card-header" id="heading17">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse17" aria-expanded="false" aria-controls="collapse17">
-                              17) PURE/FORM – There are air bubbles in the purification sub-system which can be seen on the output lines and/or the UV detector data (e.g. spikes on the trace)
+                              17) FLEX/CHEM: What’s the difference between Add position 1 and 2?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse17" class="collapse" aria-labelledby="heading17" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    Air bubbles are common in HPLC systems and can be tricky to eliminate. First, ensure that the mobile phases used are degassed properly, either through sonication, bubbling inert gas, or using a dedicated degasser. Next, purge the HPLC pump head as described in the PURE/FORM User Manual. When purged for 5-10 minutes, there should be no air bubbles in the mobile phase input line into the pump or in the pump head itself.
-                                    Next, use the Standalone screen to run HPLC pump to waste without a column present (typically the bypass tubing is connected to column position #4). Visually check that the waste line has no air bubbles inside of it. It may take some time for the HPLC system to be flushed of air bubbles, e.g. 30 minutes or more. If any column position was recently changed, verify that the fittings are tight and there is no leaking present.
+                                    The cassette has two “addition” positions where reagent vials are placed during the Add Reagent unit operation. The position is selected from the Edit Sequence page. There is no mechanical difference between the two positions. The only difference is that they are completely separate fluid paths; they both use the same type of needle and tubing. These two fluid path options are designed to allow you to avoid cross-contamination between adding reagents during your synthesis.
                                 </div>
                             </div>
                         </div>
@@ -278,16 +283,13 @@
                             <div class="card-header" id="heading18">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse18" aria-expanded="false" aria-controls="collapse18">
-                              18) PURE/FORM - When doing a sample transfer from the ELIXYS to the PURE/FORM, the liquid sensor(s) do not seem to be reading the liquid head/tail correctly
+                              18) FLEX/CHEM: What’s the difference between React position 1 and 2?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse18" class="collapse" aria-labelledby="heading18" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    The liquid sensors are calibrated before the installation has completed and are verified to be correctly identifying the head and tail of the sample as it passes through the sensor. However, there are a few common scenarios which would prevent the sensor from functioning correctly.
-                                    The most common scenario is that when the transfer from the ELIXYS to the PURE/FORM starts, the tubing between the cassette and the PURE/FORM already has liquid inside of it. This can happen if the tubing is not properly dried out after a transfer operation has been done. The residual liquid in the tubing will cause the liquid sensor to detect a false head and tail and switch the injection valve into the inject position prematurely. To dry out the tubing first connect the cassette output (either the “O” output line or the dip tube itself) to the PURE/FORM input tubing. Then run a Transfer sequence with a dry, empty reactor vial. Set the pressure for transfer to a high value, 10 or 15 psi. Let the sequence run for at least 5 minutes; this will cause all liquid inside of the tubing to be forced out/dried out.
-                                    The second common scenario is that the tubing has been moved or disturbed enough so that it is not seated properly inside the liquid sensor body. For example, this can happen if the user removes a cassette from the ELIXYS without first disconnecting the input line. To seat the tubing inside the sensor, take the tubing out and grasp the tubing with the thumb and forefinger of both hands. Carefully push both ends down into the sensor. To double check, use a small flat-head screwdriver to gently press the tubing down. The tubing will “click” when it is in the correct position.
-                                    Lastly, ensure that the correct input tubing is connected to the correct liquid sensor. It is possible that these tubes could be switched. After this, verify that the Transfer operation destination sample loop matches the input tubing number used.
+                                    The cassette has two “reaction” positions where reactor vials are sealed during React unit operations. The position is selected from the Edit Sequence page. There is no difference between the two positions except that the FLEX/CHEM positions the reactor vial at a different location on the white Teflon-coated gasket underneath the cassette. This is designed to allow you to avoid cross-contamination during your synthesis. Often times there will be refluxing during a React operation which deposits liquid on the underside of the gasket. To avoid cross-contamination with liquid that may have been left over on the gasket from the first React operation, select the other position if a second React operation is required.
                                 </div>
                             </div>
                         </div>
@@ -295,13 +297,16 @@
                             <div class="card-header" id="heading19">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse19" aria-expanded="false" aria-controls="collapse19">
-                              19) PURE/FORM - When switching between Formulation steps on the Standalone screen, a popup appears saying that the valves cannot be set correctly
+                              19) FLEX/CHEM: My liquid sensor doesn’t seem to register Fluid/No Fluid correctly. How can I fix this?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse19" class="collapse" aria-labelledby="heading19" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    This problem can occur if there is a temporary PURE/FORM communication issue with the software. In almost every case, clearing the popup window will successfully set the valving for the desired step in the Formulation sub-system. Clear the popup window; if the issue persists contact ELIXYS support.
+                                    The liquid sensor can be calibrated from the System -> Fluid tab. Press “Calibrate” and follow the on-screen prompts. The video link below demonstrates how to do this. <br><br>
+                                    Two things to note. First, you should always make sure that the injection valve input tubing is properly clipped into the sensor. If you press the tubing firmly into the sensor, you should hear a small “snap” sound; this indicates that the tubing is properly clipped in. Second, if your sample is very dark/turbid, the liquid sensor may have difficulty detecting it. The sensor is designed for clear liquids by measuring the absorption of light through the tubing but the sample may prevent it from operating as designed. Contact SOFIE if you believe that your sensor may have problems detecting your sample. <br><br>
+                                    Related video:
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/q46L_4pM7Mg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             </div>
                         </div>
@@ -309,13 +314,14 @@
                             <div class="card-header" id="heading20">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse20" aria-expanded="false" aria-controls="collapse20">
-                              20) PURE/FORM - The dilution reservoir overfilled and the HLC pump stopped pumping. What do I do now?
+                              20) FLEX/CHEM: What fittings/tubing should I use to connect to the FLEX/CHEM HPLC injection valve?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse20" class="collapse" aria-labelledby="heading20" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    The dilution reservoir will alert the user when 90% full assuming the value entered in “Reservoir Pre-Fill Amount” is correct. If the dilution reservoir overfills, the system will detect the overflow and cut off the HPLC pump. Two things can be done to recover from this situation. The user can “continue” the Purification unit operation to proceed to the Formulation unit operation if that is next. Alternatively, the user can create a sequence with a Formulation unit operation. When the Trap step starts, the product will be pushed out of the PURE/FORM through the SPE cartridge. Finally, the user could enter the Standalone screen and navigate to the Formulation sub-system and then set a pressure in the Trap step.
+                                    We recommend using 1/16” OD stainless steel tubing for all connections into/out of the FLEX/CHEM injection valve. You can use Idex part number <b>U-190</b> or equivalent. <br><br>
+                                    We recommend 2-piece stainless steel 10-32 coned fittings from Idex to connect tubing into the injection valve. You can use Idex part number <b>6000-209</b> or equivalent.
                                 </div>
                             </div>
                         </div>
@@ -323,13 +329,13 @@
                             <div class="card-header" id="heading21">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse21" aria-expanded="false" aria-controls="collapse21">
-                              21) PURE/FORM - Can I directly inject a sample via a syringe into the sample loop for Purification?
+                              21) FLEX/CHEM: The evaporation rate for the same step in my synthesis seem to be changing (either longer or shorter). What could be causing this?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse21" class="collapse" aria-labelledby="heading21" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    Yes. The user can connect the sample to one of the input tubes on the top of the PURE/FORM. Navigate to the Standalone screen and change the injection valve position to match the input tubing number (e.g. #1). Load the sample into the sample loop; they have a 5 ml capacity. Turn the HPLC pump and UV detector lamps on, set the flow rate, and then press the other injection valve position (e.g. #2). Then press the “Clear” and “Record” button on the graphing window to start data collection.
+                                    The evaporation rate of liquid inside the reactor vial is dependent on a few factors that can be controlled by the FLEX/CHEM: temperature, stirring, vacuum level, and pressure. Assuming that the synthesis sequence has not changed, there are other factors which may influence the evaporation rate. The flow rate of the gas into the reactor vial can influence the evaporation speed. Obstructions in the inert gas flow path (e.g. crusted residue on the tubing into the cassette) can reduce the flow rate and evaporation rate. Changing inert gas sources (e.g. Nitrogen to Helium) can also strongly affect the evaporation rate as gasses have different flow rates at the same pressure. Finally, make sure that your cold trap is properly emptied and cleaned between synthesis runs. Frozen liquid can build up within the stem of the cold trap and block gasses from being pulled into the vacuum pump; this will reduce your evaporation rate or potentially stop liquids from being evaporated entirely.
                                 </div>
                             </div>
                         </div>
@@ -337,13 +343,13 @@
                             <div class="card-header" id="heading22">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse22" aria-expanded="false" aria-controls="collapse22">
-                              22) PURE/FORM – I properly degassed my mobile phase solvents and purged the HPLC pump of air. However, I still saw air bubbles before my sample in the UV detector. What happened?
+                              22) FLEX/CHEM: I noticed liquid on the underside of my cassette when I removed it from the FLEX/CHEM. What could have caused this?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse22" class="collapse" aria-labelledby="heading22" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    One cause of air bubbles in the HPLC system is air pushed through the sample loop. This can happen if the sample loop is dry before the injection. To keep the sample loops full of mobile phase, navigate to the Standalone screen. Turn the HPLC pump on and let it pump 10 ml total. Then change the injection valve position (e.g. from #2 to #1) and wait for another 10 ml of mobile phase to flow through. This fills both loops entirely with mobile phase. However, there will usually be air in front of the sample due to the dead volume in the tubing connecting the cassette.
+                                    Liquid on the underside of the cassette is a distinct sign of leaking stopcock valves within the cassette. Stopcocks are rated to 40 psi but overuse with harsh chemicals can reduce their integrity and cause them to leak at lower pressures. We strongly recommend replacing a cassette which shows signs of leaking with a new cassette. If leaking continues, you can risk damaging the instrument: seizing up a stopcock actuator, causing an electrical short if liquid drips onto the reactor, or even jamming a reactor’s linear actuator. All of these would lead to instrument downtime and require an on-site visit to remedy.
                                 </div>
                             </div>
                         </div>
@@ -351,143 +357,371 @@
                             <div class="card-header" id="heading23">
                                 <h5 class="mb-0">
                             <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse23" aria-expanded="false" aria-controls="collapse23">
-                              23) PURE/FORM - The pressure shown by my HPLC pump is much lower than expected (e.g. 0 psi instead of 3,000 psi). What could be happening?
+                              23) FLEX/CHEM: One of my reagent vials got stuck in the Add position; the gripper raised up but the reagent vial stayed stuck into the cassette. What can I do now?
                             </button>
                           </h5>
                             </div>
                             <div id="collapse23" class="collapse" aria-labelledby="heading23" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    This is often because there is a leak in the high pressure portion of the Purification sub-system. This is all systems downstream of the HPLC pump and upstream of the HPLC column: tubing out of the HPLC pump, tubing into injection valve, fittings on the injection valve, tubing into the column selector, fittings on the column selector, and fittings into the HPLC column (and/or guard column). Identifying leaks early is critical! They are almost always easily observed by a sharp decrease of HPLC pump pressure. Always keep an eye on the pressure, note when it seems out of the expected range, and be ready to identify leaks quickly.
+                                    The gripper has two rubber-coated fingers which grab the sides of reagent vials to move them around on the cassette. These fingers grip the reagent vial tightly but if there is too much resistance, the reagent vial may slip out of the fingers. The main cause of resistance is the needles that pierce the reagent vial septum. If there is too much friction between the needles and septum, the gripper may raise up but the reagent vial will stay “stuck” in the Add/Elute cassette positions. One common way that this can occur is if the crimping tool is no longer correctly crimping the reagent vial septa and metal top to the glass vial. See the linked PDF below for more information about this issue and instructions for how to adjust the crimping tool. Finally, make sure you use the correct septa for your reagent vials! The FLEX/CHEM cassettes are designed for specific components; using alternate parts may cause problems. Reagent vial components can be purchased in consumable or reagent kits through the consumables ordering section of SPN.
+                                    <br><br>
+                                    Relevant files:
+                                    <b>ELIXYS Field Service - Crimping Tool.pdf</b><br>
+                                    <a href="https://www.dropbox.com/s/zjpxbi4bwtyjd8k/ELIXYS%20Field%20Service%20-%20Crimping%20Tool.pdf?dl=0" target="_blank" class="btn btn-primary">Download PDF</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="videos-tab">
-                    <div class="accordion" id="accordionExample2">
                         <div class="card">
-                            <div class="card-header" id="videoHeadingOne">
-                                <h5 class="mb-0 text-center">
+                            <div class="card-header" id="heading24">
+                                <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse24" aria-expanded="false" aria-controls="collapse24">
+                              24) FLEX/CHEM: My Reactor [X] camera stopped working; it only displays a white or blue screen. What happened?
+                            </button>
+                          </h5>
+                            </div>
+                            <div id="collapse24" class="collapse" aria-labelledby="heading24" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    A white or blue screen on the camera feed usually indicates one of two things. First, the power/video cord that plugs into the back of the camera may have become loose and fallen out of the connector. Take a picture behind the reactor to see if the cord has become loose; the cord connects into the bottom left of the camera as you stand in the front of the FLEX/CHEM. If the cord has become loose, press it in and then restart the FLEX/CHEM to see if that fixed the problem. <br><br>
+                                    Second, the camera could have had liquid leak onto it and shorted the internal circuit board. This can occur in a variety of ways, but requires an on-site visit from SOFIE to remedy as the camera is “dead”. If you believe your camera may have “died”, please contact SOFIE for further information.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading25">
+                                <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse25" aria-expanded="false" aria-controls="collapse25">
+                              25) FLEX/CHEM: The stir bar in Reactor [X] was no longer stirring. Why can’t it stir anymore?
+                            </button>
+                          </h5>
+                            </div>
+                            <div id="collapse25" class="collapse" aria-labelledby="heading25" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Below each reactor vial, a mixer motor with a magnetic head spins to create a changing magnetic field which causes a stir bar within the reactor vial to spin. Both the mixer motor and the stir bar affect stirring within the reactor vial. Make sure that the mixer disk is present within the reactor before placing your reactor vial into the reactor. This eliminates the possibility of the reactor vial slipping and pressing onto the mixer motor’s magnetic head which prevents it from rotating. When the reactor is “up” and engaged with the cassette, you can see the mixer motor below the reactor vial spinning when it is turned on; verify that you can see the mixer spinning before contacting SOFIE for assistance. <br> <br>
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/_YlZ6doERNs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <br><br>
+                                    Regarding stir bars themselves: make sure you use clean stir bars. Dirty stir bars may stick to the sides of the reactor vial. Finally, make sure you use the correct stir bars. Stir bars which are too large or small may not stir correctly. The FLEX/CHEM was designed for the stir bars provided during the installation. If new stir bars should be ordered, contact SOFIE for more information.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading26">
+                                <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse26" aria-expanded="false" aria-controls="collapse26">
+                              26) FLEX/CHEM: During my evaporations, nothing is happening but my vacuum level is very low (e.g. <-400 mmHg). Why am I not evaporating anything?
+                            </button>
+                          </h5>
+                            </div>
+                            <div id="collapse26" class="collapse" aria-labelledby="heading26" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    The most common cause of this problem is a frozen cold trap stem. If liquid freezes and clogs the cold trap stem, the vacuum pump can pull a strong (<-400 mmHg) vacuum on the cold trap but will not pull any vapor out of the reactor vial. To avoid this issue, first always empty and clean your cold trap between syntheses. Second, always use a dry ice/methanol slurry in your cold trap. Liquid nitrogen can freeze certain gasses that could clog the cold trap stem and can potentially crack and compromise the white compression fittings on the top of the cold trap. Finally, avoid evaporating large amounts of water if possible, as water freezes very easily within the cold trap and can clog the stem. </div> </div> </div> <div class="card">
+                                        <div class="card-header" id="heading27">
+                                            <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse27" aria-expanded="false" aria-controls="collapse27">
+                              27) FLEX/CHEM: We had to move our FLEX/CHEM system to a different hot cell because [insert reason]. Now we have [insert problem], what should we do?
+                            </button>
+                          </h5>
+                                        </div>
+                                        <div id="collapse27" class="collapse" aria-labelledby="heading27" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                The FLEX/CHEM should only be moved by a SOFIE field service engineer who will make sure it’s connected properly. Many potential issues can arise from improperly connecting the FLEX/CHEM. Contact SOFIE for more information as an on-site visit may be required.
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading28">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse28" aria-expanded="false" aria-controls="collapse28">
+                              28) FLEX/CHEM: When I try to transfer my reactor vial’s contents to the sample loop on the injection valve, it takes a very long time/does not seem to transfer. What could be causing this?
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse28" class="collapse" aria-labelledby="heading28" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            There are two primary causes of slow transferring to the injection valve. First, a clog could have built up somewhere within the injection valve fluid paths. This can occur if the injection valve is not cleaned regularly and particulates/residue are allowed to build up. The injection valve head can be cleaned to remove these clogs; see the linked PDF below. <br> <br>
+                                            <b>PDF: ELIXYS Field Service - Cleaning HPLC injection valve head</b><br>
+                                            <a href="https://www.dropbox.com/s/jmy45ozr4ofrezb/ELIXYS%20Field%20Service%20-%20Cleaning%20HPLC%20injection%20valve%20head.pdf?dl=0" target="_blank" class="btn btn-primary">Download PDF</a>
+                                            <br><br>
+                                            The FLEX/CHEM uses pressurized inert gas to force liquid out of the reactor vial and through tubing into the injection valve. If the cassette gasket was replaced incorrectly, adhesive residue could have clogged the small gas delivery needle in the Transfer position. This will prevent or significantly reduce how much inert gas can drive the liquid flow, resulting in very slow liquid transfer rates. This can be avoided when cassette gaskets are replaced; see the video below for a demonstration on how to replace cassette gaskets correctly.
+                                            Video: Replacing cassette gasket
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Pure form section -->
+                                <div class="card">
+                                    <div class="card-header" id="heading16">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse16" aria-expanded="false" aria-controls="collapse16">
+                              16) PURE/FORM – Communication to the PURE/FORM module is very slow or “not responding”
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse16" class="collapse" aria-labelledby="heading16" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            The PURE/FORM module requires the HPLC pump to be powered on in order to communicate properly with the ELIXYS software. Unfortunately, the pump will not automatically turn on when the power strip is turned on. The power button on the front of the pump must be pressed. This turns the button blue and will allow communication with the software.
+                                            If the “PF system is not responding” message appears, this indicates that the software cannot connect to the PURE/FORM. Check that power is being supplied; the fans on the back of the PURE/FORM should be on. Also, check that the ethernet cable from the PURE/FORM into the airport router is plugged in securely and has not become disconnected. If the problem persists, contact ELIXYS Support.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading17">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse17" aria-expanded="false" aria-controls="collapse17">
+                              17) PURE/FORM – There are air bubbles in the purification sub-system which can be seen on the output lines and/or the UV detector data (e.g. spikes on the trace)
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse17" class="collapse" aria-labelledby="heading17" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            Air bubbles are common in HPLC systems and can be tricky to eliminate. First, ensure that the mobile phases used are degassed properly, either through sonication, bubbling inert gas, or using a dedicated degasser. Next, purge the HPLC pump head as described in the PURE/FORM User Manual. When purged for 5-10 minutes, there should be no air bubbles in the mobile phase input line into the pump or in the pump head itself.
+                                            Next, use the Standalone screen to run HPLC pump to waste without a column present (typically the bypass tubing is connected to column position #4). Visually check that the waste line has no air bubbles inside of it. It may take some time for the HPLC system to be flushed of air bubbles, e.g. 30 minutes or more. If any column position was recently changed, verify that the fittings are tight and there is no leaking present.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading18">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse18" aria-expanded="false" aria-controls="collapse18">
+                              18) PURE/FORM - When doing a sample transfer from the ELIXYS to the PURE/FORM, the liquid sensor(s) do not seem to be reading the liquid head/tail correctly
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse18" class="collapse" aria-labelledby="heading18" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            The liquid sensors are calibrated before the installation has completed and are verified to be correctly identifying the head and tail of the sample as it passes through the sensor. However, there are a few common scenarios which would prevent the sensor from functioning correctly.
+                                            The most common scenario is that when the transfer from the ELIXYS to the PURE/FORM starts, the tubing between the cassette and the PURE/FORM already has liquid inside of it. This can happen if the tubing is not properly dried out after a transfer operation has been done. The residual liquid in the tubing will cause the liquid sensor to detect a false head and tail and switch the injection valve into the inject position prematurely. To dry out the tubing first connect the cassette output (either the “O” output line or the dip tube itself) to the PURE/FORM input tubing. Then run a Transfer sequence with a dry, empty reactor vial. Set the pressure for transfer to a high value, 10 or 15 psi. Let the sequence run for at least 5 minutes; this will cause all liquid inside of the tubing to be forced out/dried out.
+                                            The second common scenario is that the tubing has been moved or disturbed enough so that it is not seated properly inside the liquid sensor body. For example, this can happen if the user removes a cassette from the ELIXYS without first disconnecting the input line. To seat the tubing inside the sensor, take the tubing out and grasp the tubing with the thumb and forefinger of both hands. Carefully push both ends down into the sensor. To double check, use a small flat-head screwdriver to gently press the tubing down. The tubing will “click” when it is in the correct position.
+                                            Lastly, ensure that the correct input tubing is connected to the correct liquid sensor. It is possible that these tubes could be switched. After this, verify that the Transfer operation destination sample loop matches the input tubing number used.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading19">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse19" aria-expanded="false" aria-controls="collapse19">
+                              19) PURE/FORM - When switching between Formulation steps on the Standalone screen, a popup appears saying that the valves cannot be set correctly
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse19" class="collapse" aria-labelledby="heading19" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            This problem can occur if there is a temporary PURE/FORM communication issue with the software. In almost every case, clearing the popup window will successfully set the valving for the desired step in the Formulation sub-system. Clear the popup window; if the issue persists contact ELIXYS support.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading20">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse20" aria-expanded="false" aria-controls="collapse20">
+                              20) PURE/FORM - The dilution reservoir overfilled and the HLC pump stopped pumping. What do I do now?
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse20" class="collapse" aria-labelledby="heading20" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            The dilution reservoir will alert the user when 90% full assuming the value entered in “Reservoir Pre-Fill Amount” is correct. If the dilution reservoir overfills, the system will detect the overflow and cut off the HPLC pump. Two things can be done to recover from this situation. The user can “continue” the Purification unit operation to proceed to the Formulation unit operation if that is next. Alternatively, the user can create a sequence with a Formulation unit operation. When the Trap step starts, the product will be pushed out of the PURE/FORM through the SPE cartridge. Finally, the user could enter the Standalone screen and navigate to the Formulation sub-system and then set a pressure in the Trap step.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading21">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse21" aria-expanded="false" aria-controls="collapse21">
+                              21) PURE/FORM - Can I directly inject a sample via a syringe into the sample loop for Purification?
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse21" class="collapse" aria-labelledby="heading21" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            Yes. The user can connect the sample to one of the input tubes on the top of the PURE/FORM. Navigate to the Standalone screen and change the injection valve position to match the input tubing number (e.g. #1). Load the sample into the sample loop; they have a 5 ml capacity. Turn the HPLC pump and UV detector lamps on, set the flow rate, and then press the other injection valve position (e.g. #2). Then press the “Clear” and “Record” button on the graphing window to start data collection.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading22">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse22" aria-expanded="false" aria-controls="collapse22">
+                              22) PURE/FORM – I properly degassed my mobile phase solvents and purged the HPLC pump of air. However, I still saw air bubbles before my sample in the UV detector. What happened?
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse22" class="collapse" aria-labelledby="heading22" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            One cause of air bubbles in the HPLC system is air pushed through the sample loop. This can happen if the sample loop is dry before the injection. To keep the sample loops full of mobile phase, navigate to the Standalone screen. Turn the HPLC pump on and let it pump 10 ml total. Then change the injection valve position (e.g. from #2 to #1) and wait for another 10 ml of mobile phase to flow through. This fills both loops entirely with mobile phase. However, there will usually be air in front of the sample due to the dead volume in the tubing connecting the cassette.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="heading23">
+                                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed txt-wrap" type="button" data-toggle="collapse" data-target="#collapse23" aria-expanded="false" aria-controls="collapse23">
+                              23) PURE/FORM - The pressure shown by my HPLC pump is much lower than expected (e.g. 0 psi instead of 3,000 psi). What could be happening?
+                            </button>
+                          </h5>
+                                    </div>
+                                    <div id="collapse23" class="collapse" aria-labelledby="heading23" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            This is often because there is a leak in the high pressure portion of the Purification sub-system. This is all systems downstream of the HPLC pump and upstream of the HPLC column: tubing out of the HPLC pump, tubing into injection valve, fittings on the injection valve, tubing into the column selector, fittings on the column selector, and fittings into the HPLC column (and/or guard column). Identifying leaks early is critical! They are almost always easily observed by a sharp decrease of HPLC pump pressure. Always keep an eye on the pressure, note when it seems out of the expected range, and be ready to identify leaks quickly.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="videos-tab">
+                            <div class="accordion" id="accordionExample2">
+                                <div class="card">
+                                    <div class="card-header" id="videoHeadingOne">
+                                        <h5 class="mb-0 text-center">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#video1" aria-expanded="true" aria-controls="video1">
                                   <b>Basics</b>
                                 </button>
                               </h5>
-                            </div>
-                            <div id="video1" class="collapse" aria-labelledby="videoHeadingOne" data-parent="#accordionExample2">
-                                <div class="card-body">
-                                    <div class="card-columns">
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/sAC_pcHyHaE?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>ELIXYS Visual Dictionary</h4>
-                                                <p>This video highlights both the terminology used by SOFIE to describe the ELIXYS platform as well as the physical locations and properties of relevant components on the FLEX/CHEM and PURE/FORM.</p>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/o4zKdEnNSMo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>FLEX/CHEM Common Issues</h4>
-                                                <p>Not all issues cause a software error. This video addresses some common issues which fall into this category.</p>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/u2rtJf7fi34" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>PURE/FORM Common Issues</h4>
-                                                <p>The PURE/FORM module gives the ELIXYS system additional abilities. This video answers some common questions users have regarding the PURE/FORM.</p>
+                                    </div>
+                                    <div id="video1" class="collapse" aria-labelledby="videoHeadingOne" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <div class="card-columns">
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/o4zKdEnNSMo" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>FLEX/CHEM Common Issues</h5>
+                                                        <p>Not all issues cause a software error. This video addresses some common issues which fall into this category.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/u2rtJf7fi34" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>PURE/FORM Common Issues</h5>
+                                                        <p>The PURE/FORM module gives the ELIXYS system additional abilities. This video answers some common questions users have regarding the PURE/FORM.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/sAC_pcHyHaE?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>ELIXYS Visual Dictionary</h5>
+                                                        <p>This video highlights both the terminology used by SOFIE to describe the ELIXYS platform as well as the physical locations and properties of relevant components on the FLEX/CHEM and PURE/FORM.</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="videoHeadingTwo">
-                                <h5 class="mb-0 text-center">
+                                <div class="card">
+                                    <div class="card-header" id="videoHeadingTwo">
+                                        <h5 class="mb-0 text-center">
                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#video2" aria-expanded="false" aria-controls="video2">
                                   <b>Common Errors</b>
                                 </button>
                               </h5>
-                            </div>
-                            <div id="video2" class="collapse" aria-labelledby="videoHeadingTwo" data-parent="#accordionExample2">
-                                <div class="card-body">
-                                    <p class="w-100 mb-3">These videos highlight the most common errors encountered when using the ELIXYS platform based on actual customer usage. Each video explains what causes the software to display the error message, the most typical root causes of the error, and potential solutions to prevent these errors from happening in the future.</p>
-                                    <div class="card-columns mt-3">
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/gwCvC56vZOA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Crushed Dip Tube</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/N42xx6ns8Dw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Software not Loading</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/Rgbt3XTS9PY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Close Gripper</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/_YlZ6doERNs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Lift Reactor</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/YWFpUnHhb1Y" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Lower Gripper</h4>
-                                            </div>
-                                        </div>
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/NBWhptY5Bok" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>Common Errors – Set Regulator</h4>
+                                    </div>
+                                    <div id="video2" class="collapse" aria-labelledby="videoHeadingTwo" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <p class="w-100 mb-3">These videos highlight the most common errors encountered when using the ELIXYS platform based on actual customer usage. Each video explains what causes the software to display the error message, the most typical root causes of the error, and potential solutions to prevent these errors from happening in the future.</p>
+                                            <div class="card-columns mt-3">
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/gwCvC56vZOA" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Crushed Dip Tube</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/N42xx6ns8Dw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Software not Loading</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/Rgbt3XTS9PY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Close Gripper</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/_YlZ6doERNs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Lift Reactor</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/YWFpUnHhb1Y" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Lower Gripper</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/NBWhptY5Bok" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>Common Errors – Set Regulator</h4>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-header" id="videoHeadingThree">
-                                <h5 class="mb-0 text-center">
+                                <div class="card">
+                                    <div class="card-header" id="videoHeadingThree">
+                                        <h5 class="mb-0 text-center">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#video3" aria-expanded="false" aria-controls="video3">
+                                  <b>How To</b>
+                                </button>
+                              </h5>
+                                    </div>
+                                    <div id="video3" class="collapse" aria-labelledby="videoHeadingThree" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <p class="w-100">These videos demonstrate how to perform various functions on or with the ELXIYS. Each video describes what the function is and why it is important, followed by a video demonstration of how to perform the function correctly.</p>
+                                            <div class="card-columns">
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/XtXgGtlsiss" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>How To – Use a Gross Dilution Reservoir</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/q46L_4pM7Mg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>How To – Calibrate the FLEX/CHEM Liquid Sensor</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/l69PdNthRBE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h5>How To – Replace a Cassette Gasket</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="videoHeadingThree">
+                                        <h5 class="mb-0 text-center">
                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#video3" aria-expanded="false" aria-controls="video3">
                                   <b>Maintenance</b>
                                 </button>
                               </h5>
-                            </div>
-                            <div id="video3" class="collapse" aria-labelledby="videoHeadingThree" data-parent="#accordionExample2">
-                                <div class="card-body">
-                                    <p class="w-100">In addition to highlighting the benefits of periodically cleaning the ELIXYS instruments, we highlight places and items to check on a regular basis to ensure smooth operation of your system. Good practice habits are also included for users to follow to prevent extended downtime of their instrument.</p>
-                                    <div class="card-columns">
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/HvoormkDyHk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>FLEX/CHEM Maintenance</h4>
-                                            </div>
-                                        </div>
-
-                                        <div class="card">
-                                            <iframe height="205" src="https://www.youtube.com/embed/EX31giuKk7Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                                            <div class="card-body">
-                                                <h4>PURE/FORM Maintenance</h4>
+                                    </div>
+                                    <div id="video3" class="collapse" aria-labelledby="videoHeadingThree" data-parent="#accordionExample2">
+                                        <div class="card-body">
+                                            <p class="w-100">In addition to highlighting the benefits of periodically cleaning the ELIXYS instruments, we highlight places and items to check on a regular basis to ensure smooth operation of your system. Good practice habits are also included for users to follow to prevent extended downtime of their instrument.</p>
+                                            <div class="card-columns">
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/HvoormkDyHk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>FLEX/CHEM Maintenance</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card">
+                                                    <iframe height="205" src="https://www.youtube.com/embed/EX31giuKk7Q" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                                    <div class="card-body">
+                                                        <h4>PURE/FORM Maintenance</h4>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
+        {% endblock %}
