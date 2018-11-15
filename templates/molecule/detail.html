@@ -73,7 +73,7 @@
                   <div class="card-footer">
                     <div class="sequence-card-footer">
                         <a href="/account/{{ sequence.AccountID }}">
-                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
                         </a>
                     </div>
                   </div>
@@ -106,14 +106,55 @@
                   <div class="card-footer">
                     <div class="sequence-card-footer text-center">
                         <a href="/account/{{ sequence.AccountID }}">
-                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
                         </a>
                     </div>
                   </div>
                     
                 </div>
+                
 
                 {% endfor %}
+            </div>
+
+            <!-- comments -->
+            <div class="accordion" id="probe-comments">
+              <div class="card">
+                <div class="card-header" id="probe-comment-1">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Comments
+                    </button>
+                  </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="probe-comment-1" data-parent="#probe-comments">
+                  <div class="card-body">
+                    {% for comment in comments %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            {{ comment.Message|safe }}
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-8">
+                                <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
+                                <b>{{ comment.username }}</b>
+                                </div>
+                                <div class="col-4 text-right">
+                                    {{ comment.CreationDate }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="border-bottom"></div>
+                    <div class="form-group mt-3">
+                        <textarea name="" id="" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
         </div>
         <div class="col-3 sidebar-padding" id="probe-right-sidebar">

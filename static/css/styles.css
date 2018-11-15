@@ -79,7 +79,7 @@ div#newest-sequences, div#dashboard-quick-links {
     margin-top: -32px;
     font-size: 18px;
 }
-.sequence-card-footer img {
+.avatar-small {
     max-width: 30px;
 }
 

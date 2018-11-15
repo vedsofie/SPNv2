@@ -4,6 +4,7 @@ import json
 import random
 import httpagentparser
 import math
+import datetime
 from Crypto.Cipher import AES
 from flask import Blueprint, render_template, request, Response, session, g, flash, redirect
 from models.keyword import Keyword, db
@@ -97,6 +98,17 @@ def get_details(molecule_id):
     keywords = Keyword.query.filter_by( ParentID=molecule_id, Type="Molecules").all()
     keywords_hash = [keyword.to_hash() for keyword in keywords ]
     # Get account of the user who uploaded a sequence (this is used to get logo of that )
+
+    # get comments for this probe
+    all_comments = []
+    comments = Comment.query.filter(and_(Comment.ParentID == molecule_id,Comment.Type == 'Molecules')).order_by(Comment.CreationDate.desc()).all()
+    for comment in comments:
+        users_name = User.query.filter_by(UserID=comment.UserID).first()
+        comments_aggr = comment.to_hash()
+        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%Y / %m / %d')
+        comments_aggr['username'] = users_name.username
+        all_comments.append(comments_aggr)
+
     usr = g.user.to_hash()
     userid = session["userid"]
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
@@ -107,7 +119,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
     
 
     else:
