@@ -88,6 +88,7 @@ def new():
 @back.anchor
 def get_details(molecule_id):
     edit_page = request.args.get('edit', False)
+    userid = session["userid"]
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     # Get sequences for this molecule
     sequences = Sequence.query.filter_by(MoleculeID=molecule_id).all()
@@ -99,18 +100,21 @@ def get_details(molecule_id):
     keywords_hash = [keyword.to_hash() for keyword in keywords ]
     # Get account of the user who uploaded a sequence (this is used to get logo of that )
 
+
     # get comments for this probe
     all_comments = []
     comments = Comment.query.filter(and_(Comment.ParentID == molecule_id,Comment.Type == 'Molecules')).order_by(Comment.CreationDate.desc()).all()
     for comment in comments:
         users_name = User.query.filter_by(UserID=comment.UserID).first()
         comments_aggr = comment.to_hash()
-        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%Y / %m / %d')
+        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%m / %d / %Y')
         comments_aggr['username'] = users_name.username
         all_comments.append(comments_aggr)
-
+    # Check if logged in user is following this probe
+    follower = Follower.query.filter(and_(Follower.ParentID == molecule_id, Follower.UserID == userid, Follower.Type == 'Molecules')).first()
+    
     usr = g.user.to_hash()
-    userid = session["userid"]
+    
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
         resp = molecule.to_hash()
         if "Accept" in request.headers and request.headers['Accept'] == "application/json":
@@ -119,7 +123,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, follower = follower,comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
     
 
     else:
