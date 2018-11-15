@@ -70,7 +70,17 @@ def faq():
 @supportcontroller.route("/software",methods=["GET"])
 def software():
     userid = session["userid"]
-    return render_template("/support/software.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    url = PYELIXYS_BASE_DIR + "releases"
+    response = requests.get(url,headers=git_headers())
+    resp = response.json()
+    releases = as_assets(resp)
+    new_release = releases[0]
+    releases.pop(0)
+    old_release = []
+    for release in range(2):
+        old_release.append(releases[release])
+
+    return render_template("/support/software.html", new_release=new_release, old_release=old_release, uid = userid, runninguser=json.dumps(g.user.to_hash()))
 
 @supportcontroller.route("/field_support",methods=["GET"])
 def field_support():
@@ -78,8 +88,6 @@ def field_support():
     # code for fetching open support requests
 
     # code for fetching closed support requests
-
-
     return render_template("/support/field_support.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
 
 def as_assets(resp):
@@ -93,7 +101,8 @@ def as_assets(resp):
             rel['name'] = tag_name
             rel["versions"] = []
             rel['assets_url'] = release['assets_url']
-            rel['published_at'] = release['published_at']
+            dateSplit = release['published_at'].split('T')[0].split('-')
+            rel['published_at'] = dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0]
             rel['body'] = release['body']
             index = 0
             while index < len(release['assets']):
