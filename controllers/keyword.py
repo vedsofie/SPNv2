@@ -29,6 +29,12 @@ def get_keywords_for(keyword_type, parent_id):
     resp = [keyword.to_hash() for keyword in keywords]
     return Response(json.dumps(resp), content_type='application/json')
 
+@keywordcontroller.route("/<keyword_type>/<int:parent_id>/synonym", methods=["GET"])
+def get_keywords_synonyms_for(keyword_type, parent_id):
+    keywords = Keyword.query.filter(and_(Keyword.Type==keyword_type,Keyword.ParentID==parent_id)).all()
+    resp = [keyword.to_hash() for keyword in keywords if keyword.Category == "Synonym"]
+    return Response(json.dumps(resp), content_type='application/json')
+
 @keywordcontroller.route("/delete", methods=["POST"])
 def delete_keywords():
     keywords = request.json['keywordIds']
