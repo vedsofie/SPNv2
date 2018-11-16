@@ -1,29 +1,40 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-{% endblock %}
-
 {% block content_body %}
-
-    <span data-bind="with: moleculeDetailPopup">
-        <div class="m-form-wrapper">
-            <span data-bind="template: {name: 'molecule-detail-template', data: moleculeDetailViewModel}"></span>
-            <div class="m-submit-buttons">
-                <a data-bind="click: save" class="m-solid-button">Save</a>
-                <a data-bind="click: cancel" class="m-solid-button">Cancel</a>
-                <div class="clear"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
             </div>
         </div>
-    </span>
 
+        <div class="col-6">
+            <form action="">
+                
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
-{% block footer %}
-    {{super()}}
-
-    <script>
-        var molecule = new Molecule(JSON.parse({{molecule|tojson|safe}}));
-        var moleculeDetailPopup = new MoleculeDetailPopup({molecule: molecule});
-    </script>
-
-{% endblock %}
+<span data-bind="with: moleculeDetailPopup">
+    <div class="m-form-wrapper">
+        <span data-bind="template: {name: 'molecule-detail-template', data: moleculeDetailViewModel}"></span>
+        <div class="m-submit-buttons">
+            <a data-bind="click: save" class="m-solid-button">Save</a>
+            <a data-bind="click: cancel" class="m-solid-button">Cancel</a>
+            <div class="clear"></div>
+        </div>
+    </div>
+</span>

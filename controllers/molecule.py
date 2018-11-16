@@ -39,9 +39,11 @@ def index():
 
     #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
     all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).limit(9)
-    all_molecules = all_molecules.offset((page_number*9) - page_number)
     all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
-    number_of_pages = int(math.ceil(all_molecules_count / 9))
+    number_of_pages = 0
+    if all_molecules_count > 9:
+        all_molecules = all_molecules.offset((page_number*9) - 9)
+        number_of_pages = int(math.ceil(all_molecules_count / 9.0))
 
     sorted_molecules = []
     for molecule in all_molecules:
@@ -69,6 +71,62 @@ def index():
     userid = session["userid"]
     return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=json.dumps(g.user.to_hash()))
 
+
+
+
+@moleculecontroller.route("/my_probes", methods=['GET'])
+def my_probes():
+    specific_ids = request.args.get("MoleculeIDs", '')
+    specific_ids = specific_ids.split(',')
+    specific_ids = specific_ids if specific_ids[0] != '' else []
+    userid = session["userid"]
+    page_number = request.args.get("page", 1, type=int)  #this is used for pagination, dont delete
+    ids = []
+    for specific_id in specific_ids:
+        try:
+            spec_id = int(specific_id)
+            ids.append(specific_id)
+        except Exception as e:
+            pass
+    sql_filter = Molecule.Approved == True
+    if len(specific_ids) > 0:
+        sql_filter = and_(sql_filter, Molecule.ID.in_(ids))
+    molecules_list = []
+    #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    all_molecules = Molecule.query.filter_by(UserID=userid).order_by(Molecule.Name).limit(9)
+    my_molecules_count = Molecule.query.filter_by(UserID=userid).count()
+    number_of_pages = 0
+    if my_molecules_count > 9:
+        all_molecules = all_molecules.offset((page_number*9) - 9)
+        #all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
+        number_of_pages = int(math.ceil(my_molecules_count / 9.0))
+
+
+    sorted_molecules = []
+    for molecule in all_molecules:
+        x = molecule.to_hash()
+        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1]}
+        sorted_molecules.append(y)
+    
+    #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
+    mole_dict = {}
+    for molecule in sorted_molecules:
+        if molecule['Isotope'] in mole_dict:
+            mole_dict[molecule['Isotope']].append(molecule)
+        else:
+            mole_dict[molecule['Isotope']] = []
+            mole_dict[molecule['Isotope']].append(molecule)
+
+    
+    for key, value in mole_dict.iteritems():
+        value.sort(key=lambda x: x["Sort"].lower(), reverse=False)
+        molecules_list.extend(value)
+            #molecules_list.reverse()
+    #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
+    resp = molecules_list
+
+    return render_template("molecule/my_probes.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=json.dumps(g.user.to_hash()))
+
 @moleculecontroller.route("/<int:cid>/auto_fill/", methods=["GET"])
 def autofill(cid):
     mole = Molecule(CID=cid)
@@ -83,6 +141,12 @@ def new():
     mole = Molecule()
     resp = json.dumps(mole.to_hash())
     return render_template("molecule/edit.html", molecule=resp, runninguser=json.dumps(g.user.to_hash()))
+
+@moleculecontroller.route("/<int:molecule_id>/edit/", methods=['GET'])
+def edit(molecule_id):
+    userid = session["userid"]
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/edit.html", molecule=molecule, uid = userid,runninguser=json.dumps(g.user.to_hash()))
 
 @moleculecontroller.route("/<int:molecule_id>/", methods=['GET'])
 @back.anchor
