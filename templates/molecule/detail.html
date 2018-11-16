@@ -29,7 +29,6 @@
                     </div>
                 </div>
             </div>
-            {{ follower }}
             <div class="card mt-3 mb-3 p-3">
                 <div class="row">
                     <div class="dropdown col-6">
@@ -39,7 +38,7 @@
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">Edit probe details</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Delete this probe</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteProbeModal">Delete this probe</a>
                       </div>
                     </div>
                     
@@ -197,11 +196,26 @@
 
     </div><!-- end of row -->
 </div>
+<!-- Modal -->
+<div class="modal fade" id="deleteProbeModal" tabindex="-1" role="dialog" aria-labelledby="deleteProbeModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center mt-3">
+        <h5 class="text-danger">Are you sure you want to delete {{ molecule.Name }}</h5>
+        <p class="text-danger">NOTE: This action cannot be undone</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-mol="{{ molecule.ID }}" id="delete-probe-button">Delete probe</button>
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
     $(document).ready(function(){
+        // follow probe functionality
         $("#follow-probe").click(function(){
-
             if($(this).text() == "Follow"){
                 var molecule_id = $(this).data("mol");
                 $.ajax({
@@ -222,7 +236,19 @@
                   }
                 });
             }
-        });
+        }); // end of follow probe call
+
+        // Delete probe functionality
+        $("#delete-probe-button").click(function(){
+            var molecule_id = $(this).data("mol");
+            $.ajax({
+                  url: "/probe/"+molecule_id+"/",
+                  method: "DELETE",
+                  success: function(result){
+                    console.log(result);
+                  }
+                });
+        }); // end of delete probe call
     });
 
 </script>

@@ -112,7 +112,7 @@ def get_details(molecule_id):
         all_comments.append(comments_aggr)
     # Check if logged in user is following this probe
     follower = Follower.query.filter(and_(Follower.ParentID == molecule_id, Follower.UserID == userid, Follower.Type == 'Molecules')).first()
-    
+
     usr = g.user.to_hash()
     
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
