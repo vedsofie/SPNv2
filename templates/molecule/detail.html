@@ -176,7 +176,7 @@
                     </li>
                     <li class="list-group-item lh-condensed">
                         <b>Formula:</b>
-                        <div>{{ molecule.Formula }}</div>
+                        <div id="formula">{{ molecule.Formula }}</div>
                     </li>
                     {% for keyw in keywords if keyw.Category == "Synonym" %}
                     <li class="list-group-item lh-condensed">
@@ -187,7 +187,7 @@
                     <li class="list-group-item lh-condensed">
                          <b>Keywords</b>
                     {% for keyw in keywords if keyw.Category == "Keyword" %}
-                        <div>{{ keyw.DisplayFormat|safe}}</div>    
+                        <div>{{ keyw.Keyword|safe}}</div>    
                     {% endfor %}
                     </li>
                 </ul>
@@ -213,59 +213,48 @@
 </div>
 
 <script>
-    $(document).ready(function(){
-        // follow probe functionality
-        $("#follow-probe").click(function(){
-            if($(this).text() == "Follow"){
-                var molecule_id = $(this).data("mol");
-                $.ajax({
-                  url: "/probe/"+molecule_id+"/follow/",
-                  method: "POST",
-                  success: function(result){
-                    $("#follow-probe").text("Unfollow");
-                  }
-                });
-            }
-            else{
-                var molecule_id = $(this).data("mol");
-                $.ajax({
-                  url: "/probe/"+molecule_id+"/unfollow/",
-                  method: "DELETE",
-                  success: function(result){
-                    $("#follow-probe").text("Follow");
-                  }
-                });
-            }
-        }); // end of follow probe call
-
-        // Delete probe functionality
-        $("#delete-probe-button").click(function(){
+$(document).ready(function(){
+    // follow probe functionality
+    $("#follow-probe").click(function(){
+        if($(this).text() == "Follow"){
             var molecule_id = $(this).data("mol");
             $.ajax({
-                  url: "/probe/"+molecule_id+"/",
-                  method: "DELETE",
-                  success: function(result){
-                    console.log(result);
-                  }
-                });
-        }); // end of delete probe call
-        
-        formattedFormula = function(){
-                var data = self.data();
-                var formatted = "";
-                if(data){
-                    if(self.subscriptNumbers){
-                        formatted = data.replace(/([0-9])/g, "<sub>$1</sub>");
-                    }
-                    else{
-                        formatted = data.replace(/([0-9])/g, "<sup>$1</sup>");
-                    }
-                }
-                return formatted;
-            }
+              url: "/probe/"+molecule_id+"/follow/",
+              method: "POST",
+              success: function(result){
+                $("#follow-probe").text("Unfollow");
+              }
+            });
+        }
+        else{
+            var molecule_id = $(this).data("mol");
+            $.ajax({
+              url: "/probe/"+molecule_id+"/unfollow/",
+              method: "DELETE",
+              success: function(result){
+                $("#follow-probe").text("Follow");
+              }
+            });
+        }
+    }); // end of follow probe call
 
-
-    });
+    // Delete probe functionality
+    $("#delete-probe-button").click(function(){
+        var molecule_id = $(this).data("mol");
+        $.ajax({
+              url: "/probe/"+molecule_id+"/",
+              method: "DELETE",
+              success: function(result){
+                console.log(result);
+              }
+            });
+    }); // end of delete probe call
+    
+    // the code below is to subscript the formula, do not delete
+    var formula = $("#formula").text();
+    formatted = formula.replace(/([0-9])/g, "<sub>$1</sub>");
+    $("#formula").html(formatted);
+});
 
 </script>
 
