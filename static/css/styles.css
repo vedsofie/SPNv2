@@ -56,7 +56,15 @@ div#newest-sequences, div#dashboard-quick-links {
     margin-top: 48px;
 }
 
-/* Probe Detail page */
+/* Probes / Detail page */
+#synonymModalCenterTitle{
+    display: inline-flex;
+}
+
+#synonymModalCenterTitle p{
+    margin-left: 4px;
+}
+
 .divider_title {
     border-bottom: 1px solid #d7dde2;
     margin-bottom: 50px;

@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-5"><img src="/probe/{{ molecule.ID }}/image" alt="" class="img-fluid bg-light"></div>
                     <div class="col-7">
-                        <h5 class="text-left mt-2">{{ molecule.Name }}</h5>
+                        <h5 class="text-left mt-2">{{ molecule.DisplayFormat|safe }}</h5>
                         <p>{{ molecule.Description }}</p>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body text-center mt-3">
-        <h5 class="text-danger">Are you sure you want to delete {{ molecule.Name }}</h5>
+        <h5 class="text-danger">Are you sure you want to delete {{ molecule.DisplayFormat|safe }}</h5>
         <p class="text-danger">NOTE: This action cannot be undone</p>
       </div>
       <div class="modal-footer justify-content-between">
@@ -249,6 +249,22 @@
                   }
                 });
         }); // end of delete probe call
+        
+        formattedFormula = function(){
+                var data = self.data();
+                var formatted = "";
+                if(data){
+                    if(self.subscriptNumbers){
+                        formatted = data.replace(/([0-9])/g, "<sub>$1</sub>");
+                    }
+                    else{
+                        formatted = data.replace(/([0-9])/g, "<sup>$1</sup>");
+                    }
+                }
+                return formatted;
+            }
+
+
     });
 
 </script>

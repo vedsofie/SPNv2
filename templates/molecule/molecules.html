@@ -26,11 +26,11 @@
                 <div class="card text-center">
                   <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
                   <div class="card-body">
-                    <h5 class="card-title">{{ molecule.Name }}</h5>
+                    <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
                     
                   </div>
                   <div class="card-footer">
-                    <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                    <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.DisplayFormat|safe }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
                     <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                 </div>
 
@@ -57,7 +57,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Synonyms</h5>
+        <h5 class="modal-title" id="synonymModalCenterTitle">Synonyms</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -77,7 +77,7 @@ $(document).ready(function(){
     $('#synonymModal').on('show.bs.modal', function (e) {
            var id = e.relatedTarget.id;
            var molecule_name = $(e.relatedTarget).data("mol");
-           $("h5.modal-title").text("Synonyms for"+molecule_name);
+           $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
            console.log(molecule_name);
            // AJAX request
            $.ajax({

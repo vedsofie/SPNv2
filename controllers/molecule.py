@@ -148,6 +148,8 @@ def edit(molecule_id):
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     return render_template("molecule/edit.html", molecule=molecule, uid = userid,runninguser=json.dumps(g.user.to_hash()))
 
+
+
 @moleculecontroller.route("/<int:molecule_id>/", methods=['GET'])
 @back.anchor
 def get_details(molecule_id):
