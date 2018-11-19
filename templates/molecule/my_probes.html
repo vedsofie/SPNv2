@@ -10,7 +10,7 @@
                 <ul class="list-group text-center list-group-flush">
                     <li class="list-group-item lh-condensed">
                         <div class="mx-auto">
-                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                            <a href=""><i class="fas fa-vial"></i> All probes</a>
                         </div>
                     </li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
@@ -77,7 +77,7 @@ $(document).ready(function(){
     $('#synonymModal').on('show.bs.modal', function (e) {
            var id = e.relatedTarget.id;
            var molecule_name = $(e.relatedTarget).data("mol");
-           $("h5.modal-title").text("Synonyms for"+molecule_name);
+           $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
            console.log(molecule_name);
            // AJAX request
            $.ajax({
