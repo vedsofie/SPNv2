@@ -200,11 +200,39 @@ def get_details(molecule_id):
             message = urllib.quote("The Probe Does not exist")
         return redirect('/user/dashboard?notificationMessage=%s' % message)
 
+# ===========================
 @moleculecontroller.route("/<int:molecule_id>/edit/", methods=['POST'])
 def edit_post(molecule_id):
     userid = session["userid"]
-    molecule = Molecule.query.filter_by(ID=molecule_id).first()
-    return redirect(url_for('moleculecontroller.get_details', molecule_id=molecule_id))
+    data = request.form
+    this_molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    can_save = (g.user.role.Type == 'super-admin') or (this_molecule.UserID == userid)
+    print("=========")
+    print(can_save)
+    #only save updates if the current user is super-admin or owner of the current probe
+    if can_save:
+        this_molecule.Name = data['Name']
+        this_molecule.DisplayFormat = data['DisplayFormat']
+        this_molecule.CAS = data['CAS']
+        this_molecule.Isotope = data['Isotope']
+        this_molecule.Approved = True if data['Approved'] == 'on' else False
+        this_molecule.Description = data['Description']
+        if this_molecule.save():
+            return redirect(url_for('moleculecontroller.get_details', molecule_id=molecule_id))
+        else:
+            error = "There was an error saving the changes to database"
+            return redirect(url_for('moleculecontroller.edit', molecule_id=molecule_id), error)
+
+    else:
+        error = "You don't have the necessary permissions to update this molecule"
+        return redirect(url_for('moleculecontroller.edit', molecule_id=molecule_id), error)
+    # get the form data from user submitted form
+    
+    
+
+
+
+#=====================
 
 @moleculecontroller.route("/<int:molecule_id>/check_following/", methods=['GET'])
 def is_following(molecule_id):

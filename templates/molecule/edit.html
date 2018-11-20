@@ -25,20 +25,20 @@
                 <form action="/probe/{{ molecule.ID }}/edit/" method="POST">
                     <div class="mb-3">
                       <label for="probe-name"><b>Probe name</b></label>
-                      <input type="probe-name" class="form-control" id="probe-name" placeholder="Probe name" value="{{ molecule.Name }}">
+                      <input type="text" class="form-control" id="probe-name" name="Name" placeholder="Probe name" value="{{ molecule.Name }}">
                           <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                           </div>
                     </div>
                     <div class="mb-3">
                       <label for="probe-name"><b>Probe name's display format</b></label>
-                      <input type="probe-name" class="form-control" id="probe-name" placeholder="Probe name" value="{{ molecule.DisplayFormat|safe }}">
+                      <input type="text" class="form-control" id="probe-name" name="DisplayFormat" placeholder="Probe name" value="{{ molecule.DisplayFormat|safe }}">
                           <div class="invalid-feedback">
                             Please enter a valid email address for shipping updates.
                           </div>
                     </div>                    
                     <div class="mb-3 align-items-center">
-                      <label for="probe-name"><b>Probe structure</b></label>
+                      <label><b>Probe structure</b></label>
                       <div class="row">
                       <div class="col-4">
                         <img src="/probe/{{ molecule.ID }}/image/" alt="" class="img-fluid">
@@ -53,15 +53,15 @@
                      </div>
                     </div>                    
                     <div class="mb-3">
-                      <label for="probe-name"><b>CAS</b></label>
-                      <input type="probe-name" class="form-control" id="probe-name" placeholder="Probe name" value="{{ molecule.CAS }}">
+                      <label for="probe-cas"><b>CAS</b></label>
+                      <input type="text" class="form-control" id="probe-cas" name="CAS" placeholder="Probe name" value="{{ molecule.CAS }}">
                           <div class="invalid-feedback">
                             Please enter a valid email CAS value
                           </div>
                     </div>                    
                     <div class="mb-3">
-                      <label for="probe-name"><b>Isotope</b></label>
-                      <input type="probe-name" class="form-control" id="probe-name" placeholder="Probe name" value="{{ molecule.Isotope }}">
+                      <label for="Isotope"><b>Isotope</b></label>
+                      <input type="text" class="form-control" id="Isotope" name="Isotope" placeholder="Probe name" value="{{ molecule.Isotope }}">
                           <div class="invalid-feedback">
                             Please enter a valid Isotope
                           </div>
@@ -69,13 +69,13 @@
                     <div class="mb-3">
                       <div class="input-group-prepend">
                         <div class="input-group-text">
-                          <input type="checkbox" aria-label="Checkbox for following text input" {% if molecule.Approved %} checked {% endif %}> <span class="ml-2">SOFIE Approved</span>
+                          <input type="checkbox" name="Approved" aria-label="Checkbox for following text input" {% if molecule.Approved %} checked {% endif %}> <span class="ml-2">SOFIE Approved</span>
                         </div>
                       </div>
                     </div>                 
                     <div class="mb-3">
                       <label for="probe-name"><b>Description</b></label>
-                      <textarea type="probe-name" class="form-control" id="probe-name" placeholder="description" rows="5">{{ molecule.Description }}</textarea>
+                      <textarea name="Description" class="form-control" id="probe-name" placeholder="description" rows="5">{{ molecule.Description }}</textarea>
                     </div>
                     <div class="mb-3">
                       <input class="btn btn-primary" type="submit" value="Update changes" />
