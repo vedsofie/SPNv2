@@ -4,6 +4,7 @@ import json
 import random
 import httpagentparser
 import math
+from flask import Flask, url_for
 import datetime
 from Crypto.Cipher import AES
 from flask import Blueprint, render_template, request, Response, session, g, flash, redirect
@@ -148,8 +149,6 @@ def edit(molecule_id):
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     return render_template("molecule/edit.html", molecule=molecule, uid = userid,runninguser=json.dumps(g.user.to_hash()))
 
-
-
 @moleculecontroller.route("/<int:molecule_id>/", methods=['GET'])
 @back.anchor
 def get_details(molecule_id):
@@ -200,6 +199,12 @@ def get_details(molecule_id):
         else:
             message = urllib.quote("The Probe Does not exist")
         return redirect('/user/dashboard?notificationMessage=%s' % message)
+
+@moleculecontroller.route("/<int:molecule_id>/edit/", methods=['POST'])
+def edit_post(molecule_id):
+    userid = session["userid"]
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return redirect(url_for('moleculecontroller.get_details', molecule_id=molecule_id))
 
 @moleculecontroller.route("/<int:molecule_id>/check_following/", methods=['GET'])
 def is_following(molecule_id):
