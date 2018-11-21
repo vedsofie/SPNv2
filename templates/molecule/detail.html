@@ -152,14 +152,16 @@
                     </div>
                     {% endfor %}
                     <div class="border-bottom"></div>
-                    <div class="form-group mt-3">
-                        <textarea name="" id="" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
+                    <div class="form-group mt-3 text-right">
+                        <textarea name="comment" id="new-comment" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
+                        <button class="btn btn-outline-primary mt-3" id="post-comment-button">Post comment</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
         </div>
+        <!-- right side sidebar -->
         <div class="col-3 sidebar-padding" id="probe-right-sidebar">
             <div class="card text-center">
                 <div class="card-header bg-secondary text-center">
@@ -254,6 +256,19 @@ $(document).ready(function(){
     var formula = $("#formula").text();
     formatted = formula.replace(/([0-9])/g, "<sub>$1</sub>");
     $("#formula").html(formatted);
+
+    // make a new comment with ajax
+    $("button#post-comment-button").click(function(){
+        var comment = $("#new-comment").val();
+        $.ajax({
+            url: "/comment/",
+            method: "POST",
+            data: comment,
+            success: function(result){
+                console.log(result);
+              }
+        });
+    });
 });
 
 </script>
