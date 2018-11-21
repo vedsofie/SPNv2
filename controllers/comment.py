@@ -11,6 +11,7 @@ from models.sequenceattachment import SequenceAttachment
 import models.model_helpers as model_helpers
 import base64,zipfile,io,os
 import modules
+import datetime
 from sqlalchemy import or_, and_
 
 db = modules.database.get_db()
@@ -147,6 +148,8 @@ def make_comment():
     ## Printing this  otherwise to_hash does not include the comment id
     print comm.CommentID
     ## Do not remove the print above, otherwise to_hash will not include the comment id
+    print(comm.CreationDate)
+    #comm.CreationDate = datetime.datetime.fromtimestamp(comm.CreationDate / 1000).strftime('%m / %d / %Y')
     resp = comm.to_hash()
     running_user = User.query.filter_by(UserID=user_id).first()
     #email_sender.comment_on_probe(running_user, sequence, msg)

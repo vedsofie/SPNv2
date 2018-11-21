@@ -168,7 +168,7 @@ def get_details(molecule_id):
 
     # get comments for this probe
     all_comments = []
-    comments = Comment.query.filter(and_(Comment.ParentID == molecule_id,Comment.Type == 'Molecules')).order_by(Comment.CreationDate.desc()).all()
+    comments = Comment.query.filter(and_(Comment.ParentID == molecule_id,Comment.Type == 'Molecules')).order_by(Comment.CreationDate.asc()).all()
     for comment in comments:
         users_name = User.query.filter_by(UserID=comment.UserID).first()
         comments_aggr = comment.to_hash()
@@ -188,7 +188,7 @@ def get_details(molecule_id):
         if edit_page and molecule.can_save(g.user):
             return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, follower = follower,comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, follower = follower,comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=usr)
     
 
     else:
