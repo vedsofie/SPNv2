@@ -19,6 +19,7 @@ from models.sequenceattachment import SequenceAttachment
 from models.notification import Notification
 from models.forum import Forum
 from models.user import SOFIEBIO_USER
+from controllers.user import getUserFollowingIssue
 import models.model_helpers as model_helpers
 import base64,zipfile,io,os
 import modules
@@ -85,10 +86,8 @@ def software():
 @supportcontroller.route("/field_support",methods=["GET"])
 def field_support():
     userid = session["userid"]
-    # code for fetching open support requests
-
-    # code for fetching closed support requests
-    return render_template("/support/field_support.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    openCase, closedCase = getUserFollowingIssue()
+    return render_template("/support/field_support.html", openCase=openCase, closedCase=closedCase, uid = userid, runninguser=json.dumps(g.user.to_hash()))
 
 def as_assets(resp):
     spn_domain = os.environ['SOFIE_PROBE_DOMAIN']
