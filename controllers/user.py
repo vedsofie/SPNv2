@@ -19,6 +19,7 @@ from models.notification import Notification
 from models.sequence import Sequence
 from models.molecule import Molecule
 from models.follower import Follower
+from models.comment import Comment
 import os
 from back import back
 
@@ -281,6 +282,117 @@ def follow():
             resp['hasNotifications'] = len(following.notifications) > 0
 
     return Response(json.dumps(responds), headers={"Content-Type": "application/json"})
+
+def get_comment(parentID):
+    comments_data = Comment.query.all()
+    comments = []
+    for comment in comments_data:
+        temp = comment.to_hash()
+        if temp['ParentID'] == parentID:
+            comments.append(comment.to_hash())
+    comments = sorted(comments, key=lambda x: x["CreationDate"], reverse=False)
+    return comments
+
+@usercontroller.route('/user/followingIssue/')
+def getUserFollowingIssue():
+    userid = session['userid']
+    followings = Follower.query.filter_by(UserID=userid).all()
+
+    sequence_ids = []
+    molecule_ids = []
+    account_ids = []
+    forum_ids = []
+
+    mapping = {"Sequences": sequence_ids, "Molecules": molecule_ids, "Forums": forum_ids}
+    for following in followings:
+        if following.Type in mapping:
+            mapping[following.Type].append(following.ParentID)
+        else:
+            pass
+    sequence_followings = {seq.SequenceID : seq for seq in Sequence.query.filter(Sequence.SequenceID.in_(sequence_ids)).all()} if len(sequence_ids) > 0 else {}
+    owner_ids = [seq.UserID for seq in sequence_followings.values()]
+    molecule_followings = {mol.ID: mol for mol in Molecule.query.filter(Molecule.ID.in_(molecule_ids)).all()} if len(molecule_ids) > 0 else {}
+    forum_followings = {forum.ForumID : forum for forum in Forum.query.filter(Forum.ForumID.in_(forum_ids))} if len(forum_ids) > 0 else {}
+
+    user_table = table('user', column('UserID'), column('AccountID'))
+    account_table = table('Account', column('name'), column('id'))
+    statement = user_table.join(account_table, user_table.c.AccountID==account_table.c.id)
+    x = db.session.query(statement).filter(user_table.c.AccountID==account_table.c.id).all()
+    account_name_by_userid = {res[0] : {"AccountName": res[2], "AccountID": res[1]} for res in x}
+    forum_table = table('Forums', column('ForumID'), column('AccountID'), column('Color'), column('Subject'), column("Subtitle"), column("Type"), column("SFDC_ID"), column("UserID"), column("ReadOnly"), column("CreationDate"), column("CaseNumber"), column("ClosedDate"))
+    account_table = table('Account', column('name'), column('id'))
+    statement = forum_table.join(account_table, account_table.c.id==forum_table.c.AccountID)
+
+    form_account_table = db.session.query(statement).filter(account_table.c.id==forum_table.c.AccountID).all()
+
+    account_name_by_forumids = {form_account[0] : {"Subtitle": xstr(form_account[4]).encode('utf-8'), "Color": xstr(form_account[2]).encode('utf-8'), "Subject": xstr(form_account[3]).encode('utf-8'), "AccountID": form_account[1], "Type": form_account[5], "SFDC_ID": form_account[6], "UserID": form_account[7], "ReadOnly": form_account[8], "CreatedDate": form_account[9], "CaseNumber": form_account[10], "ClosedDate": form_account[11]} for form_account in form_account_table}
+    openCase = []
+    closeCase = []
+
+    for following in followings:
+        resp = following.to_hash()
+        if ["Forums"].__contains__(following.Type):
+            if following.Type == "Forums" and following.ParentID in forum_ids:
+                if following.ParentID in account_name_by_forumids:
+                    resp = {}
+                    resp['Type'] = 'Forums'
+                    resp['Title'] = account_name_by_forumids[following.ParentID]['Subject']
+                    resp["OwnerID"] = following.ParentID
+                    subtitle = account_name_by_forumids[following.ParentID]['Subtitle']
+                    resp['SubTitle'] = subtitle if subtitle is not None and subtitle != "" and subtitle != 'None' else resp['Title']
+                    resp['Color'] = account_name_by_forumids[following.ParentID]['Color']
+                    account_id =  account_name_by_forumids[following.ParentID]['AccountID']
+                    resp['AccountID'] = account_id
+                    resp["OwnerAvatarURL"] = "/account/%s/logo/" % account_id
+                    resp['OwnerName'] = 'Sofie Biosciences, Inc.'
+                    resp['SubType'] = None
+
+                    is_case = SOFIEBIO_ACCOUNTID != account_id
+                    can_unfollow = account_name_by_forumids[following.ParentID]['Type'] == 'Issue'
+                    resp['CanUnfollow'] = can_unfollow
+                    resp["ReadOnly"] = account_name_by_forumids[following.ParentID]['ReadOnly']
+                    if can_unfollow:
+                        resp['CaseNumber'] = account_name_by_forumids[following.ParentID]['CaseNumber']
+                        created_date = account_name_by_forumids[following.ParentID]['CreatedDate']
+                        if created_date and not isinstance(created_date, unicode):
+                            resp['CreatedDate'] = created_date.isoformat()
+                        else:
+                            resp['CreatedDate'] = created_date
+
+                        closed_date = account_name_by_forumids[following.ParentID]['ClosedDate']
+                        if closed_date and not isinstance(closed_date, unicode):
+                            resp['ClosedDate'] = closed_date.isoformat()
+                        else:
+                            resp['ClosedDate'] = closed_date
+
+                        act = Account.query.filter(Account.id==account_id).first()
+                        resp['OwnerName'] = act.Name if act else ''
+                        resp["CanClose"] = g.user.AccountID == SOFIEBIO_ACCOUNTID
+                        resp['SubType'] = 'FieldService'
+                        resp["OwnerAvatarURL"] = '/user/%s/avatar' % account_name_by_forumids[following.ParentID]['UserID']
+                        resp['UnfollowDetails'] = {'ForumID': following.ParentID,
+                                                   'unfollowTitle': "Unfollow",
+                                                   "FollowingID": following.FollowerID,
+                                                   "SubTitle": subtitle}
+                        resp['EmailSubscribed'] = following.EmailSubscribed
+                        if g.user.role.Type == 'super-admin':
+                    
+                            resp['RedirectURL'] = '%s%s' % (SFDC_PATH_URL, account_name_by_forumids[following.ParentID]['SFDC_ID'])
+                        comment_list = get_comment(resp['UnfollowDetails']['ForumID'])
+                        resp['numComments'] = len(comment_list)
+                        resp["comments"] = comment_list 
+                    resp['ImageURL'] = "/account/%s/logo/" % account_id
+                    if resp['SubType'] == 'FieldService' and resp['ClosedDate'] == None:
+                        openCase.append(resp)
+                    elif resp['SubType'] == 'FieldService' and resp['ClosedDate'] != None:
+                        closeCase.append(resp)
+            resp['FollowingID'] = following.FollowerID
+            resp['hasNotifications'] = len(following.notifications) > 0
+
+    openCase = sorted(openCase, key=lambda x: x["CreatedDate"], reverse=False)
+    closeCase = sorted(closeCase, key=lambda x: x["ClosedDate"], reverse=True)
+
+    return openCase, closeCase
 
 @usercontroller.route('/user/new/')
 def new():
