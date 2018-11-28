@@ -126,7 +126,7 @@ def my_probes():
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
     resp = molecules_list
 
-    return render_template("molecule/my_probes.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=json.dumps(g.user.to_hash()))
+    return render_template("molecule/my_probes.html", molecules=resp, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
 @moleculecontroller.route("/<int:cid>/auto_fill/", methods=["GET"])
 def autofill(cid):

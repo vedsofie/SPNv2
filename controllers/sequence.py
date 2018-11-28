@@ -82,11 +82,17 @@ def get_details(sequence_id):
         message = urllib.quote("The sequence does not exist")
         return redirect('/user/dashboard?notificationMessage=%s' % message)
 
-    resp = json.dumps(sequence.to_hash())
-    running_user = json.dumps(g.user.to_hash())
+    resp = sequence.to_hash()
+    running_user = g.user.to_hash()
     showNotification = request.args.get("showThankyou", False)
     showNotification = showNotification and not sequence.molecule.Approved
-
+    components = sequence.components
+    reagents_hash = []
+    for component in components:
+        reagents = component.reagents
+        for reagent in reagents:
+            if reagent.Name:
+                reagents_hash.append(reagent.Name)
     if request.headers.get("accept", "") == "application/json":
         return Response(resp, content_type='application/json')
 
@@ -97,6 +103,7 @@ def get_details(sequence_id):
     else:
         return render_template("/sequence/detail.html",
                                sequence=resp,
+                               reagents = reagents_hash,
                                running_user=running_user,
                                runninguser=running_user,
                                back=back,
