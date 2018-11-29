@@ -21,42 +21,43 @@
         <div class="col-6 page-contents">
             <h5 class="text-center mt-3">Sequence Details </h5>
             <div class="card p-3 mt-3">
-                <div class="row">
+                <div class="row border-bottom pb-3">
                     <div class="col-5"><img src="/probe/{{ sequence.MoleculeID }}/image" alt="" class="img-fluid bg-light"></div>
                     <div class="col-7">
                         <h5 class="text-left mt-2">{{ sequence.Name }}</h5>
                         <p>{{ sequence.Comment }}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="sequence-card-footer text-right">
-                            <a href="/account/{{ sequence.AccountID }}">
-                                <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
-                            </a>
-                        </div>
+                <div class="row mt-3">
+                    <div class="text-left col-6">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 align-middle pl-3 pt-1">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
+                    <div class="col-6 text-right align-self-end">
+                        <button class="btn btn-link" data-toggle="modal" data-target="#sequenceContactModal"><i class="far fa-envelope-open"></i>  Contact</button>
                     </div>
                 </div>
             </div>
             <div class="card mt-3 mb-3 p-3">
                 <div class="row">
-                    <div class="dropdown col-4">
+                    <div class="dropdown col-3">
                       <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Sequence Options
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/probe/{{ molecule.ID }}/edit/">Edit sequence details</a>
+                        <a class="dropdown-item" href="/sequence/{{ sequence.SequenceID }}/edit/">Edit sequence details</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteSequenceModal">Delete sequence</a>
                       </div>
                     </div>
-                    <div class="col-8 text-right">
-                        <a href="/sequence/{{ sequence.SequenceID }}/export"><button class="btn btn-link"><i class="far fa-arrow-alt-circle-down"></i> Download</button></a>
-                        <button class="btn btn-link"><a href=""><i class="far fa-envelope-open"></i>  Contact</a></button>
+                    <div class="text-right col-9">
+                        <a href="/sequence/{{ sequence.SequenceID }}/export" class="ml-2"><button class="btn btn-link"><i class="far fa-arrow-alt-circle-down"></i> Download</button></a>
+                        <a href="" ><button class="btn btn-link"><i class="far fa-eye"></i> View Reaction Scheme</button></a>
                         {% if follower != None %}
-                        <button type="button" class="btn btn-primary" data-mol="{{ molecule.ID }}" id="follow-probe">Unfollow</button>
+                        <button type="button" class="btn btn-primary" data-seq="{{ sequence.ID }}" id="follow-sequence">Unfollow</button>
                         {% else %}
-                        <button type="button" class="btn btn-primary" data-mol="{{ molecule.ID }}" id="follow-probe">Follow</button>
+                        <button type="button" class="btn btn-primary" data-seq="{{ sequence.ID }}" id="follow-sequence">Follow</button>
                         {% endif %}
                     </div>
                 </div>
@@ -95,9 +96,6 @@
                 {% endfor %}
             </div>
             {% endif %}
-            <div class="divider_title col-sm-12">
-                <span>Contact for further information</span>
-            </div>
             <div class="card-columns column-count-2">
                 {% for sequence in private_sequences %}
                 <div class="card text-center">
@@ -131,9 +129,9 @@
             </div>
 
             <!-- comments -->
-            <div class="accordion" id="probe-comments">
+            <div class="accordion" id="sequence-comments">
               <div class="card">
-                <div class="card-header" id="probe-comment-1">
+                <div class="card-header" id="sequence-comment-1">
                   <h5 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                       Comments
@@ -141,7 +139,7 @@
                   </h5>
                 </div>
 
-                <div id="collapseOne" class="collapse show" aria-labelledby="probe-comment-1" data-parent="#probe-comments">
+                <div id="collapseOne" class="collapse show" aria-labelledby="sequence-comment-1" data-parent="#sequence-comments">
                   <div class="card-body">
                     {% for comment in comments %}
                     <div id="comment-card-body">
@@ -174,7 +172,7 @@
             </div>
         </div>
         <!-- right side sidebar -->
-        <div class="col-3 sidebar-padding" id="probe-right-sidebar">
+        <div class="col-3 sidebar-padding" id="sequence-right-sidebar">
             <div class="card text-center">
                 <div class="card-header bg-secondary text-center">
                     <h5 class="mb-0 text-white">Info</h5>
@@ -219,7 +217,7 @@
     </div><!-- end of row -->
 </div>
 <!-- Modal -->
-<div class="modal fade" id="deleteProbeModal" tabindex="-1" role="dialog" aria-labelledby="deleteProbeModal" aria-hidden="true">
+<div class="modal fade" id="deleteSequenceModal" tabindex="-1" role="dialog" aria-labelledby="deleteSequenceModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body text-center mt-3">
@@ -227,50 +225,78 @@
         <p class="text-danger">NOTE: This action cannot be undone</p>
       </div>
       <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-outline-danger" data-mol="{{ molecule.ID }}" id="delete-probe-button">Delete probe</button>
+        <button type="button" class="btn btn-outline-danger" data-mol="{{ molecule.ID }}" id="delete-sequence-button">Delete sequence</button>
         <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>
 </div>
-
+<!-- Contact modal -->
+<div class="modal fade" id="sequenceContactModal" tabindex="-1" role="dialog" aria-labelledby="sequenceContactModalL" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sequenceContactModalL">{% if sequence.UserID %}Contact {{ sequence.SequenceUserFN }} {{ sequence.SequenceUserLN }} {% else %} This sequence does not have a contact {% endif %} </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/contact">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Your email</label>
+            <input type="email" class="form-control" id="sequence-contact-email" placeholder="Enter email" value="{{ runninguser.Email }}">
+            <small id="emailHelp" class="form-text text-muted"><i class="fas fa-info-circle"></i> Autofilled</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Your Message</label>
+            <textarea class="form-control" id="sequence-contact-message" placeholder="Your message"> </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 $(document).ready(function(){
-    // follow probe functionality
-    $("#follow-probe").click(function(){
+    // follow sequence functionality
+    $("#follow-sequence").click(function(){
         if($(this).text() == "Follow"){
-            var molecule_id = $(this).data("mol");
+            var sequence_id = {{ sequence.SequenceID }};
             $.ajax({
-              url: "/probe/"+molecule_id+"/follow/",
+              url: "/sequence/"+sequence_id+"/follow/",
               method: "POST",
               success: function(result){
-                $("#follow-probe").text("Unfollow");
+                $("#follow-sequence").text("Unfollow");
               }
             });
         }
         else{
-            var molecule_id = $(this).data("mol");
+            var sequence_id = $(this).data("seq");
             $.ajax({
-              url: "/probe/"+molecule_id+"/unfollow/",
+              url: "/sequence/"+sequence_id+"/unfollow/",
               method: "DELETE",
               success: function(result){
-                $("#follow-probe").text("Follow");
+                $("#follow-sequence").text("Follow");
               }
             });
-        }
-    }); // end of follow probe call
+        };
+    }); // end of follow sequence call
 
-    // Delete probe functionality
-    $("#delete-probe-button").click(function(){
-        var molecule_id = $(this).data("mol");
+    // Delete sequence functionality
+    $("#delete-sequence-button").click(function(){
+        var sequence_id = {{ sequence.SequenceID }};
         $.ajax({
-              url: "/probe/"+molecule_id+"/",
+              url: "/sequence/"+sequence_id+"/",
               method: "DELETE",
               success: function(result){
                 console.log(result);
               }
             });
-    }); // end of delete probe call
+    }); // end of delete sequence call
     
     // the code below is to subscript the formula, do not delete
     var formula = $("#formula").text();
@@ -280,13 +306,13 @@ $(document).ready(function(){
     // make a new comment with ajax
     $("button#post-comment-button").click(function(){
         var new_comment = $("#new-comment").val();
-        molecule_id = {{ molecule.ID }};
+        sequence_id = {{ sequence.SequenceID }};
         $.ajax({
             url: "/comment/",
             method: "POST",
             data: {
                 Message: new_comment,
-                ParentID: molecule_id,
+                ParentID: sequence_id,
                 Type: "Molecules"
             },
             success: function(result){

@@ -169,9 +169,11 @@ class Sequence(SObject, db.Model):
         #res['Color'] = self.molecule.Color if self.molecule else None
         res['hasReactionScheme'] = self.has_reaction_scheme
         res['IsDownloadable'] = self.downloadable
-        user_account_id = User.query.filter_by(UserID=self.UserID).first()
-        res['AccountID'] = user_account_id.AccountID
-        res['AccountName'] = user_account_id.account.name
+        seq_user = User.query.filter_by(UserID=self.UserID).first()
+        res['SequenceUserFN'] = seq_user.FirstName
+        res['SequenceUserLN'] = seq_user.LastName
+        res['AccountID'] = seq_user.AccountID
+        res['AccountName'] = seq_user.account.name
         return res
 
     @property

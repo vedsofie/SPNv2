@@ -88,6 +88,7 @@ def get_details(sequence_id):
     showNotification = showNotification and not sequence.molecule.Approved
     components = sequence.components
     reagents_hash = []
+    follower = Follower.query.filter(and_(Follower.ParentID == sequence_id, Follower.UserID == running_user['UserID'], Follower.Type == 'Sequences')).first()
     for component in components:
         reagents = component.reagents
         for reagent in reagents:
@@ -106,6 +107,7 @@ def get_details(sequence_id):
                                reagents = reagents_hash,
                                running_user=running_user,
                                runninguser=running_user,
+                               follower = follower,
                                back=back,
                                showNotification=showNotification)
 
