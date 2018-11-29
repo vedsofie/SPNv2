@@ -53,7 +53,7 @@
                     </div>
                     <div class="text-right col-9">
                         <a href="/sequence/{{ sequence.SequenceID }}/export" class="ml-2"><button class="btn btn-link"><i class="far fa-arrow-alt-circle-down"></i> Download</button></a>
-                        <a href="" ><button class="btn btn-link"><i class="far fa-eye"></i> View Reaction Scheme</button></a>
+                        <a href="/sequence/{{ sequence.SequenceID }}/reaction_scheme"><button class="btn btn-link"><i class="far fa-eye"></i> View Reaction Scheme</button></a>
                         {% if follower != None %}
                         <button type="button" class="btn btn-primary" data-seq="{{ sequence.ID }}" id="follow-sequence">Unfollow</button>
                         {% else %}
@@ -144,8 +144,16 @@
                     {% for comment in comments %}
                     <div id="comment-card-body">
                         <div class="card mb-3">
-                            <div class="card-body">
+                            <div class="card-body" id="comment-card-body-{{ loop.index }}">
+                                {% if comment.RenderType != 'attachment' %}
                                 {{ comment.Message|safe }}
+                                {% else %}
+                                <script>
+                                    var attachment = jQuery.parseJSON('{{ comment.Message|safe }}');
+                                    $('#comment-card-body-{{ loop.index }}').html("<a href='"+attachment.url+"' >"+attachment.name+"</a>")
+                                    console.log(attachment);
+                                </script>
+                                {% endif %}
                             </div>
                             <div class="card-footer">
                                 <div class="row">
@@ -275,7 +283,7 @@ $(document).ready(function(){
             });
         }
         else{
-            var sequence_id = $(this).data("seq");
+            var sequence_id = {{ sequence.SequenceID }};
             $.ajax({
               url: "/sequence/"+sequence_id+"/unfollow/",
               method: "DELETE",
@@ -313,14 +321,14 @@ $(document).ready(function(){
             data: {
                 Message: new_comment,
                 ParentID: sequence_id,
-                Type: "Molecules"
+                Type: "Sequences"
             },
             success: function(result){
                 var parsed_response = JSON.parse(result)
                 $("#new-comment").val("");
                 var comment_card = "<div class='card mb-3'><div class='card-body'>"+parsed_response['Message']+"</div><div class='card-footer'><div class='row'><div class='col-8'><img src='/user/"+parsed_response['UserID']+"/avatar' class='avatar-small img-fluid rounded-circle' alt='><b>{{ runninguser.username }}</b></div><div class='col-4 text-right'>"+parsed_response['CreationDate']+"</div></div></div></div>";
                 $("#comment-card-body").append(comment_card);
-                console.log(parsed_response);
+                // console.log(parsed_response);
               }
         });
     });

@@ -19,6 +19,7 @@ import urllib
 import models.model_helpers as model_helpers
 import base64,zipfile,io,os
 import modules
+import datetime
 from sqlalchemy import or_, and_, func
 from sqlalchemy.sql.expression import alias
 SOFIEBIO_USER = int(os.getenv("SOFIEBIO_USERID", 0))
@@ -89,6 +90,16 @@ def get_details(sequence_id):
     components = sequence.components
     reagents_hash = []
     follower = Follower.query.filter(and_(Follower.ParentID == sequence_id, Follower.UserID == running_user['UserID'], Follower.Type == 'Sequences')).first()
+    # get comments for this probe
+    all_comments = []
+    comments = Comment.query.filter(and_(Comment.ParentID == sequence_id,Comment.Type == 'Sequences')).order_by(Comment.CreationDate.asc()).all()
+    for comment in comments:
+        users_name = User.query.filter_by(UserID=comment.UserID).first()
+        comments_aggr = comment.to_hash()
+        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%m / %d / %Y')
+        comments_aggr['username'] = users_name.username
+        all_comments.append(comments_aggr)
+    # Check if logged in user is following this probe
     for component in components:
         reagents = component.reagents
         for reagent in reagents:
@@ -108,6 +119,7 @@ def get_details(sequence_id):
                                running_user=running_user,
                                runninguser=running_user,
                                follower = follower,
+                               comments = all_comments,
                                back=back,
                                showNotification=showNotification)
 
