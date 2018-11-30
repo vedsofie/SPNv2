@@ -8,6 +8,7 @@ from models.molecule import Molecule
 from models.sobject import ValidationException
 import email_sender
 import json
+import math
 from back import back
 from werkzeug import secure_filename
 import urllib
@@ -266,18 +267,33 @@ def users(account_id):
 @accountcontroller.route("/account/", methods=["GET"])
 @back.anchor
 def show():
-    print "show"
-    acts = Account.query.order_by(Account.name).all()
+    page_number = request.args.get("page", 1, type=int)
+    all_accounts = Account.query.order_by(Account.name).all()
+    all_accounts_count = Account.query.order_by(Account.name).count()
+    number_of_pages = int(math.ceil(all_accounts_count / 9.0))
     response = []
-    for act in acts:
+    for act in all_accounts:
         x = act.to_hash()
         x.update({"sequence_count": len(act.sequences)})
         response.append(x)
     response.sort(key=lambda account: account["sequence_count"], reverse=True)
-    response = json.dumps(response)
-    if 'Accept' in request.headers and request.headers['Accept'] == 'json':
-        return response
-    return render_template("account/accounts.html", accounts=response, runninguser=json.dumps(g.user.to_hash()))
+    lower_limit = page_number*9 - 9
+    upper_limit = page_number*9
+    response = response[lower_limit : upper_limit]
+
+
+
+    # #pagination
+    # all_accounts = Account.query.order_by(Account.name).limit(9)
+    
+    # number_of_pages = 0
+    # if all_accounts_count > 9:
+    #     all_accounts = all_accounts.offset((page_number*9) - 9)
+    #     number_of_pages = int(math.ceil(all_accounts_count / 9.0))
+
+
+
+    return render_template("account/accounts.html", accounts=response, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
 @accountcontroller.route('/account/<int:account_id>/user/available_roles/')
 def get_available_roles(account_id):

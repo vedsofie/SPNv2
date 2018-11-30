@@ -1,54 +1,101 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-
-    <script type="text/javascript">
-        var accounts = ko.observableArray(initAccounts(JSON.parse({{accounts|tojson|safe}})));
-        var AccountSearch = function(params){
-            var self = this;
-            self.params = params || {};
-            self.displayItems = params.displayItems || ko.observableArray();
-            self.fullList = _.cloneDeep(self.displayItems());
-            self.text = ko.observable("");
-            self.search = function(){
-                var txt = self.text();
-                var matches = [];
-                for(var i = 0; i < self.fullList.length; i++){
-                    var act = self.fullList[i];
-                    var name = act.name;
-                    if(name){
-                        txt = txt.toUpperCase();
-                        name = name.toUpperCase();
-                        if(name.indexOf(txt) >= 0){
-                            matches.push(act);
-                        }
-                    }
-                }
-                self.displayItems(matches);
-            }
-        }
-        var accountSearch = new AccountSearch({displayItems: accounts});
-
-        $(function(){
-            navbar.currentlyOpenedTab("organizations");
-        });
-
-    </script>
-
-{% endblock %}
-
 {% block content_body %}
+<div class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card page-contents">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href="/probe/my_probes"><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                </ul>
+            </div>
+        </div>
 
-   <div class="l-content-wrapper">
-       <!--<div class="m-search-wrapper" data-bind="with: accountSearch">
-           <input type="text" data-bind="textInput: text, event:{keyup: search}" placeholder="Search..."/>
-           <div class="clear"></div>
-       </div>-->
-       <div class="col-sm-12" id="organization-screen">
-           <div data-bind="template: { name: 'account_template', foreach: accounts, as: 'account'}"></div>
-           <div class="clear"></div>
-       </div>
-   </div>
+
+        <div class="col-9">
+            <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
+            <div class="card-columns mt-3">
+            {% for account in accounts %}
+                <div class="card text-center">
+                  <img src="/account/{{ account.id }}/logo" alt="" class="card-img-top p-3">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ account.name }}</h5>
+                  </div>
+                  <div class="card-footer">
+                    <span class="badge badge-secondary">{{ account.sequence_count }}</span>
+                  </div>
+                </div>
+            {% endfor %}
+            </div>
+            <nav aria-label="Page navigation example" class="text-center">
+              <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                {% for page in range(number_of_pages) %}
+                <li {% if current_page_number == (page + 1) %}  class="page-item active" {% else %} class="page-item" {% endif %}><a class="page-link" href="/account/?page={{ page + 1 }}">{{ page + 1 }}</a></li>
+                {% endfor %}
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
 
 
+<!-- modal -->
+
+<div class="modal fade" id="synonymModal" tabindex="-1" role="dialog" aria-labelledby="synonymModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="synonymModalCenterTitle">Synonyms</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="item-list">
+            
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- scripts -->
+<script>
+$(document).ready(function(){
+    $('#synonymModal').on('show.bs.modal', function (e) {
+           var id = e.relatedTarget.id;
+           var molecule_name = $(e.relatedTarget).data("mol");
+           $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
+           console.log(molecule_name);
+           // AJAX request
+           $.ajax({
+            url: '/keyword/Molecules/'+id+'/synonym',
+            type: 'get',
+            success: function(response){ 
+              // Add response in Modal body
+              $(response).each(function(index){
+                $('ul.item-list').append("<li>"+response[index]['DisplayFormat']+"</li>");
+                console.log(response[index]['DisplayFormat']);
+                });
+
+              
+              // Display Modal
+              // $('#empModal').modal('show'); 
+            }
+          });
+    });
+});
+</script>
 {% endblock %}
+
+
