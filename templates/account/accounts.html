@@ -21,8 +21,9 @@
 
         <div class="col-9">
             <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
-            <div class="card-columns mt-3">
+            <div class="mt-3 row">
             {% for account in accounts %}
+              <div class="col-4 mb-3">
                 <div class="card text-center">
                   <img src="/account/{{ account.id }}/logo" alt="" class="card-img-top p-3">
                   <div class="card-body">
@@ -32,6 +33,7 @@
                     <span class="badge badge-secondary">{{ account.sequence_count }}</span>
                   </div>
                 </div>
+              </div>
             {% endfor %}
             </div>
             <nav aria-label="Page navigation example" class="text-center">
