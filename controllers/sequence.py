@@ -88,6 +88,12 @@ def get_details(sequence_id):
     showNotification = request.args.get("showThankyou", False)
     showNotification = showNotification and not sequence.molecule.Approved
     components = sequence.components
+
+    r_scheme = SequenceAttachment.query.filter(and_(SequenceAttachment.SequenceID==sequence_id, SequenceAttachment.Type=='ReactionScheme')).first()
+    if r_scheme:
+        reaction_scheme = Response(r_scheme.Attachment)
+    else:
+        reaction_scheme = r_scheme
     reagents_hash = []
     follower = Follower.query.filter(and_(Follower.ParentID == sequence_id, Follower.UserID == running_user['UserID'], Follower.Type == 'Sequences')).first()
     # get comments for this probe
@@ -120,6 +126,7 @@ def get_details(sequence_id):
                                runninguser=running_user,
                                follower = follower,
                                comments = all_comments,
+                               reaction_scheme = reaction_scheme,
                                back=back,
                                showNotification=showNotification)
 

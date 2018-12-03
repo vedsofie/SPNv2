@@ -149,16 +149,21 @@ def edit(account_id):
 @back.anchor
 def get_account(account_id):
     account = Account.query.filter_by(id=account_id).first()
-    if account is not None:
-        resp = json.dumps(account.to_hash())
-        edit_page = request.args.get('edit', False)
-        if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
-            return Response(resp, headers={'Content-Type': "application/json"})
-        if edit_page and account.can_save(g.user):
-            return render_template("account/edit.html", account=resp, runninguser=json.dumps(g.user.to_hash()))
-        return render_template("account/detail.html", back=back, account=resp, runninguser=json.dumps(g.user.to_hash()))
-    message = urllib.quote("The organization does not exist")
-    return redirect('/user/dashboard?notificationMessage=%s' % message)
+    resp = account
+    account_users = account.users
+    #public_sequences = 
+    return render_template("account/detail.html", back=back, account=resp, account_users = account_users,runninguser=g.user.to_hash())
+    
+    # if account is not None:
+    #     resp = json.dumps(account.to_hash())
+    #     edit_page = request.args.get('edit', False)
+    #     if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
+    #         return Response(resp, headers={'Content-Type': "application/json"})
+    #     if edit_page and account.can_save(g.user):
+    #         return render_template("account/edit.html", account=resp, runninguser=json.dumps(g.user.to_hash()))
+    #     return render_template("account/detail.html", back=back, account=resp, runninguser=json.dumps(g.user.to_hash()))
+    # message = urllib.quote("The organization does not exist")
+    # return redirect('/user/dashboard?notificationMessage=%s' % message)
 
 
 @accountcontroller.route("/account/undefined/logo/", methods=["GET"])

@@ -9,9 +9,7 @@
                 </div>
                 <ul class="list-group text-center list-group-flush">
                     <li class="list-group-item lh-condensed">
-                        <div class="mx-auto">
                             <a href=""><i class="fas fa-vial"></i> My Probes</a>
-                        </div>
                     </li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
@@ -53,7 +51,10 @@
                     </div>
                     <div class="text-right col-9">
                         <a href="/sequence/{{ sequence.SequenceID }}/export" class="ml-2"><button class="btn btn-link"><i class="far fa-arrow-alt-circle-down"></i> Download</button></a>
+                        <!-- if reaction scheme exists -->
+                        {% if reaction_scheme %}
                         <a href="/sequence/{{ sequence.SequenceID }}/reaction_scheme"><button class="btn btn-link"><i class="far fa-eye"></i> View Reaction Scheme</button></a>
+                        {% endif %}
                         {% if follower != None %}
                         <button type="button" class="btn btn-primary" data-seq="{{ sequence.ID }}" id="follow-sequence">Unfollow</button>
                         {% else %}
