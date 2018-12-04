@@ -13,6 +13,7 @@
                     </li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Probes</a></li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
                 </ul>
             </div>
         </div>
@@ -47,6 +48,9 @@
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteSequenceModal">Delete Organization</a>
                       </div>
                     </div>
+                    <div class="col-9 text-right">
+                        <a href="/user/new?account_id={{ account.id }}"><button class="btn btn-outline-primary"><i class="far fa-user"></i> Add new user</button></a>
+                    </div>
                 </div>
             </div>
             {% if public_sequences|length > 0 %}
@@ -72,11 +76,15 @@
                     <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
                   </div>
                   <div class="card-footer">
-                    <div class="sequence-card-footer">
-                        Molecule name:
-                        <a href="/account/{{ sequence.AccountID }}">
-                            <span class="pl-3 ml-3">{{ sequence.MoleculeName|safe }}</span>
-                        </a>
+                    <div class="sequence-card-footer sc-footer-account">
+                        <ul class="list-inline  mb-0 pt-1 pb-1">
+                        <li class="list-inline-item">Molecule name:</li>
+                        <li class="list-inline-item"><a href="/account/{{ sequence.AccountID }}">
+                            {{ sequence.MoleculeName|safe }}
+                            </a>
+                        </li>
+
+                        </ul>
                     </div>
                   </div>
                 </div>

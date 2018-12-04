@@ -114,3 +114,6 @@ a.org-cards:hover{
 a.org-cards:hover .card{
     box-shadow: 2px 2px 2px #bdc0c2;
 }
+.sc-footer-account p{
+    margin-bottom: 0 !important;
+}
