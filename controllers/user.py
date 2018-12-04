@@ -394,6 +394,7 @@ def getUserFollowingIssue():
 
     return openCase, closeCase
 
+# ====== create a new user =========
 @usercontroller.route('/user/new/')
 def new():
     redirect_url = request.args["redirect_url"] if "redirect_url" in request.args else None
@@ -401,10 +402,11 @@ def new():
     user = User()
     if "account_id" in request.args:
         user.AccountID = int(request.args['account_id'])
+        account = Account.query.filter_by(id = user.AccountID).first()
 
     if not user.can_save(g.user.to_hash()):
         return Response("You do not have the appropriate role type to update this record", 403)
-    return render_template("user/edit.html", redirect_url=redirect_url, user=json.dumps(user.to_hash()), runninguser=json.dumps(g.user.to_hash()))
+    return render_template("user/new.html", redirect_url=redirect_url, user=user.to_hash(), account=account, runninguser=g.user.to_hash())
 
 @usercontroller.route('/user/<int:user_id>/edit/')
 def edit(user_id):

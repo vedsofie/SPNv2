@@ -1,0 +1,26 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href=""><i class="far fa-building"></i> All Organizations</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Probes</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-6 page-contents">
+            <h5 class="text-center mt-3">Add a new user for {{ account.name }} </h5>
+        </div>
+    </div>
+</div>
+{% endblock %}
