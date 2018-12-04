@@ -5,6 +5,7 @@ from follower import Follower
 from sobject import SObject, ValidationException, NoPermissionException
 import datetime
 from models.component import Component
+from models.molecule import Molecule
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, create_engine, ForeignKey, LargeBinary, event, and_
 from sqlalchemy.orm import relationship, backref, validates
 import zipfile, os, StringIO,json
@@ -174,6 +175,8 @@ class Sequence(SObject, db.Model):
         res['SequenceUserLN'] = seq_user.LastName
         res['AccountID'] = seq_user.AccountID
         res['AccountName'] = seq_user.account.name
+        mol = Molecule.query.filter_by(ID = self.MoleculeID).first()
+        res['MoleculeName'] = mol.DisplayFormat
         return res
 
     @property

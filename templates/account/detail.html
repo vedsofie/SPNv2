@@ -51,7 +51,7 @@
             </div>
             {% if public_sequences|length > 0 %}
             <div class="divider_title col-sm-12">
-                <span>Sequences available for download</span>
+                <span>Public sequences</span>
             </div>
             <div class="card-columns column-count-2 mb-3">
                 {% for sequence in public_sequences %}
@@ -73,8 +73,9 @@
                   </div>
                   <div class="card-footer">
                     <div class="sequence-card-footer">
+                        Molecule name:
                         <a href="/account/{{ sequence.AccountID }}">
-                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                            <span class="pl-3 ml-3">{{ sequence.MoleculeName|safe }}</span>
                         </a>
                     </div>
                   </div>
@@ -83,6 +84,9 @@
                 {% endfor %}
             </div>
             {% endif %}
+            <div class="divider_title col-sm-12">
+                <span>Private sequences </span>
+            </div>
             <div class="card-columns column-count-2">
                 {% for sequence in private_sequences %}
                 <div class="card text-center">
@@ -104,66 +108,14 @@
                   <div class="card-footer">
                     <div class="sequence-card-footer text-center">
                         <a href="/account/{{ sequence.AccountID }}">
-                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle">
+                            <span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
                         </a>
                     </div>
                   </div>
                     
                 </div>
-                
-
                 {% endfor %}
-            </div>
-
-            <!-- comments -->
-            <div class="accordion" id="sequence-comments">
-              <div class="card">
-                <div class="card-header" id="sequence-comment-1">
-                  <h5 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Comments
-                    </button>
-                  </h5>
-                </div>
-
-                <div id="collapseOne" class="collapse show" aria-labelledby="sequence-comment-1" data-parent="#sequence-comments">
-                  <div class="card-body">
-                    {% for comment in comments %}
-                    <div id="comment-card-body">
-                        <div class="card mb-3">
-                            <div class="card-body" id="comment-card-body-{{ loop.index }}">
-                                {% if comment.RenderType != 'attachment' %}
-                                {{ comment.Message|safe }}
-                                {% else %}
-                                <script>
-                                    var attachment = jQuery.parseJSON('{{ comment.Message|safe }}');
-                                    $('#comment-card-body-{{ loop.index }}').html("<a href='"+attachment.url+"' >"+attachment.name+"</a>")
-                                    console.log(attachment);
-                                </script>
-                                {% endif %}
-                            </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col-8">
-                                    <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
-                                    <b>{{ comment.username }}</b>
-                                    </div>
-                                    <div class="col-4 text-right">
-                                        {{ comment.CreationDate }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <div class="border-bottom"></div>
-                    <div class="form-group mt-3 text-right">
-                        <textarea name="comment" id="new-comment" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
-                        <button class="btn btn-outline-primary mt-3" id="post-comment-button">Post comment</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
         </div>
         <!-- right side sidebar -->
@@ -207,7 +159,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="sequenceContactModalL">{% if sequence.UserID %}Contact {{ sequence.SequenceUserFN }} {{ sequence.SequenceUserLN }} {% else %} This sequence does not have a contact {% endif %} </h5>
+        <h5 class="modal-title" id="sequenceContactModalL">Contact {{ account.name }} </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -233,29 +185,6 @@
 </div>
 <script>
 $(document).ready(function(){
-    // follow sequence functionality
-    $("#follow-sequence").click(function(){
-        if($(this).text() == "Follow"){
-            var sequence_id = {{ sequence.SequenceID }};
-            $.ajax({
-              url: "/sequence/"+sequence_id+"/follow/",
-              method: "POST",
-              success: function(result){
-                $("#follow-sequence").text("Unfollow");
-              }
-            });
-        }
-        else{
-            var sequence_id = {{ sequence.SequenceID }};
-            $.ajax({
-              url: "/sequence/"+sequence_id+"/unfollow/",
-              method: "DELETE",
-              success: function(result){
-                $("#follow-sequence").text("Follow");
-              }
-            });
-        };
-    }); // end of follow sequence call
 
     // Delete sequence functionality
     $("#delete-sequence-button").click(function(){
@@ -275,26 +204,6 @@ $(document).ready(function(){
     $("#formula").html(formatted);
 
     // make a new comment with ajax
-    $("button#post-comment-button").click(function(){
-        var new_comment = $("#new-comment").val();
-        sequence_id = {{ sequence.SequenceID }};
-        $.ajax({
-            url: "/comment/",
-            method: "POST",
-            data: {
-                Message: new_comment,
-                ParentID: sequence_id,
-                Type: "Sequences"
-            },
-            success: function(result){
-                var parsed_response = JSON.parse(result)
-                $("#new-comment").val("");
-                var comment_card = "<div class='card mb-3'><div class='card-body'>"+parsed_response['Message']+"</div><div class='card-footer'><div class='row'><div class='col-8'><img src='/user/"+parsed_response['UserID']+"/avatar' class='avatar-small img-fluid rounded-circle' alt='><b>{{ runninguser.username }}</b></div><div class='col-4 text-right'>"+parsed_response['CreationDate']+"</div></div></div></div>";
-                $("#comment-card-body").append(comment_card);
-                // console.log(parsed_response);
-              }
-        });
-    });
 });
 
 </script>

@@ -151,8 +151,10 @@ def get_account(account_id):
     account = Account.query.filter_by(id=account_id).first()
     resp = account
     account_users = account.users
-    #public_sequences = 
-    return render_template("account/detail.html", back=back, account=resp, account_users = account_users,runninguser=g.user.to_hash())
+    sequences = account.sequences
+    private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
+    public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]          
+    return render_template("account/detail.html", back=back, account=resp, public_sequences=public_sequences, private_sequences=private_sequences, account_users = account_users,runninguser=g.user.to_hash())
     
     # if account is not None:
     #     resp = json.dumps(account.to_hash())
