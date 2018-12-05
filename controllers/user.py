@@ -568,45 +568,18 @@ def agreeToTerms():
 @usercontroller.route('/user/create/', methods=["POST"])
 def create():
     data = request.form
-    print "========"
-    print data
+    usr = User()
     data = data.to_dict()
     for key, value in data.iteritems():
-        print key, value
-    usr = User()
-    if g.user.RoleID == 2 or (g.user.AccountID == account.id and g.user.RoleID == 1):
-        usr.merge_fields(**data)
-        # usr.generate_password()
-        # usr.validate_required_fields()
-
-        # if usr.can_save(running_user):
-        #     usr.save()
+        if value:
+            setattr(usr, key, value)
+    usr.generate_password()
     
-    return render_template("user/new.html", usr=User())
-
-    # if "ResetDate" in data:
-    #     del data['ResetDate']
-    # if "TermsAndConditions" in data:
-    #     del data['TermsAndConditions']
-    # try:
-    #     user = do_create(data, g.user)
-    #     if user is False:
-    #         return Response("You do not have the appropriate role type to create this record", 403)
-    # except Exception as e:
-    #     db.session.rollback()
-    #     if e.__class__ == ValidationException().__class__:
-    #         msg = e.errors()
-    #     else:
-    #         msg = str(e)
-    #     if request.headers.get("Accept") == "application/json":
-    #         return Response(json.dumps({"error_details": msg}), status=400, headers={"Content-Type": "application/json"})
-    #     flash(msg)
-    #     return render_template("user/new.html", usr=User())
-
-    # if request.headers.get("Accept") == "application/json":
-    #     return Response(json.dumps(user.to_hash()), headers={"Content-Type": "application/json"})
-
-    return redirect("/")
+    if usr.save():
+        flash('User created successfully')
+        return redirect(url_for('accountcontroller.get_account', account_id=usr.AccountID))
+    else:
+        return redirect(url_for('.new', account_id = usr.AccountID))
 
 def do_create(data, running_user):
     if "ResetDate" in data:
