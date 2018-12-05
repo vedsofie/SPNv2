@@ -49,7 +49,9 @@
                       </div>
                     </div>
                     <div class="col-9 text-right">
+                        {% if runninguser.RoleID == 2 or (runninguser.AccountID == account.id and runninguser.RoleID == 1) %}
                         <a href="/user/new?account_id={{ account.id }}"><button class="btn btn-outline-primary"><i class="far fa-user"></i> Add new user</button></a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

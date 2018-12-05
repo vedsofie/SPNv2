@@ -20,6 +20,64 @@
 
         <div class="col-6 page-contents">
             <h5 class="text-center mt-3">Add a new user for {{ account.name }} </h5>
+            <form action="/user/create/" method="POST">
+             <div class="card mt-3">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="new-user-email">Email</label> <span class="text-danger">*</span>
+                        <input type="email" class="form-control" id="new-user-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-user-username">Username</label><span class="text-danger">*</span>
+                        <input type="text" class="form-control" id="new-user-username" name="username" required>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="form-group col-6">
+                            <label for="new-user-fn">First name</label><span class="text-danger">*</span>
+                            <input type="text" class="form-control" id="new-user-fn" name="FirstName" required>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="new-user-ln">Last name</label><span class="text-danger">*</span>
+                            <input type="text" class="form-control" id="new-user-ln" name="LastName" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-user-role">Role</label><span class="text-danger">*</span>
+                        <select name="RoleID" id="new-user-role" class="custom-select">
+                            <option>-- Select from list --</option>
+                            <option value="3">Basic</option>
+                            <option value="1">Admin</option>
+                            {% if runninguser.RoleID == 2 %}
+                            <option value="2">Super-admin</option>
+                            {% endif %}
+                        </select><br>
+                        <div class="alert alert-light" role="alert">
+                            <small><strong><i class="fas fa-info-circle"></i> Role Info</strong></small><br>
+                            <small><strong>Basic:</strong> Basic privileges</small><br>
+                            <small><strong>Admin:</strong> Allows control of your organization's account</small><br>
+                            <small><strong>Super-admin:</strong> Allows control of the entire SPN platform</small>
+                        </div>
+                    </div>
+                    <div class="custom-file mb-3">
+                        <input type="file" class="custom-file-input" id="new-user-dp" name="avatar">
+                        <label class="custom-file-label" for="new-user-dp">Upload a Profile Picture</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-user-phone">Phone</label>
+                        <input type="text" class="form-control" id="new-user-phone" name="Phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-user-title">Title</label>
+                        <input type="text" class="form-control" id="new-user-title" name="title" name="title">
+                    </div>
+                    <input type="hidden" name="AccountID" value="{{ account.id }}">
+                </div>
+
+                <div class="card-footer text-right">
+                        <input type="submit" value="Add member" class="btn btn-primary">
+                    </div>
+                     </div>
+                </form>
         </div>
     </div>
 </div>
