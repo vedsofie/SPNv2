@@ -78,6 +78,7 @@ def do_authenticate():
             request.path.startswith("/static") or \
             request.path.startswith("/login") or \
             request.path.startswith("/forgot_password") or \
+            request.path.startswith("/find_a_probe") or \
             request.path == url_for("account_sequences") or \
             request.path == url_for("featured_sequences") or \
             request.path == url_for("usercontroller.running_user") or \
@@ -124,6 +125,10 @@ def welcome():
 @app.route('/login')
 def login():
     return render_template("user/login.html")
+
+@app.route('/find_a_probe')
+def find_a_probe():
+    return render_template("find_a_probe.html")
 
 @app.route('/forgot_password')
 def forgot_password():

@@ -1,0 +1,200 @@
+{% extends "application.html" %}
+{% block login_content_body %}
+<div class="container-fluid">
+	<div class="row">
+        <!-- Left information card pane -->
+        <div class="col-md-4 left-info-pane">
+            <div class="input-group ui-widget">
+                <span class="input-group-btn input-btn-left">
+                    <a href="javascript:history.back()"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> BACK</button></a>
+                </span>
+                <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search">
+                <span class="input-group-btn input-btn-right">
+                    <button class="btn btn-default" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </span>
+            </div>
+            <div class="probe-default-headline">
+                <h3>Probes</h3>
+                <div class="info">
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> Tap on a card to see sites with that probe</p>
+                </div>
+            </div>
+            
+            <div class="search-results">
+                <a href="">
+                    <div class="probe-card featured-probe-card">
+                        <div class="probe-card-content col-sm-6">
+                            <h6 class="text-left">Fallypride</h6>
+                            <img src="img/fallypride.png" class="img-responsive" alt="">
+                        </div>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="probe-card featured-probe-card">
+                        <div class="probe-card-content col-sm-6">
+                            <h6 class="text-left">Fallypride</h6>
+                            <img src="img/fallypride.png" class="img-responsive" alt="">
+                        </div>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="probe-card featured-probe-card">
+                        <div class="probe-card-content col-sm-6">
+                            <h6 class="text-left">Fallypride</h6>
+                            <img src="img/fallypride.png" class="img-responsive" alt="">
+                        </div>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="probe-card featured-probe-card">
+                        <div class="probe-card-content col-sm-6">
+                            <h6 class="text-left">Fallypride</h6>
+                            <img src="img/fallypride.png" class="img-responsive" alt="">
+                        </div>
+                    </div>
+                </a>
+      
+            </div>
+        </div>
+
+        <!-- right map pane -->
+        <div id='map' class="col-md-8"></div>
+      </div>
+</div>
+
+<script>
+	$(document).ready(function(){
+
+
+var map;
+var mapStyles = [
+            {
+                "featureType": "water",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "color": "#b5cbe4"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape",
+                "stylers": [
+                    {
+                        "color": "#efefef"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#83a5b0"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#bdcdd3"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#e3eed3"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "lightness": 33
+                    }
+                ]
+            },
+            {
+                "featureType": "road"
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "labels",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "lightness": 20
+                    }
+                ]
+            },
+            {},
+            {
+                "featureType": "road",
+                "stylers": [
+                    {
+                        "lightness": 20
+                    }
+                ]
+            }
+        ]
+
+
+var locations = [
+      {lat: 33.9841956, lng: -118.3917526},
+      {lat: 34.0679596, lng: -118.4447181},
+      {lat: 39.1753751, lng: -86.5144451}
+    ];
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+var marker, i;
+
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 39.2029039, lng: -108.2139459},
+    zoom: 4,
+    styles: mapStyles,
+    });
+
+    var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
+
+var markerCluster = new MarkerClusterer(map, markers,
+    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+  // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, marker,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+}
+
+});
+
+	
+</script>
+{% endblock %}
