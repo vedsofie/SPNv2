@@ -70,7 +70,7 @@ def index():
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
     resp = molecules_list
     userid = session["userid"]
-    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=json.dumps(g.user.to_hash()))
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
 
 
@@ -207,8 +207,6 @@ def edit_post(molecule_id):
     data = request.form
     this_molecule = Molecule.query.filter_by(ID=molecule_id).first()
     can_save = (g.user.role.Type == 'super-admin') or (this_molecule.UserID == userid)
-    print("=========")
-    print(can_save)
     #only save updates if the current user is super-admin or owner of the current probe
     if can_save:
         this_molecule.Name = data['Name']

@@ -1,25 +1,94 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-{% endblock %}
-
 {% block content_body %}
-    <span data-bind="with: accountDetailPopup">
-        <div class="m-form-wrapper">
-            <span data-bind="template: {name: 'account-detail-template', data: accountDetailViewModel}"></span>
-            <div class="m-submit-buttons">
-                <a data-bind="click: save" class="m-solid-button">Save</a>
-                <a data-bind="click: cancel" class="m-solid-button">Cancel</a>
-                <div class="clear"></div>
+<div class="container-fluid">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
+                <i class="fas fa-info mr-3"></i> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href=""><i class="far fa-building"></i> All Organizations</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Probes</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
             </div>
         </div>
-    </span>
-{% endblock %}
-
-{% block footer %}
-    {{super()}}
-    <script>
-        var account = initAccounts([JSON.parse({{account|tojson|safe}})])[0];
-        var accountDetailPopup = new AccountDetailPopup({account: account});
-    </script>
+        <div class="col-6 page-contents">
+            <h5 class="text-center mt-3">Edit details for {{ account.name }} </h5>
+            <form action="/account/{{ account.id }}/update/" method="POST">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="organization-name">Organization Name</label> <span class="text-danger">*</span>
+                            <input type="text" class="form-control" id="organization-name" name="name" required value="{{ account.name }}">
+                        </div>
+                        <div class="form-group">
+                            <div class="row align-items-center p-3">
+                                <div class="col-6">
+                                    <img src="/account/{{ account.id }}/logo" alt="" class="avatar-large">
+                                </div>
+                                <div class="col-6">
+                                    <input type="file" class="custom-file-input" id="organization-dp" name="avatar">
+                                    <label class="custom-file-label" for="organization-dp">Upload new picture</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-department">Department Name</label>
+                            <input type="text" class="form-control" id="organization-department" name="LabName" value="{{ account.LabName }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-description">Description</label>
+                            <textarea class="form-control" id="organization-description" name="description">{{ account.description }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-city">City</label>
+                            <input type="text" class="form-control" id="organization-city" name="City" value="{{ account.City }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-state">State</label>
+                            <input type="text" class="form-control" id="organization-state" name="State" value="{{ account.State }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-zipcode">Zip Code</label>
+                            <input type="text" class="form-control" id="organization-zipcode" name="ZipCode" value="{{ account.ZipCode }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-address">Address</label>
+                            <textarea class="form-control" id="organization-address" name="Address">{{ account.Address }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-latitude">Latitude</label>
+                            <input type="text" class="form-control" id="organization-latitude" name="Latitude" value="{{ account.Latitude }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="organization-longitude">Longitude</label>
+                            <input type="text" class="form-control" id="organization-longitude" name="Longitude" value="{{ account.Longitude }}">
+                        </div>
+                    </div>
+                    <!-- card footer -->
+                    <div class="card-footer text-right">
+                        <input type="submit" value="Save changes" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

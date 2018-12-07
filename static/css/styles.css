@@ -93,7 +93,9 @@ div#newest-sequences, div#dashboard-quick-links {
 .avatar-medium {
     max-width: 45px;
 }
-
+.avatar-large{
+    max-width: 100px;
+}
 .sequence-card-footer a {
     color: black;
     text-decoration: none;

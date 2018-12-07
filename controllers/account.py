@@ -85,7 +85,7 @@ def contact(account_id):
     email_sender.contact_account(guest_user, account, message)
     return "OK"
 
-@accountcontroller.route("/account/<int:account_id>/update", methods=["POST", "PUT"])
+@accountcontroller.route("/account/<int:account_id>/update_old", methods=["POST", "PUT"])
 def update(account_id):
     try:
         account_name = None
@@ -167,6 +167,37 @@ def get_account(account_id):
     # message = urllib.quote("The organization does not exist")
     # return redirect('/user/dashboard?notificationMessage=%s' % message)
 
+# ================== Edit the details of a particular account ==============
+@accountcontroller.route("/account/<int:account_id>/edit/", methods=["GET"])
+@back.anchor
+def edit_account(account_id):
+    account = Account.query.filter_by(id=account_id).first()
+    resp = account.to_hash()
+    return render_template("/account/edit.html", back=back, account=resp,runninguser=g.user.to_hash())
+
+@accountcontroller.route("/account/<int:account_id>/update/", methods=["POST"])
+@back.anchor
+def update_account(account_id):
+    account = Account.query.filter_by(id=account_id).first()
+    data = request.form
+    if account.can_save(g.user):
+        account.name = data['name']
+        account.LabName = data['LabName']
+        account.description = data['description']
+        account.City = data['City']
+        account.State = data['State']
+        account.ZipCode = data['ZipCode']
+        account.Address = data['Address']
+        account.Latitude = data['Latitude']
+        account.Longitude = data['Longitude']
+        if account.save():
+            return redirect(url_for('.get_account', account_id=account_id))
+        else:
+            error = "There was an error saving the changes to database"
+            return redirect(url_for('.edit_account', account_id=account_id), error)
+
+    # resp = account.to_hash()
+    # return render_template("/account/edit.html", back=back, account=resp,runninguser=g.user.to_hash())
 
 @accountcontroller.route("/account/undefined/logo/", methods=["GET"])
 def get_default_logo():

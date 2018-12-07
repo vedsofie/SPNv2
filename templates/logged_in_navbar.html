@@ -27,8 +27,14 @@
           <a class="dropdown-item" href="#">Create Support Request</a>
         </div>
       </li>
-      <li {% if "/probe/" in request.path  %}   class="nav-item active" {% else %} class="nav-item" {% endif %} >
-        <a class="nav-link" href="/probe">Probes</a>
+      <li {% if "/probe/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href=/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Probes
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarProbeDropdown">
+          <a class="dropdown-item" href="/probe">All probes</a>
+          <a class="dropdown-item" href="/probe/new">Create new probe</a>
+        </div>
       </li>
       <li class="nav-item border-right">
         <a class="nav-link" href="/account/">Organizations</a>
