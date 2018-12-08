@@ -1,12 +1,4 @@
 {% extends "application.html" %}
-{% block head %}
-{{ super() }}
-<!--     <script src="/static/js/maps/map.js"></script>
-    <script src="/static/js/user_login_model.js"></script> -->
-{% include 'contact_us.html' %}
-{% include 'molecule/templates/featured_molecule.html' %}
-{% include 'molecule/templates/search.html' %}
-{% endblock %}
 {% block login_content_body %}
 <!-- Hero banner -->
 <div class="container-fluid" id="hero-banner" data-bind="visible: !mapOn()">
@@ -17,12 +9,7 @@
             <a href="" class="btn btn-primary btn-lg" data-bind="click: goToMap"><i class="fas fa-search"></i> Search Probes</a>
         </div>
     </div>
-</div>
-<!-- Hero banner end -->
-<!-- Section 2 - icons -->
-<div class="featured"></div>
-<div class="container-fluid" id="description-container" data-bind="visible: !mapOn()">
-    <div class="col-sm-12 text-center">
+    <div class="col-12 text-center">
         <h2 class="homepage-headings">Features</h2>
     </div>
     <div class="row align-items-center about-spn-content">
@@ -39,6 +26,11 @@
             <h6 class="about-spn-text">Give and receive feedback about probe protocols on the network and get real-time support for your ELIXYS system</h6>
         </div>
     </div>
+</div>
+<!-- Hero banner end -->
+<!-- Section 2 - icons -->
+<div class="container-fluid" id="description-container">
+    
 </div>
 <div class="container-fluid popular-probes-inner-content grey-bg" id="popular-probes-container">
     <div class="row">
@@ -137,4 +129,4 @@
         </div>
     </div>
 </div>
-{%endblock%}
+{% endblock %}

@@ -27,7 +27,7 @@
                     
                   </div>
                   <div class="card-footer">
-                    <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.DisplayFormat|safe }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                    <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
                     <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                 </div>
 
@@ -46,8 +46,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- modal -->
 
 <div class="modal fade" id="synonymModal" tabindex="-1" role="dialog" aria-labelledby="synonymModalTitle" aria-hidden="true">

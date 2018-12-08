@@ -141,7 +141,7 @@ def autofill(cid):
 def new():
     mole = Molecule()
     resp = json.dumps(mole.to_hash())
-    return render_template("molecule/edit.html", molecule=resp, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("molecule/new.html", molecule=resp, runninguser=g.user.to_hash())
 
 @moleculecontroller.route("/<int:molecule_id>/edit/", methods=['GET'])
 def edit(molecule_id):
@@ -446,9 +446,10 @@ def find():
 
     return Response(json.dumps(resp), headers={'content-type': 'application/json'})
 
-@moleculecontroller.route("/create", methods=["POST"])
+@moleculecontroller.route("/create/", methods=["POST"])
 def create():
-    data = request.json
+    data = json.dumps(request.form)
+    print data
     try:
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
