@@ -22,16 +22,16 @@
         <div class="col-6">
             <h5 class="text-center mt-3">Add a new probe</h5>
             <div class="card p-3 mt-3">
-                <form action="/probe/create/" method="POST">
+                <form action="/probe/create/" enctype="multipart/form-data" method="POST">
                     <div class="mb-3">
                       <label for="probe-name"><b>Probe name</b></label> <span class="text-danger">*</span>
-                      <textarea name="content" id="editor" name="Name"></textarea>
+                      <textarea id="editor" name="DisplayFormat"></textarea>
                     </div>                
                     <div class="mb-3 align-items-center">
                       <label><b>Probe structure</b></label><span class="text-danger">*</span>
                       <div class="row align-items-center">
                         <div class="col-4">
-                          <img src="https://place-hold.it/150x150?text=Molecule%20Image&italic=true" alt="" class="img-fluid">
+                          <img src="https://place-hold.it/150x150?text=Molecule%20Image&italic=true" id="molecule-image-preview" alt="" class="img-fluid">
                         </div>
                         <div class="col-4 custom-file">
                             <div class="custom-file">
@@ -44,6 +44,10 @@
                     <div class="mb-3">
                       <label for="probe-cas"><b>CAS</b></label>
                       <input type="text" class="form-control" id="probe-cas" name="CAS" placeholder="Probe name" value="">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="probe-formula"><b>Formula</b></label>
+                      <input type="text" class="form-control" id="probe-formula" name="Formula" placeholder="Probe name" value="">
                     </div>                    
                     <div class="mb-3">
                       <label for="Isotope"><b>Isotope</b></label><span class="text-danger">*</span>
@@ -61,7 +65,7 @@
                       <textarea name="Description" class="form-control" id="probe-name" placeholder="description" rows="5"></textarea>
                     </div>
                     <div class="mb-3">
-                      <input class="btn btn-primary" type="submit" value="Update changes" />
+                      <input class="btn btn-primary" type="submit" value="Save molecule" />
                     </div>
                 </form>
             </div>
@@ -70,5 +74,21 @@
 </div>
 <script>
   CKEDITOR.replace( 'editor' );
+  function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#molecule-image-preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#molecule-image").change(function(e){
+        readURL(this);
+        var fileName = e.target.files[0].name;
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    });
 </script>
 {% endblock %}

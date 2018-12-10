@@ -4,6 +4,7 @@ import json
 import random
 import httpagentparser
 import math
+import html2text
 from flask import Flask, url_for
 import datetime
 from Crypto.Cipher import AES
@@ -448,8 +449,13 @@ def find():
 
 @moleculecontroller.route("/create/", methods=["POST"])
 def create():
-    data = json.dumps(request.form)
-    print data
+    #this function has been modified for accepting form data
+    data = request.form
+    file = request.files['Image'].read()
+    #print file
+    data = data.to_dict()
+    data['Image'] = file
+    #print data
     try:
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
@@ -464,7 +470,7 @@ def create():
         if request.headers.get("Accept") == "application/json":
             return Response(json.dumps({"molecule": Molecule.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
         flash(msg)
-        return render_template("molecule/new.html", molecule=Molecule().to_hash())
+    return render_template("molecule/new.html", molecule=Molecule().to_hash())
 
     """
     id = data.get("ID", None)
@@ -516,6 +522,7 @@ def do_save(user, **kwargs):
     id = kwargs.get("ID", None)
     was_approved = None
     uid = None
+    print "------in do save---------"
     if not id or can_approve:# Only super-admins can edit a molecule for now
         if id:
             mole = Molecule.query.filter_by(ID=kwargs['ID']).first()
@@ -526,9 +533,12 @@ def do_save(user, **kwargs):
         else:
             mole = Molecule()
             mole.merge_fields(**kwargs)
+            mole.Name = html2text.html2text(mole.DisplayFormat)
+            print mole.Formula
             mole.UserID = user.UserID
             mole.Approved = can_approve and kwargs['Approved']
             mole.validate_required_fields()
+            print "right before saving ________"
         mole.save()
 
         uid = mole.ID

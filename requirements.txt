@@ -43,3 +43,4 @@ SQLAlchemy==1.0.12
 webassets==0.11.1
 Werkzeug==0.11.4
 wheel==0.29.0
+html2text==2018.1.9
