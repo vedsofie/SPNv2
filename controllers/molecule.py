@@ -460,7 +460,7 @@ def create():
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
             return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-        return redirect("/")
+        return redirect(url_for("add_synonyms", molecule_id=mole.id, new_probe=True))
     except Exception as e:
         db.session.rollback()
         msg = str(e)
@@ -472,6 +472,16 @@ def create():
         flash(msg)
     return render_template("molecule/new.html", molecule=Molecule().to_hash())
 
+
+@moleculecontroller.route("/<int:molecule_id>/add_synonyms/", methods=["GET"])
+def add_synonyms(molecule_id):
+    keywords = Keyword.query.filter(and_(Keyword.Category=='Synonym',Keyword.ParentID==molecule_id)).all()
+    #keywords = Keyword.query.filter(Keyword.ParentID==molecule_id).all()
+    print keywords
+    #resp = [keyword.to_hash() for keyword in keywords]
+    new_addition = request.args.get("new_probe")
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/add_synonyms.html",runninguser = g.user.to_hash(), new_probe = new_addition, molecule=molecule, keywords = keywords)
     """
     id = data.get("ID", None)
     was_approved = None
@@ -533,7 +543,7 @@ def do_save(user, **kwargs):
         else:
             mole = Molecule()
             mole.merge_fields(**kwargs)
-            mole.Name = html2text.html2text(mole.DisplayFormat)
+            mole.Name = html2text.html2text(mole.DisplayFormat).strip()
             print mole.Formula
             mole.UserID = user.UserID
             mole.Approved = can_approve and kwargs['Approved']

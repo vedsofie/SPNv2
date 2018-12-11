@@ -1,13 +1,16 @@
 from flask import Blueprint, request, make_response, render_template, session, redirect, url_for, Response, flash
 from models.keyword import Keyword, db
 from sqlalchemy import and_
+from flask import jsonify
 import json
+import html2text
 
 keywordcontroller = Blueprint("keywordcontroller", __name__,url_prefix="/keyword")
 
 @keywordcontroller.route("/", methods=["POST"])
 def create_keywords():
     keywords = request.json['keywords']
+    print keywords
     for key in keywords:
         if "KeywordID" in key:
             if "CreationDate" in key:
@@ -22,6 +25,41 @@ def create_keywords():
         db.session.add(keyw)
     db.session.commit()
     return "OK"
+
+@keywordcontroller.route("/save_synonym/<int:parent_id>/", methods=["POST"])
+def create_synonyms(parent_id):
+    # get form data
+    data = request.form
+    data = data.to_dict()
+    keyw = Keyword()
+    keyw.ParentID = parent_id
+    keyw.DisplayFormat = data['DisplayFormat']
+    keyw.Category = 'Synonym'
+    keyw.Type = 'Molecules'
+    # change displayformat to normal text
+    keyw.Keyword = html2text.html2text(keyw.DisplayFormat)
+    keyw.Keyword = keyw.Keyword.strip()
+    # save everything
+    keyw.save()
+    data['ID'] = keyw.KeywordID
+    print data
+
+    # return the saved keyword via ajax - json
+    # for key in keywords:
+    #     if "KeywordID" in key:
+    #         if "CreationDate" in key:
+    #             del key['CreationDate']
+    #         keyw = Keyword.query.filter_by(KeywordID=key['KeywordID']).first()
+    #         keyw.merge_fields(**key)
+    #     else:
+    #         keyw = Keyword()
+    #         keyw.merge_fields(**key)
+    #         keyw.validate_required_fields()
+
+    #     db.session.add(keyw)
+    # db.session.commit()
+
+    return Response(json.dumps(data), content_type='application/json')
 
 @keywordcontroller.route("/<keyword_type>/<int:parent_id>/", methods=["GET"])
 def get_keywords_for(keyword_type, parent_id):
@@ -42,5 +80,12 @@ def delete_keywords():
     keys = Keyword.query.filter(Keyword.KeywordID.in_(keywords)).all()
     for key in keys:
         db.session.delete(key)
+    db.session.commit()
+    return "OK"
+
+@keywordcontroller.route("/<int:synonym_id>/delete_synonym/", methods=["POST"])
+def delete_synonym(synonym_id):
+    syn = Keyword.query.filter_by(KeywordID=synonym_id).first()
+    db.session.delete(key)
     db.session.commit()
     return "OK"

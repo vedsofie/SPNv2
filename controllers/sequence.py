@@ -65,7 +65,7 @@ def create_sequence():
     resp = json.dumps(seq.to_hash())
     return render_template("/sequence/edit.html",
                            sequence=resp,
-                           runninguser=json.dumps(g.user.to_hash()))
+                           runninguser=g.user.to_hash())
 
 @sequencecontroller.route("/sequence/module/list/", methods=["GET"])
 def list_module_options():
