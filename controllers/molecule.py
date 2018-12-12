@@ -477,7 +477,6 @@ def create():
 def add_synonyms(molecule_id):
     keywords = Keyword.query.filter(and_(Keyword.Category=='Synonym',Keyword.ParentID==molecule_id)).all()
     #keywords = Keyword.query.filter(Keyword.ParentID==molecule_id).all()
-    print keywords
     #resp = [keyword.to_hash() for keyword in keywords]
     new_addition = request.args.get("new_probe")
     molecule = Molecule.query.filter_by(ID=molecule_id).first()

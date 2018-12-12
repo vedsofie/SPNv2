@@ -42,6 +42,7 @@ def create_synonyms(parent_id):
     # save everything
     keyw.save()
     data['ID'] = keyw.KeywordID
+    data['Keyword']= keyw.Keyword
     print data
 
     # return the saved keyword via ajax - json
@@ -86,6 +87,6 @@ def delete_keywords():
 @keywordcontroller.route("/<int:synonym_id>/delete_synonym/", methods=["POST"])
 def delete_synonym(synonym_id):
     syn = Keyword.query.filter_by(KeywordID=synonym_id).first()
-    db.session.delete(key)
+    db.session.delete(syn)
     db.session.commit()
-    return "OK"
+    return str(synonym_id)
