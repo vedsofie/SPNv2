@@ -1,6 +1,6 @@
 var map;
 
-GoogleMaps = function(markerClickedOnEvt){
+GoogleMaps = function(markerClickedOnEvt, accountLocations){
     var self = this;
     self.markers = {};
     self.mappedActs = {};
@@ -8,6 +8,12 @@ GoogleMaps = function(markerClickedOnEvt){
     self.map = null;
     self.markerClickedOnEvt = markerClickedOnEvt;
     self.markerCluster;
+
+    self.accountLocations = new Map()
+    for(var i = 0; i < accountLocations.length; i++) {
+         self.accountLocations.set(accountLocations[i]['id'], accountLocations[i]);
+    }
+    
     self.initMap = function(){
         if(arguments.length != 0) {
             var lat = arguments[0];//position.coords.latitude;
@@ -36,35 +42,45 @@ GoogleMaps = function(markerClickedOnEvt){
         self.markerCluster.setGridSize(40)
     }
 
-    self.generateHtml = function(){
+    self.generateHtml = function(siteId){
+        var siteInformation = self.accountLocations.get(siteId)
+        var address = siteInformation['Address'] != null ? siteInformation['Address'] : '' ;
+        var city = siteInformation['City'] != null ? siteInformation['City'] : '' ;;
+        var state = siteInformation['State'] != null ? siteInformation['State'] : '' ;;
+        var zipcode = siteInformation['ZipCode'] != null ? siteInformation['ZipCode'] : '' ;;
+        var name = siteInformation['name'] != null ? siteInformation['name'] : '' ;;
+
         var markup =
-            '<div class="map-info-wrapper" data-bind="attr:{id: \'account_\' + account.id}">' +
-            '    <h3 class="h3-home-map" data-bind="text: account.name"></h3>' +
+            '<div class="map-info-wrapper">' +
+            '    <h3 class="h3-home-map"></h3>' +
             '    <div class="map-address">' +
-            '        <span data-bind="text: account.Address"></span>' +
+            '        <span>'+ name +'</span>' +
+                    '<br>' +
+            '        <span>'+ address +'</span>' +
 			'        <div>' +
-            '            <span class="span-map-address" data-bind="text: account.City"></span>' +
-			"            <span class='span-map-address' data-bind='if: account.City && account.State'>,&nbsp;</span>"  +
-            '            <span class="span-map-address" data-bind="text: account.State"></span>' +
-            '            <span class="span-map-address" data-bind="text: account.ZipCode"></span>' +
+            '            <span class="span-map-address">'+ city +'</span>' +
+			"            <span class='span-map-address'>&nbsp;</span>"  +
+            '            <span class="span-map-address">'+ state +'</span>' +
+            "            <span class='span-map-address'>&nbsp;</span>"  +
+            '            <span class="span-map-address">'+ zipcode +'</span>' +
 			'		</div>' +
             '    </div>' +
-            '    <a class="btn-gray" data-bind="click: displayPopup">Contact</a>' +
             '</div>';
         return $(markup)[0];
     }
 
     self.bindInfo = function(marker, siteId){
-        var contentString = self.generateHtml();
+        var contentString = self.generateHtml(siteId);
         var infowindow = new google.maps.InfoWindow({
             content: contentString,
             maxWidth: 400
         });
         marker.addListener('click', function(){
+            console.log("addListener")
             var act = self.mappedActs[siteId];
             self.closeAllAccounts();
             self.markerClickedOnEvt(act);
-            //infowindow.open(self.map, marker);
+            infowindow.open(self.map, marker);
         });
         var act = self.mappedActs[siteId];
         function GoogleMapsAccountInfoWindow(act, marker, infoWindow){
@@ -80,7 +96,7 @@ GoogleMaps = function(markerClickedOnEvt){
         }
         var markerCtrl = new GoogleMapsAccountInfoWindow(act, marker, infowindow);
         self.markers[siteId] = markerCtrl;
-        ko.applyBindings(markerCtrl, infowindow.content);
+        //ko.applyBindings(markerCtrl, infowindow.content);
     }
 
     self.clickSiteOnResult = function(site_number) {
@@ -91,7 +107,7 @@ GoogleMaps = function(markerClickedOnEvt){
         self.markers_cluster = []
         for(var i = 0; i < locations.length; i++){
             var site = locations[i];
-            self.mappedActs[site.id] = new Account(site);
+            //self.mappedActs[site.id] = new Account(site);
             self.addLocations([site],site.name, site.id);
         }
     }

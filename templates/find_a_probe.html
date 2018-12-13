@@ -3,7 +3,8 @@
 <script src="/static/js/map.js"></script>
 <script src="/static/js/user_login_model.js"></script>
 <script>
-    var accountLocations = []
+    var accountLocations = JSON.parse({{sequence_data|tojson|safe}})
+    console.log(accountLocations)
     var loginModel = new UserLoginModel(accountLocations);
 </script>
 <div class="container-fluid">
@@ -62,11 +63,8 @@
       
             </div>
         </div>
-
         <!-- right map pane -->
         <div id='map' class="col-md-8"></div>
-
-
         <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>

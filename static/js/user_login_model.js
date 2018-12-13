@@ -72,7 +72,7 @@ UserLoginModel = function(accountLocations){
     });
 */
     self.initMap = function(){
-        self.map = new GoogleMaps(self.locationSelected);
+        self.map = new GoogleMaps(self.locationSelected, self.accountLocations);
         self.map.showLocations(self.accountLocations);
         var list = self.averageGeolocation(self.accountLocations)
         self.map.initMap(list.Latitude, list.Longitude); 
@@ -96,7 +96,7 @@ UserLoginModel = function(accountLocations){
     }
 
     self.locationSelected = function(act){
-        self.featuredOrganization(act);
+        self.featuredOrganization = act;
     }
 
     self.locationSelectedFromResult = function(site) {

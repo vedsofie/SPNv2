@@ -128,7 +128,9 @@ def login():
 
 @app.route('/find_a_probe')
 def find_a_probe():
-    return render_template("find_a_probe.html")
+    acts = Account.query.all()
+    data = [act.to_hash() for act in acts]
+    return render_template("find_a_probe.html", sequence_data=json.dumps(data))
 
 @app.route('/forgot_password')
 def forgot_password():
