@@ -481,50 +481,15 @@ def add_synonyms(molecule_id):
     new_addition = request.args.get("new_probe")
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
     return render_template("molecule/add_synonyms.html",runninguser = g.user.to_hash(), new_probe = new_addition, molecule=molecule, keywords = keywords)
-    """
-    id = data.get("ID", None)
-    was_approved = None
-    if not id or can_approve:# Only super-admins can edit a molecule for now
-        try:
-            if id:
-                mole = Molecule.query.filter_by(ID=data['ID']).first()
-                already_approved = mole.Approved
-                mole.merge_fields(**data)
-                was_approved = mole.Approved and not already_approved
-                mole.validate_required_fields()
-            else:
-                mole = Molecule()
-                mole.merge_fields(**data)
-                mole.UserID = g.user.UserID
-                mole.Approved = can_approve and data['Approved']
-                mole.validate_required_fields()
-            mole.save()
-        except Exception as e:
-            db.session.rollback()
-            msg = str(e)
-            if e.__class__ == ValidationException().__class__:
-                msg = e.errors()
 
-            if request.headers.get("Accept") == "application/json":
-                return Response(json.dumps({"molecule": mole.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
-            flash(msg)
-            return render_template("molecule/new.html", molecule=mole.to_hash())
-
-        uid = mole.ID
-
-        if was_approved:
-            message = "%s was approved" % mole.Name
-            comment = Comment(UserID=g.user.UserID, Type='Molecules',ParentID=mole.ID, Message=message, RenderType='text')
-            comment.save()
-        mole = Molecule.query.filter_by(ID=uid).first()
-
-        if request.headers.get("Accept") == "application/json":
-            return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-
-        return redirect("/")
-    else:
-        return Response("You do not have permission to create molecules", 403)
-    """
+@moleculecontroller.route("/<int:molecule_id>/add_keywords/", methods=["GET"])
+def add_keywords(molecule_id):
+    keywords = Keyword.query.filter(and_(Keyword.Category=='Keyword',Keyword.ParentID==molecule_id)).all()
+    #keywords = Keyword.query.filter(Keyword.ParentID==molecule_id).all()
+    #resp = [keyword.to_hash() for keyword in keywords]
+    new_addition = request.args.get("new_probe")
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/add_keywords.html",runninguser = g.user.to_hash(), new_probe = new_addition, molecule=molecule, keywords = keywords)
 
 def do_save(user, **kwargs):
     can_approve = user.role.Type == 'super-admin'

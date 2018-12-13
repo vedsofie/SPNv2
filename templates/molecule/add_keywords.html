@@ -22,47 +22,44 @@
             {% if new_probe %}
             <h5 class="text-center mt-3">Add a new probe</h5>
             {% else %}
-            <h5 class="text-center mt-3">Add synonyms for {{ molecule.Name }}</h5>
+            <h5 class="text-center mt-3">Add keywords for {{ molecule.Name }}</h5>
             {% endif %}
             <div class="card p-3 mt-3">
               {% if new_probe %}
                <div class="row mb-3">
-                <div class="col-6 pb-1 offset-3 text-center"><span class="badge badge-pill badge-info">Step 2 of 3</span> Add synonyms
+                <div class="col-6 pb-1 offset-3 text-center"><span class="badge badge-pill badge-info">Step 3 of 3</span> Add keywords
                </div>
            </div>
               {% endif %}
                 <div>
                     <div class="mb-3">
-                      <label for="probe-name"><b>Synonym</b></label> <span class="text-danger">*</span>
+                      <label for="probe-name"><b>Keyword</b></label> <span class="text-danger">*</span>
                       <textarea id="editor" name="DisplayFormat"></textarea>
                       <div class="row text-right">
                         <div class="col text-right mr-3">
-                            <button class="btn btn-outline-primary mt-3" id="add-synonym">Add</button>
+                            <button class="btn btn-outline-primary mt-3" id="add-keyword">Add</button>
                         </div>
                       </div>
                     </div>        
                 </div>
                 <div class="mb-3">
-                    <b>Synonym list</b>
+                    <b>Keyword list</b>
                     <small></small>
                     <table class="table">
-                        <tbody id="synonym-table">
+                        <tbody id="keyword-table">
                             {% for keyword in keywords %}
-                            <tr id="row-{{ keyword.KeywordID }}"><td>{{ keyword.Keyword }}</td><td class="text-right"><button class="btn btn-outline-primary delete-keyword" data-key="{{ keyword.KeywordID }}" data-toggle="modal" data-syn="{{ keyword.Keyword }}" data-target="#deleteKeywordModal">Delete</button></td></tr>
+                            <tr id="row-{{ keyword.KeywordID }}"><td>{{ keyword.Keyword }}</td><td class="text-right"><button class="btn btn-outline-primary delete-keyword" data-key="{{ keyword.KeywordID }}" data-toggle="modal" data-name="{{ keyword.Keyword }}" data-target="#deleteKeywordModal">Delete</button></td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
                 {% if new_probe %}
                     <div class="row mt-1">
-                        <div class="col-6 text-left">
-                            <button class="btn btn-outline-primary mb-2"><i class="fas fa-arrow-left"></i> View probe</button>
-                            <small class="text-right text-secondary pr-2">Next: Add Keywords</small>
-                        </div>
-                        <div class="col-6 text-right">
-                          <a href="/probe/{{ molecule.ID }}/add_keywords/?new_probe=True" class="btn btn-primary mb-2">Proceed <i class="fas fa-arrow-right"></i></a>
+                        <div class="col-6 offset-6 text-right">
+                          <a href="/probe/{{ molecule.ID }}/" class="btn btn-primary mb-2 mr-2">Done</a>
                           <br>
-                          <small class="text-right text-secondary pr-2">Next: Add Keywords</small>
+                          <small class="text-right text-secondary pr-2">View probe details</small>
                         </div>
                     </div>
                 {% endif %}    
@@ -83,7 +80,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete the Synonym: <strong id="modal-keyword-name"></strong> ?
+        Are you sure you want to delete the Keyword: <strong id="modal-keyword-name"></strong> ?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -95,19 +92,19 @@
 <script>
     CKEDITOR.replace('editor');
 
-    // Add synonym to table
+    // Add keyword to table
     var tableItem = "";
 
-    // Ajax code to POST synonyms
-    $('#add-synonym').click(function(){
-        var synonymData = CKEDITOR.instances['editor'].getData();
+    // Ajax code to POST keywords
+    $('#add-keyword').click(function(){
+        var keywordData = CKEDITOR.instances['editor'].getData();
         $.ajax({
           type: "POST",
-          url: "/keyword/save_synonym/{{ molecule.ID }}/",
-          data: {DisplayFormat: synonymData},
+          url: "/keyword/save_keyword/{{ molecule.ID }}/",
+          data: {DisplayFormat: keywordData},
           success: function(data){
             var newRow = "<tr><td>"+data['DisplayFormat']+"</td><td><button class='btn btn-outline-primary delete-keyword' data-key='"+data['ID']+"' data-syn='"+data['ID']+"' data-toggle='modal' data-target='#deleteKeywordModal'>Delete</button></td></tr>";
-            $("#synonym-table").prepend(newRow);
+            $("#keyword-table").prepend(newRow);
           },
           dataType: ""
         });
@@ -116,18 +113,18 @@
 
     // when delete button is clicked, pass on attributes from button to the modal. Data to be passed: keyword ID, keyword name. These are later used to send an ajax request to delete. 
     $("button.delete-keyword").click(function(){
-        var KeywordName = $(this).data("syn");
+        var KeywordName = $(this).data("name");
         KeywordID = $(this).data("key");
         $("#modal-keyword-name").text(KeywordName);
         $("button#confirm-delete").attr("data-key", KeywordID);
-    }); // end of on click for delete synonym button
+    }); // end of on click for delete keyword button
 
 
     // Send ajax request when delete confirmation button is clicked
     $("button#confirm-delete").click(function(){
         $.ajax({
           type: "POST",
-          url: "/keyword/"+KeywordID+"/delete_synonym/",
+          url: "/keyword/"+KeywordID+"/delete_keyword/",
           success: function(data){
             var rowID = "#row-"+data+"";
             $('#deleteKeywordModal').modal('hide');

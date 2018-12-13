@@ -43,23 +43,25 @@ def create_synonyms(parent_id):
     keyw.save()
     data['ID'] = keyw.KeywordID
     data['Keyword']= keyw.Keyword
-    print data
+    return Response(json.dumps(data), content_type='application/json')
 
-    # return the saved keyword via ajax - json
-    # for key in keywords:
-    #     if "KeywordID" in key:
-    #         if "CreationDate" in key:
-    #             del key['CreationDate']
-    #         keyw = Keyword.query.filter_by(KeywordID=key['KeywordID']).first()
-    #         keyw.merge_fields(**key)
-    #     else:
-    #         keyw = Keyword()
-    #         keyw.merge_fields(**key)
-    #         keyw.validate_required_fields()
-
-    #     db.session.add(keyw)
-    # db.session.commit()
-
+@keywordcontroller.route("/save_keyword/<int:parent_id>/", methods=["POST"])
+def create_keyword(parent_id):
+    # get form data
+    data = request.form
+    data = data.to_dict()
+    keyw = Keyword()
+    keyw.ParentID = parent_id
+    keyw.DisplayFormat = data['DisplayFormat']
+    keyw.Category = 'Keyword'
+    keyw.Type = 'Molecules'
+    # change displayformat to normal text
+    keyw.Keyword = html2text.html2text(keyw.DisplayFormat)
+    keyw.Keyword = keyw.Keyword.strip()
+    # save everything
+    keyw.save()
+    data['ID'] = keyw.KeywordID
+    data['Keyword']= keyw.Keyword
     return Response(json.dumps(data), content_type='application/json')
 
 @keywordcontroller.route("/<keyword_type>/<int:parent_id>/", methods=["GET"])
@@ -90,3 +92,10 @@ def delete_synonym(synonym_id):
     db.session.delete(syn)
     db.session.commit()
     return str(synonym_id)
+
+@keywordcontroller.route("/<int:keyword_id>/delete_keyword/", methods=["POST"])
+def delete_keyword(keyword_id):
+    keyw = Keyword.query.filter_by(KeywordID=keyword_id).first()
+    db.session.delete(keyw)
+    db.session.commit()
+    return str(keyword_id)
