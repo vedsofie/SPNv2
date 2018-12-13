@@ -1,16 +1,15 @@
 UserLoginModel = function(accountLocations){
     var self = this;
-    this.featuredOrganization = ko.observable();
-    this.featuredSequences = ko.observableArray();
-    this.navbar = new LoginNavbar();
+    this.featuredOrganization = null;
+    this.featuredSequences = [];
     self.accountLocations = accountLocations;
-    self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
+    //self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
     self.probe_list;
     self.probe_map = new Map();
-    self.pure_probe_list = ko.observableArray();
+    self.pure_probe_list = [];
 
     self.setFeaturedOrganization = function() {
-        this.featuredOrganization(null)
+        this.featuredOrganization = null
     }
     self.set_pure_probe_list = function(list) {
         var set = new Set()
@@ -21,7 +20,7 @@ UserLoginModel = function(accountLocations){
                 set.add(list[i].searchName)
             }
         }
-        self.pure_probe_list(temp)
+        self.pure_probe_list = temp
     }
 
     self.set_probe_list = function() {
@@ -59,7 +58,7 @@ UserLoginModel = function(accountLocations){
     self.get_probe_number = function(site) {
         return self.probe_map.get(site);
     }
-
+/*
     self.calculatedFeaturedSequences = ko.pureComputed(function(){
         $.ajax("/featured_sequences").success(function(res){
             for(var i = 0; i < res.length; i++){
@@ -71,7 +70,7 @@ UserLoginModel = function(accountLocations){
         });
         return self.featuredSequences;
     });
-
+*/
     self.initMap = function(){
         self.map = new GoogleMaps(self.locationSelected);
         self.map.showLocations(self.accountLocations);
@@ -194,7 +193,7 @@ UserLoginModel = function(accountLocations){
     }
 
     self.matchingMoleculeIds = {};//new Set();
-
+/*
     self.moleculeSearch.matches.subscribe(function(newVal){
         self.matchingMoleculeIds = {};//new Set();
         var acts = {}
@@ -235,4 +234,5 @@ UserLoginModel = function(accountLocations){
             self.moleculeSearch.isSearching(false);
         });
     });
+    */
 }

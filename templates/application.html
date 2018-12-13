@@ -16,18 +16,6 @@
                 {% endwith %}
             {% endif %}
         {% endblock %}   	
-        <script>
-            {% if reset_password is defined %}
-                var resetPassword = JSON.parse({{reset_password|tojson|safe}})
-            {% else %}
-                var resetPassword = false;
-            {% endif %}
-
-
-            if(runningUser){
-                var navbar = new NavigationBar();
-            }
-        </script>
 
 		{% if runninguser is defined %}
         <div class="col-12" id="home-wrapper">
