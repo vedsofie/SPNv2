@@ -1,0 +1,154 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <h5 class="text-center mt-3">Add a new sequence</h5>
+           
+            <div class="card p-3 mt-3">
+                <form action="/sequence/create/" enctype="multipart/form-data" method="POST">
+                    <div class="mb-3">
+                      <label for="sequence-name"><b>Sequence name</b></label> <span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="probe-name"><b>Probe name</b></label> <span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="probe-id-dummy" placeholder="Probe name" value="">
+                      <input type="hidden" id="probe-id" name="MolculeID">
+                    </div>
+                    <div class="mb-3">
+                      <label for="purification-method">Purification method</label>
+                      <select name="purification-method" id="" class="form-control">
+                        <option>Choose Purification Method</option>
+                        <option value="PURE/FORM">PURE/FORM</option>
+                        <option value="3rd Party HPLC">3rd Party HPLC</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="purification-method">Module</label>
+                      <select name="purification-module" id="" class="form-control">
+                          <option value="">Choose Synthesis Module</option>
+                          <option value="SOFIE ELIXYS">SOFIE ELIXYS</option>
+                          <option value="Manual">Manual</option>
+                          <option value="Homemade">Homemade</option>
+                          <option value="GE FASTlab Multi-Tracer">GE FASTlab Multi-Tracer</option>
+                          <option value="GE FASTLab 2">GE FASTLab 2</option>
+                          <option value="GE TRACERlab FX N">GE TRACERlab FX N</option>
+                          <option value="GE TRACERlab FX N Pro">GE TRACERlab FX N Pro</option>
+                          <option value="GE TRACERlab FX2 N">GE TRACERlab FX2 N</option>
+                          <option value="GE TRACERlab FX2 E">GE TRACERlab FX2 E</option>
+                          <option value="GE TRACERlab FX MeI">GE TRACERlab FX MeI</option>
+                          <option value="GE TRACERlab FX2 MeI">GE TRACERlab FX2 MeI</option>
+                          <option value="GE TRACERlab FX M">GE TRACERlab FX M</option>
+                          <option value="GE TRACERlab FX2 M">GE TRACERlab FX2 M</option>
+                          <option value="GE TRACERlab FX C Pro">GE TRACERlab FX C Pro</option>
+                          <option value="GE TRACERlab FX2 C">GE TRACERlab FX2 C</option>
+                          <option value="GE Other">GE Other</option>
+                          <option value="CTI CPCU">CTI CPCU</option>
+                          <option value="Trasis AllinOne">Trasis AllinOne</option>
+                          <option value="Trasis Mini AIO">Trasis Mini AIO</option>
+                          <option value="Scintomics GRP">Scintomics GRP</option>
+                          <option value="E&amp;Z Modular-lab eazy">E&amp;Z Modular-lab eazy</option>
+                          <option value="E&amp;Z Modular-lab Pharmtracer">E&amp;Z Modular-lab Pharmtracer</option>
+                          <option value="E&amp;Z Modular-lab Standard">E&amp;Z Modular-lab Standard</option>
+                          <option value="Siemens Explora">Siemens Explora</option>
+                          <option value="Synthra FDGtwo">Synthra FDGtwo</option>
+                          <option value="Synthra RNplus">Synthra RNplus</option>
+                          <option value="Synthra F-Dopa">Synthra F-Dopa</option>
+                          <option value="Synthra MeI">Synthra MeI</option>
+                          <option value="Synthra MeIplus">Synthra MeIplus</option>
+                          <option value="Synthra MeIplus Research">Synthra MeIplus Research</option>
+                          <option value="Synthra MeIplus Loop">Synthra MeIplus Loop</option>
+                          <option value="Synthra GPextent">Synthra GPextent</option>
+                          <option value="Synthra C-11 Choline">Synthra C-11 Choline</option>
+                          <option value="IBA Synthera">IBA Synthera</option>
+                          <option value="IBA HighMOR">IBA HighMOR</option>
+                          <option value="IBA Pinctada">IBA Pinctada</option>
+                          <option value="Advion NanoTek">Advion NanoTek</option>
+                          <option value="ABT Biomarker Generator">ABT Biomarker Generator</option>
+                          <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="probe-name"><b>Description</b></label> <span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="">
+                    </div>
+                    <div class="mb-3 align-items-center">
+                      <label><b>Probe structure</b></label><span class="text-danger">*</span>
+                      <div class="row align-items-center">
+                        <div class="col-4">
+                          <img src="https://place-hold.it/150x150?text=Molecule%20Image&italic=true" id="molecule-image-preview" alt="" class="img-fluid">
+                        </div>
+                        <div class="col-4 custom-file">
+                            <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="molecule-image" name="Image">
+                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                          </div>
+                        </div>
+                     </div>
+                    </div>                    
+                    <div class="mb-3">
+                      <label for="probe-cas"><b>CAS</b></label>
+                      <input type="text" class="form-control" id="probe-cas" name="CAS" placeholder="Probe name" value="">
+                    </div> 
+                    <div class="mb-3">
+                      <label for="probe-formula"><b>Formula</b></label>
+                      <input type="text" class="form-control" id="probe-formula" name="Formula" placeholder="Probe name" value="">
+                    </div>                    
+                    <div class="mb-3">
+                      <label for="Isotope"><b>Isotope</b></label><span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="Isotope" name="Isotope" placeholder="Probe name" value="">
+                    </div>
+                    <div class="mb-3">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">
+                          <input type="checkbox" name="Approved" aria-label="Checkbox for following text input" {% if molecule.Approved %} checked {% endif %}> <span class="ml-2">Approved</span>
+                        </div>
+                      </div>
+                    </div>                 
+                    <div class="mb-3">
+                      <label for="probe-name"><b>Description</b></label>
+                      <textarea name="Description" class="form-control" id="probe-name" placeholder="description" rows="5"></textarea>
+                    </div>
+                    <div class="text-right mt-1">
+                      <input class="btn btn-primary mb-2" type="submit" value="Save & proceed" />
+                      <br>
+                      <small class="text-right text-secondary pr-2">Next: Add synonyms</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+
+    </div>
+</div>
+<script>
+  molecule_names = {{ molecule_names|safe }};
+  $( "#probe-id-dummy" ).autocomplete({
+      source: molecule_names,
+      select: function(event, ui){
+        $("#probe-id-dummy").val(ui.item.label);
+        $("#probe-id").val(ui.item.id);
+      }
+    });
+  console.log(molecule_names);
+</script>
+{% endblock %}

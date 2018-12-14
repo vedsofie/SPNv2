@@ -58,14 +58,30 @@ def get_probe(sequence_id):
     sequence = Sequence.query.filter(Sequence.SequenceID==sequence_id).first()
     resp = json.dumps(sequence.molecule.to_hash())
     return Response(resp, content_type="application/json")
-    
+
+# ============ Display form to create a sequence =======
 @sequencecontroller.route("/sequence/new/", methods=["GET"])
+def new_sequence():
+    # seq = Sequence()
+    # resp = seq.to_hash()
+    molecule_names_result = Molecule.query.with_entities(Molecule.Name, Molecule.ID).all()
+    molecule_names = []
+    for mol in molecule_names_result:
+        jsonobject = {'label': mol[0].strip(), 'id': mol[1]}
+        molecule_names.append(jsonobject)
+    return render_template("/sequence/new.html",runninguser=g.user.to_hash(), molecule_names=json.dumps(molecule_names))
+
+@sequencecontroller.route("/sequence/create/", methods=["POST"])
 def create_sequence():
-    seq = Sequence()
-    resp = json.dumps(seq.to_hash())
-    return render_template("/sequence/edit.html",
-                           sequence=resp,
-                           runninguser=g.user.to_hash())
+    # seq = Sequence()
+    # resp = seq.to_hash()
+    molecule_names_result = Molecule.query.with_entities(Molecule.Name).all()
+    molecule_names = []
+    for mol in molecule_names_result:
+        molecule_names.append(mol[0].strip())
+    #molecule_names = [molecule_name.to_hash() for molecule_name in molecule_names]
+    molecule_ids = Molecule.query.with_entities(Molecule.ID).all()
+    return render_template("/sequence/new.html",runninguser=g.user.to_hash(), molecule_names=json.dumps(molecule_names), molecule_ids=json.dumps(molecule_ids))
 
 @sequencecontroller.route("/sequence/module/list/", methods=["GET"])
 def list_module_options():
