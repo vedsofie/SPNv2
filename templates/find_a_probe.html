@@ -4,7 +4,9 @@
 <script src="/static/js/user_login_model.js"></script>
 <script>
     var accountLocations = JSON.parse({{sequence_data|tojson|safe}})
-    console.log(accountLocations)
+    var probeinformation = JSON.parse({{probe_data|tojson|safe}}) //Original List 
+    console.log(probeinformation)
+    var seachResult = JSON.parse({{probe_data|tojson|safe}}) //will be modified!
     var loginModel = new UserLoginModel(accountLocations);
 </script>
 <div class="container-fluid">
@@ -17,7 +19,7 @@
                 </span>
                 <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search">
                 <span class="input-group-btn input-btn-right">
-                    <button class="btn btn-default" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button class="btn btn-default" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
                 </span>
             </div>
             <div class="probe-default-headline">
@@ -27,40 +29,8 @@
                 </div>
             </div>
             
-            <div class="search-results">
-                <a href="">
-                    <div class="probe-card featured-probe-card">
-                        <div class="probe-card-content col-sm-6">
-                            <h6 class="text-left">Fallypride</h6>
-                            <img src="img/fallypride.png" class="img-responsive" alt="">
-                        </div>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="probe-card featured-probe-card">
-                        <div class="probe-card-content col-sm-6">
-                            <h6 class="text-left">Fallypride</h6>
-                            <img src="img/fallypride.png" class="img-responsive" alt="">
-                        </div>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="probe-card featured-probe-card">
-                        <div class="probe-card-content col-sm-6">
-                            <h6 class="text-left">Fallypride</h6>
-                            <img src="img/fallypride.png" class="img-responsive" alt="">
-                        </div>
-                    </div>
-                </a>
-                <a href="">
-                    <div class="probe-card featured-probe-card">
-                        <div class="probe-card-content col-sm-6">
-                            <h6 class="text-left">Fallypride</h6>
-                            <img src="img/fallypride.png" class="img-responsive" alt="">
-                        </div>
-                    </div>
-                </a>
-      
+            <div class="search-results" id=search-list>
+
             </div>
         </div>
         <!-- right map pane -->
@@ -70,4 +40,24 @@
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
       </div>
 </div>
+<script>
+searchList = document.getElementById("search-list")
+function search(){
+    var user_insert = document.getElementById("probe-search").value
+    console.log(user_insert)
+    searchList.innerHTML = ""
+    probeinformation.forEach(searchedList)
+}
+function searchedList(item, index) {
+    searchList.innerHTML = searchList.innerHTML +
+                            '<a href="">' +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content col-sm-6">' +
+                                        '<h6 class="text-left">'+ item.Name  +'</h6>' +
+                                        '<img src="'+item.url+'" class="img-responsive" alt="">' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>';
+}
+</script>
 {% endblock %}

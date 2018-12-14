@@ -55,7 +55,7 @@ GoogleMaps = function(markerClickedOnEvt, accountLocations){
             '    <h3 class="h3-home-map"></h3>' +
             '    <div class="map-address">' +
             '        <span>'+ name +'</span>' +
-                    '<br>' +
+                     '<br>' +
             '        <span>'+ address +'</span>' +
 			'        <div>' +
             '            <span class="span-map-address">'+ city +'</span>' +

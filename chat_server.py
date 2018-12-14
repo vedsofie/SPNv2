@@ -20,6 +20,7 @@ from models.user import User
 from models.account import Account
 from models.sequence import Sequence
 from models.labsystem import  LabSystem
+from models.molecule import Molecule
 from flask.ext.assets import Environment, Bundle
 
 import controllers
@@ -128,9 +129,28 @@ def login():
 
 @app.route('/find_a_probe')
 def find_a_probe():
-    acts = Account.query.all()
-    data = [act.to_hash() for act in acts]
-    return render_template("find_a_probe.html", sequence_data=json.dumps(data))
+    accounts = Account.query.all()
+    data = [act.to_hash() for act in accounts]
+    probe_data = []
+
+    for account in accounts:
+        molecule_ids = []
+        molecule_ids = set([sequence.MoleculeID for sequence in account.sequences])
+        molecules = Molecule.query.filter(Molecule.ID.in_(molecule_ids)).all()
+        for molecule in molecules:
+            if molecule.Approved:
+                x = molecule.to_hash()
+                y = {"Name": x["Name"],"searchName": getName(x["Name"]), "AccountID": account.id, "AccountName": account.name, "number" : 0, "url": '/probe/'+str(molecule.ID)+'/image/'}
+                probe_data.append(y)
+
+    #sort the probe list for displaying
+    probe_data = sorted(probe_data, key=lambda k: k['searchName']) 
+    probe_data = json.dumps(probe_data)
+
+    return render_template("find_a_probe.html", sequence_data=json.dumps(data), probe_data = probe_data)
+    
+def getName(name) :
+    return name.split("]")[1].rstrip()
 
 @app.route('/forgot_password')
 def forgot_password():
