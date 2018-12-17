@@ -71,17 +71,6 @@ def new_sequence():
         molecule_names.append(jsonobject)
     return render_template("/sequence/new.html",runninguser=g.user.to_hash(), molecule_names=json.dumps(molecule_names))
 
-@sequencecontroller.route("/sequence/create/", methods=["POST"])
-def create_sequence():
-    # seq = Sequence()
-    # resp = seq.to_hash()
-    molecule_names_result = Molecule.query.with_entities(Molecule.Name).all()
-    molecule_names = []
-    for mol in molecule_names_result:
-        molecule_names.append(mol[0].strip())
-    #molecule_names = [molecule_name.to_hash() for molecule_name in molecule_names]
-    molecule_ids = Molecule.query.with_entities(Molecule.ID).all()
-    return render_template("/sequence/new.html",runninguser=g.user.to_hash(), molecule_names=json.dumps(molecule_names), molecule_ids=json.dumps(molecule_ids))
 
 @sequencecontroller.route("/sequence/module/list/", methods=["GET"])
 def list_module_options():
@@ -294,9 +283,11 @@ def update_sequence_file(sequence_id, sequence_data):
 class NoPermissionException(Exception):
     pass
 
-@sequencecontroller.route("/sequence/create", methods=["POST"])
+# ========= get the form request to create sequence ==============
+@sequencecontroller.route("/sequence/create/", methods=["POST"])
 def edit_sequence():
-    data = request.json
+    data = request.form
+    # print json.dumps(data)
     try:
         if "SequenceID" in data:
             seq = Sequence.query.filter_by(SequenceID=data['SequenceID']).first()
@@ -309,11 +300,13 @@ def edit_sequence():
             is_new = True
             seq = Sequence()
             seq.merge_fields(**data)
+            print seq
             seq.UserID = g.user.UserID
             seq.validate_required_fields()
 
         if seq.can_save(g.user):
-            seq.save()
+            #seq.save()
+            print "we here"
 
     except NoPermissionException:
         return Response({"error_details": "No Permissions Error"}, status=400, content_type="application/json")
@@ -336,6 +329,13 @@ def edit_sequence():
         return Response(json.dumps(seq.to_hash()), headers={"Content-Type": "application/json"})
 
     return redirect("/")
+
+
+
+
+
+
+
 
 def sequence_saved_trigger(is_new, seq):
     if is_new:

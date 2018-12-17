@@ -1,6 +1,6 @@
 {% extends "application.html" %}
 {% block content_body %}
-<div class="container-fluid">
+<div class="container-fluid" id="new-sequence">
     <div class="row">
         <div class="col-3 sidebar-padding">
             <div class="card">
@@ -26,16 +26,16 @@
                 <form action="/sequence/create/" enctype="multipart/form-data" method="POST">
                     <div class="mb-3">
                       <label for="sequence-name"><b>Sequence name</b></label> <span class="text-danger">*</span>
-                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="">
+                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="" required>
                     </div>
                     <div class="mb-3">
                       <label for="probe-name"><b>Probe name</b></label> <span class="text-danger">*</span>
-                      <input type="text" class="form-control" id="probe-id-dummy" placeholder="Probe name" value="">
-                      <input type="hidden" id="probe-id" name="MolculeID">
+                      <input type="text" class="form-control" id="probe-id-dummy" placeholder="Probe name" value="" required>
+                      <input type="hidden" id="probe-id" name="MoleculeID">
                     </div>
                     <div class="mb-3">
-                      <label for="purification-method">Purification method</label>
-                      <select name="purification-method" id="" class="form-control">
+                      <label for="purification-method">Purification method</label><span class="text-danger">*</span>
+                      <select name="PurificationMethod" id="" class="form-control" required>
                         <option>Choose Purification Method</option>
                         <option value="PURE/FORM">PURE/FORM</option>
                         <option value="3rd Party HPLC">3rd Party HPLC</option>
@@ -43,8 +43,8 @@
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label for="purification-method">Module</label>
-                      <select name="purification-module" id="" class="form-control">
+                      <label for="sequence-module">Module</label><span class="text-danger">*</span>
+                      <select name="SynthesisModule" id="sequence-module" class="form-control" required>
                           <option value="">Choose Synthesis Module</option>
                           <option value="SOFIE ELIXYS">SOFIE ELIXYS</option>
                           <option value="Manual">Manual</option>
@@ -88,15 +88,48 @@
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label for="probe-name"><b>Description</b></label> <span class="text-danger">*</span>
-                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="">
+                      <label for="sequence-description"><b>Description</b></label>
+                      <textarea type="text" class="form-control" id="sequence-description" name="Comment" value=""></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-cassettes"><b>Number of Cassettes</b></label>
+                      <input type="text" class="form-control" id="sequence-cassettes" name="NumberOfSteps" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-specificactivity"><b>Molar Activity (Ci/mmol)</b></label>
+                      <input type="text" class="form-control" id="sequence-specificactivity" name="SpecificActivity" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-activitystandarddeviation"><b>Molar Activity Standard Deviation (Ci/mmol)</b></label>
+                      <input type="text" class="form-control" id="sequence-activitystandarddeviation" name="SpecificActivityStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-startingactivity"><b>Starting Activity (mCi)</b></label>
+                      <input type="text" class="form-control" id="sequence-startingactivity" name="StartingActivity" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-startingactivitysd"><b>Starting Activity Standard Deviation (mCi)</b></label>
+                      <input type="text" class="form-control" id="sequence-startingactivitysd" name="StartingActivityStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-synthesistime"><b>Synthesis Time (minutes)</b></label>
+                      <input type="text" class="form-control" id="sequence-synthesistime" name="SynthesisTime" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-synthesistimesd"><b>Synthesis Time Standard Deviation (minutes)</b></label>
+                      <input type="text" class="form-control" id="sequence-synthesistimesd" name="SynthesisTimeStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-yield"><b>Yield (%)</b></label>
+                      <input type="text" class="form-control" id="sequence-yield" name="Yield" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-yieldsd"><b>Yield Standard Deviation(%)</b></label>
+                      <input type="text" class="form-control" id="sequence-yieldsd" name="YieldStandardDeviation" value="">
                     </div>
                     <div class="mb-3 align-items-center">
-                      <label><b>Probe structure</b></label><span class="text-danger">*</span>
+                      <label><b>Reaction Scheme</b></label>
                       <div class="row align-items-center">
-                        <div class="col-4">
-                          <img src="https://place-hold.it/150x150?text=Molecule%20Image&italic=true" id="molecule-image-preview" alt="" class="img-fluid">
-                        </div>
                         <div class="col-4 custom-file">
                             <div class="custom-file">
                             <input type="file" class="custom-file-input" id="molecule-image" name="Image">
@@ -104,29 +137,6 @@
                           </div>
                         </div>
                      </div>
-                    </div>                    
-                    <div class="mb-3">
-                      <label for="probe-cas"><b>CAS</b></label>
-                      <input type="text" class="form-control" id="probe-cas" name="CAS" placeholder="Probe name" value="">
-                    </div> 
-                    <div class="mb-3">
-                      <label for="probe-formula"><b>Formula</b></label>
-                      <input type="text" class="form-control" id="probe-formula" name="Formula" placeholder="Probe name" value="">
-                    </div>                    
-                    <div class="mb-3">
-                      <label for="Isotope"><b>Isotope</b></label><span class="text-danger">*</span>
-                      <input type="text" class="form-control" id="Isotope" name="Isotope" placeholder="Probe name" value="">
-                    </div>
-                    <div class="mb-3">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          <input type="checkbox" name="Approved" aria-label="Checkbox for following text input" {% if molecule.Approved %} checked {% endif %}> <span class="ml-2">Approved</span>
-                        </div>
-                      </div>
-                    </div>                 
-                    <div class="mb-3">
-                      <label for="probe-name"><b>Description</b></label>
-                      <textarea name="Description" class="form-control" id="probe-name" placeholder="description" rows="5"></textarea>
                     </div>
                     <div class="text-right mt-1">
                       <input class="btn btn-primary mb-2" type="submit" value="Save & proceed" />
@@ -136,8 +146,6 @@
                 </form>
             </div>
         </div>
-        
-
     </div>
 </div>
 <script>

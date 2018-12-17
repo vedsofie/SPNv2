@@ -312,7 +312,7 @@ div.search-results{
 
 /* Styling the autocomplete drop down in maps page */
 ul.ui-widget li.ui-menu-item {
-  height: 100px;
+  height: 40px;
 }
 
 li.ui-menu-item a.ui-menu-item-wrapper{
