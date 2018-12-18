@@ -19,6 +19,16 @@ def index():
                            runninguser=json.dumps(running_user),
                            simProducts=json.dumps(SIM_PRODUCTS),
                            runningUserAccount=json.dumps(runningUserAccount.to_hash()))
+@productscontroller.route("/new_order/", methods=["GET"])
+def new_order():
+    runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
+    running_user = g.user.to_hash()
+    return render_template('/products/product-list.html',
+                           runninguser=running_user,
+                           simProducts=json.dumps(SIM_PRODUCTS),
+                           runningUserAccount=json.dumps(runningUserAccount.to_hash()))
+
+
 
 @productscontroller.route("/set_cart/", methods=["POST"])
 def set_cart():
