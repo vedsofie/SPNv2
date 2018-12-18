@@ -148,9 +148,14 @@ def find_a_probe():
     probe_data = json.dumps(probe_data)
 
     return render_template("find_a_probe.html", sequence_data=json.dumps(data), probe_data = probe_data)
-    
+
 def getName(name) :
-    return name.split("]")[1].rstrip()
+    #it remove bracket for the search!
+    split = name.split("]")
+    left = split[1].rstrip()
+    right = split[0].split("[")[1]
+
+    return left + right
 
 @app.route('/forgot_password')
 def forgot_password():

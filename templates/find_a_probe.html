@@ -3,11 +3,11 @@
 <script src="/static/js/map.js"></script>
 <script src="/static/js/user_login_model.js"></script>
 <script>
-    var accountLocations = JSON.parse({{sequence_data|tojson|safe}})
-    var probeinformation = JSON.parse({{probe_data|tojson|safe}}) //Original List 
-    console.log(probeinformation)
-    var seachResult = JSON.parse({{probe_data|tojson|safe}}) //will be modified!
+    var accountLocations = JSON.parse({{sequence_data|tojson|safe}}) //account location
     var loginModel = new UserLoginModel(accountLocations);
+    console.log(accountLocations)
+    var probeinformation = loginModel.set_number_probelist(JSON.parse({{probe_data|tojson|safe}})); //Original List with updated the number of probes each site has
+    console.log(probeinformation)
 </script>
 <div class="container-fluid">
 	<div class="row">
@@ -17,7 +17,7 @@
                 <span class="input-group-btn input-btn-left">
                     <a href="javascript:history.back()"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> BACK</button></a>
                 </span>
-                <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search">
+                <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search1">
                 <span class="input-group-btn input-btn-right">
                     <button class="btn btn-default" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
                 </span>
@@ -43,21 +43,43 @@
 <script>
 searchList = document.getElementById("search-list")
 function search(){
-    var user_insert = document.getElementById("probe-search").value
+    var user_insert = document.getElementById("probe-search1").value
     console.log(user_insert)
     searchList.innerHTML = ""
     probeinformation.forEach(searchedList)
 }
 function searchedList(item, index) {
+    searchName = "'" + item.searchName +"'"
+    searchFunction = '<a onclick="loginModel.selectLocationByProbe('+searchName +')">'
+    console.log(searchFunction) 
     searchList.innerHTML = searchList.innerHTML +
-                            '<a href="">' +
+                            searchFunction +
                                 '<div class="probe-card featured-probe-card">' +
                                     '<div class="probe-card-content col-sm-6">' +
                                         '<h6 class="text-left">'+ item.Name  +'</h6>' +
+                                       /*'<h6 class="text-left">'+ item.number  +'</h6>' +*/
                                         '<img src="'+item.url+'" class="img-responsive" alt="">' +
                                     '</div>' +
                                 '</div>' +
                             '</a>';
 }
+function find_probe(keyword) {
+    $.ajax({
+        url : '/probe/hint/' + keyword,
+        type : 'GET',
+        success : function(res) {
+            console.log("search result");
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+}
+
+function clieck_searched_probe(probe_number) {
+
+}
+
 </script>
 {% endblock %}

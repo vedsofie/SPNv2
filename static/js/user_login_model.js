@@ -3,11 +3,65 @@ UserLoginModel = function(accountLocations){
     this.featuredOrganization = null;
     this.featuredSequences = [];
     self.accountLocations = accountLocations;
+    self.probe_with_site = new Map();
     //self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
     self.probe_list;
     self.probe_map = new Map();
     self.pure_probe_list = [];
 
+
+    self.set_number_probelist = function(list) {
+        var map = new Map();
+        var result = [];
+        //key = searchname, value = original list element with updated number
+        for(var i = 0; i < list.length; i++) {
+            if(map.has(list[i].searchName)) {
+                var temp = map.get(list[i].searchName)
+                temp.number = temp.number + 1
+                map.delete(list[i].searchName);
+                map.set(list[i].searchName, temp);
+            }else{
+                list[i].number = 1;
+                map.set(list[i].searchName, list[i]);
+            }
+
+            if(self.probe_with_site.has(list[i].searchName)) {
+                var temp = self.probe_with_site.get(list[i].searchName)
+                temp.push(self.find_site_for_probe(list[i].AccountName))
+                self.probe_with_site.delete(list[i].searchName)
+                self.probe_with_site.set(list[i].searchName, temp)
+            }else{
+                temp_list = []
+                account_information = self.find_site_for_probe(list[i].AccountName)
+                temp_list.push(account_information)
+                self.probe_with_site.set(list[i].searchName, temp_list)
+            }
+        }
+        //make list with updated number
+        for (var value of map.values()) {
+            result.push(value)
+        }
+        return result
+    }
+    self.find_site_for_probe = function(site_name) {
+        for(var i = 0; i < self.accountLocations.length; i++) {
+            if(site_name == self.accountLocations[i].name) {
+                return self.accountLocations[i]
+            }
+        }
+        return undefined
+    } 
+    self.selectLocationByProbe = function(probe) {
+        newLocation = []
+        newLocation = self.probe_with_site.get(probe)
+        self.map.clearMarkers();
+        self.map.showLocations(newLocation);
+        //reset map with specific map location
+        var list = self.averageGeolocation(newLocation)
+        self.map.initMap(list.Latitude, list.Longitude);    
+    }
+
+    /////previous////////
     self.setFeaturedOrganization = function() {
         this.featuredOrganization = null
     }
@@ -154,27 +208,7 @@ UserLoginModel = function(accountLocations){
       };
     }
 
-    self.selectLocationByProbe = function(probe) {
-        var set = new Set();
-        var newLocation = [];
-        for(var i = 0; i < self.probe_list.length; i++) {
-            if(self.probe_list[i]['searchName'] == probe) {
-                set.add(self.probe_list[i]['AccountName'])
-            }
-        }
-        for(let item of set) {
-            for(var i = 0; i < self.accountLocations.length; i++) {
-                if(self.accountLocations[i]['name'] == item) {
-                    newLocation.push(self.accountLocations[i])
-                }
-            }
-        }
-        self.map.clearMarkers();
-        self.map.showLocations(newLocation);
-        //reset map with specific map location
-        var list = self.averageGeolocation(newLocation)
-        self.map.initMap(list.Latitude, list.Longitude);    
-    }
+
 
     self.contactSofie = function(){
         var title = "Contact Sofie Biosciences";
