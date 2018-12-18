@@ -116,7 +116,7 @@ def dashboard():
         #if support
         isSupport = True
         return render_template("dashboard.html",
-                               runninguser=json.dumps(running_user),
+                               runninguser=running_user,
                                runningUserAccount=json.dumps(runningUserAccount.to_hash()),
                                onLoadTab=json.dumps(tab_to_load),
                                reset_password=json.dumps(do_password_reset),
@@ -141,7 +141,7 @@ def dashboard():
             isSequences = True
 
         return render_template("dashboard.html",
-                               runninguser=json.dumps(running_user),
+                               runninguser=running_user,
                                runningUserAccount=json.dumps(runningUserAccount.to_hash()),
                                onLoadTab=json.dumps(tab_to_load),
                                reset_password=json.dumps(do_password_reset),

@@ -83,7 +83,10 @@ class Molecule(SObject, db.Model):
 
     @Image.setter
     def set_Image(self, val):
-        self._Image = base64.b64decode(val) if str(val) != "image" else None
+        # use the below base64decoder if image is sent using json
+        #self._Image = base64.b64decode(val) if str(val) != "image" else None
+        #use he below code if the image is sent as a file from an html form
+        self._Image = val
 
 
     @property

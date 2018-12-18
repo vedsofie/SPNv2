@@ -1,0 +1,162 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid" id="new-sequence">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <h5 class="text-center mt-3">Add a new sequence</h5>
+           
+            <div class="card p-3 mt-3">
+                <form action="/sequence/create/" enctype="multipart/form-data" method="POST">
+                    <div class="mb-3">
+                      <label for="sequence-name"><b>Sequence name</b></label> <span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="sequence-name" name="Name" placeholder="Sequence name" value="" required>
+                    </div>
+                    <div class="mb-3">
+                      <label for="probe-name"><b>Probe name</b></label> <span class="text-danger">*</span>
+                      <input type="text" class="form-control" id="probe-id-dummy" placeholder="Probe name" value="" required>
+                      <input type="hidden" id="probe-id" name="MoleculeID">
+                    </div>
+                    <div class="mb-3">
+                      <label for="purification-method">Purification method</label><span class="text-danger">*</span>
+                      <select name="PurificationMethod" id="" class="form-control" required>
+                        <option>Choose Purification Method</option>
+                        <option value="PURE/FORM">PURE/FORM</option>
+                        <option value="3rd Party HPLC">3rd Party HPLC</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-module">Module</label><span class="text-danger">*</span>
+                      <select name="SynthesisModule" id="sequence-module" class="form-control" required>
+                          <option value="">Choose Synthesis Module</option>
+                          <option value="SOFIE ELIXYS">SOFIE ELIXYS</option>
+                          <option value="Manual">Manual</option>
+                          <option value="Homemade">Homemade</option>
+                          <option value="GE FASTlab Multi-Tracer">GE FASTlab Multi-Tracer</option>
+                          <option value="GE FASTLab 2">GE FASTLab 2</option>
+                          <option value="GE TRACERlab FX N">GE TRACERlab FX N</option>
+                          <option value="GE TRACERlab FX N Pro">GE TRACERlab FX N Pro</option>
+                          <option value="GE TRACERlab FX2 N">GE TRACERlab FX2 N</option>
+                          <option value="GE TRACERlab FX2 E">GE TRACERlab FX2 E</option>
+                          <option value="GE TRACERlab FX MeI">GE TRACERlab FX MeI</option>
+                          <option value="GE TRACERlab FX2 MeI">GE TRACERlab FX2 MeI</option>
+                          <option value="GE TRACERlab FX M">GE TRACERlab FX M</option>
+                          <option value="GE TRACERlab FX2 M">GE TRACERlab FX2 M</option>
+                          <option value="GE TRACERlab FX C Pro">GE TRACERlab FX C Pro</option>
+                          <option value="GE TRACERlab FX2 C">GE TRACERlab FX2 C</option>
+                          <option value="GE Other">GE Other</option>
+                          <option value="CTI CPCU">CTI CPCU</option>
+                          <option value="Trasis AllinOne">Trasis AllinOne</option>
+                          <option value="Trasis Mini AIO">Trasis Mini AIO</option>
+                          <option value="Scintomics GRP">Scintomics GRP</option>
+                          <option value="E&amp;Z Modular-lab eazy">E&amp;Z Modular-lab eazy</option>
+                          <option value="E&amp;Z Modular-lab Pharmtracer">E&amp;Z Modular-lab Pharmtracer</option>
+                          <option value="E&amp;Z Modular-lab Standard">E&amp;Z Modular-lab Standard</option>
+                          <option value="Siemens Explora">Siemens Explora</option>
+                          <option value="Synthra FDGtwo">Synthra FDGtwo</option>
+                          <option value="Synthra RNplus">Synthra RNplus</option>
+                          <option value="Synthra F-Dopa">Synthra F-Dopa</option>
+                          <option value="Synthra MeI">Synthra MeI</option>
+                          <option value="Synthra MeIplus">Synthra MeIplus</option>
+                          <option value="Synthra MeIplus Research">Synthra MeIplus Research</option>
+                          <option value="Synthra MeIplus Loop">Synthra MeIplus Loop</option>
+                          <option value="Synthra GPextent">Synthra GPextent</option>
+                          <option value="Synthra C-11 Choline">Synthra C-11 Choline</option>
+                          <option value="IBA Synthera">IBA Synthera</option>
+                          <option value="IBA HighMOR">IBA HighMOR</option>
+                          <option value="IBA Pinctada">IBA Pinctada</option>
+                          <option value="Advion NanoTek">Advion NanoTek</option>
+                          <option value="ABT Biomarker Generator">ABT Biomarker Generator</option>
+                          <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-description"><b>Description</b></label>
+                      <textarea type="text" class="form-control" id="sequence-description" name="Comment" value=""></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-cassettes"><b>Number of Cassettes</b></label>
+                      <input type="text" class="form-control" id="sequence-cassettes" name="NumberOfSteps" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-specificactivity"><b>Molar Activity (Ci/mmol)</b></label>
+                      <input type="text" class="form-control" id="sequence-specificactivity" name="SpecificActivity" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-activitystandarddeviation"><b>Molar Activity Standard Deviation (Ci/mmol)</b></label>
+                      <input type="text" class="form-control" id="sequence-activitystandarddeviation" name="SpecificActivityStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-startingactivity"><b>Starting Activity (mCi)</b></label>
+                      <input type="text" class="form-control" id="sequence-startingactivity" name="StartingActivity" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-startingactivitysd"><b>Starting Activity Standard Deviation (mCi)</b></label>
+                      <input type="text" class="form-control" id="sequence-startingactivitysd" name="StartingActivityStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-synthesistime"><b>Synthesis Time (minutes)</b></label>
+                      <input type="text" class="form-control" id="sequence-synthesistime" name="SynthesisTime" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-synthesistimesd"><b>Synthesis Time Standard Deviation (minutes)</b></label>
+                      <input type="text" class="form-control" id="sequence-synthesistimesd" name="SynthesisTimeStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-yield"><b>Yield (%)</b></label>
+                      <input type="text" class="form-control" id="sequence-yield" name="Yield" value="">
+                    </div>
+                    <div class="mb-3">
+                      <label for="sequence-yieldsd"><b>Yield Standard Deviation(%)</b></label>
+                      <input type="text" class="form-control" id="sequence-yieldsd" name="YieldStandardDeviation" value="">
+                    </div>
+                    <div class="mb-3 align-items-center">
+                      <label><b>Reaction Scheme</b></label>
+                      <div class="row align-items-center">
+                        <div class="col-4 custom-file">
+                            <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="molecule-image" name="Image">
+                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                          </div>
+                        </div>
+                     </div>
+                    </div>
+                    <div class="text-right mt-1">
+                      <input class="btn btn-primary mb-2" type="submit" value="Save & proceed" />
+                      <br>
+                      <small class="text-right text-secondary pr-2">Next: Add synonyms</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  molecule_names = {{ molecule_names|safe }};
+  $( "#probe-id-dummy" ).autocomplete({
+      source: molecule_names,
+      select: function(event, ui){
+        $("#probe-id-dummy").val(ui.item.label);
+        $("#probe-id").val(ui.item.id);
+      }
+    });
+  console.log(molecule_names);
+</script>
+{% endblock %}

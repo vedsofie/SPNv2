@@ -27,9 +27,20 @@
           <a class="dropdown-item" href="#">Create Support Request</a>
         </div>
       </li>
+      <li {% if "/orders" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/orders/" id="navbarOrderDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Orders
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarOrderDropdown">
+          <a class="dropdown-item" href="/orders/my_order/">Pending Order</a>
+          <a class="dropdown-item" href="/orders/old_orders/">Past Orders</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">New Order</a>
+        </div>
+      </li>
       <li {% if "/probe/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
         <a class="nav-link dropdown-toggle" href=/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Probes
+          Probes & Sequences
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarProbeDropdown">
           <a class="dropdown-item" href="/probe">All probes</a>

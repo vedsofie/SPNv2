@@ -1,0 +1,147 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            {% if new_probe %}
+            <h5 class="text-center mt-3">Add a new probe</h5>
+            {% else %}
+            <h5 class="text-center mt-3">Add keywords for {{ molecule.Name }}</h5>
+            {% endif %}
+            <div class="card p-3 mt-3">
+              {% if new_probe %}
+               <div class="row mb-3">
+                <div class="col-6 pb-1 offset-3 text-center"><span class="badge badge-pill badge-info">Step 3 of 3</span> Add keywords
+               </div>
+           </div>
+              {% endif %}
+                <div>
+                    <div class="mb-3">
+                      <label for="probe-name"><b>Keyword</b></label> <span class="text-danger">*</span>
+                      <textarea id="editor" name="DisplayFormat"></textarea>
+                      <div class="row text-right">
+                        <div class="col text-right mr-3">
+                            <button class="btn btn-outline-primary mt-3" id="add-keyword">Add</button>
+                        </div>
+                      </div>
+                    </div>        
+                </div>
+                <div class="mb-3">
+                    <b>Keyword list</b>
+                    <small></small>
+                    <table class="table">
+                        <tbody id="keyword-table">
+                            {% for keyword in keywords %}
+                            <tr id="row-{{ keyword.KeywordID }}"><td>{{ keyword.Keyword }}</td><td class="text-right"><button class="btn btn-outline-primary delete-keyword" data-key="{{ keyword.KeywordID }}" data-toggle="modal" data-name="{{ keyword.Keyword }}" data-target="#deleteKeywordModal">Delete</button></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if new_probe %}
+                    <div class="row mt-1">
+                        <div class="col-6 offset-6 text-right">
+                          <a href="/probe/{{ molecule.ID }}/" class="btn btn-primary mb-2 mr-2">Done</a>
+                          <br>
+                          <small class="text-right text-secondary pr-2">View probe details</small>
+                        </div>
+                    </div>
+                {% endif %}    
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteKeywordModal" tabindex="-1" role="dialog" aria-labelledby="deleteKeywordModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the Keyword: <strong id="modal-keyword-name"></strong> ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirm-delete">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    CKEDITOR.replace('editor');
+
+    // Add keyword to table
+    var tableItem = "";
+
+    // Ajax code to POST keywords
+    $('#add-keyword').click(function(){
+        var keywordData = CKEDITOR.instances['editor'].getData();
+        $.ajax({
+          type: "POST",
+          url: "/keyword/save_keyword/{{ molecule.ID }}/",
+          data: {DisplayFormat: keywordData},
+          success: function(data){
+            var newRow = "<tr><td>"+data['DisplayFormat']+"</td><td><button class='btn btn-outline-primary delete-keyword' data-key='"+data['ID']+"' data-syn='"+data['ID']+"' data-toggle='modal' data-target='#deleteKeywordModal'>Delete</button></td></tr>";
+            $("#keyword-table").prepend(newRow);
+          },
+          dataType: ""
+        });
+    //end of $.ajax
+    }); // end of on click
+
+    // when delete button is clicked, pass on attributes from button to the modal. Data to be passed: keyword ID, keyword name. These are later used to send an ajax request to delete. 
+    $("button.delete-keyword").click(function(){
+        var KeywordName = $(this).data("name");
+        KeywordID = $(this).data("key");
+        $("#modal-keyword-name").text(KeywordName);
+        $("button#confirm-delete").attr("data-key", KeywordID);
+    }); // end of on click for delete keyword button
+
+
+    // Send ajax request when delete confirmation button is clicked
+    $("button#confirm-delete").click(function(){
+        $.ajax({
+          type: "POST",
+          url: "/keyword/"+KeywordID+"/delete_keyword/",
+          success: function(data){
+            var rowID = "#row-"+data+"";
+            $('#deleteKeywordModal').modal('hide');
+            $("button#confirm-delete").removeAttr("data-key");
+            $("#row-"+data).remove();
+          },
+          dataType: ""
+        });
+    });
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+

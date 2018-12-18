@@ -119,3 +119,9 @@ a.org-cards:hover .card{
 .sc-footer-account p{
     margin-bottom: 0 !important;
 }
+
+/* new probe page */
+#molecule-image-preview{
+    max-width: 150px;
+    max-height: 150px;
+}

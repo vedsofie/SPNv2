@@ -21,3 +21,4 @@ source ../bin/activate
 # python generate_db.py
 python chat_server.py -m no
 #foreman start
+#gunicorn -w 4 -b 127.0.0.1:4000 chat_server:app
