@@ -312,7 +312,7 @@ def edit_sequence():
     data_from_user = json_loads_byteified(json.dumps(request.form))
 
     data = {"IsDownloadable":False, "hasReactionScheme":False, "TermsAndConditions":None, "SynthesisTime":int(0 if data_from_user['SynthesisTime'] == '' else float(data_from_user['SynthesisTime'])),
-    "NumberOfSteps": 0 if data_from_user['NumberOfSteps'] == '' else int(data_from_user['NumberOfSteps']),"MadeOnElixys":True,"MoleculeID":14,"Name":data_from_user['Name'],"Yield":None,
+    "NumberOfSteps": 0 if data_from_user['NumberOfSteps'] == '' else int(data_from_user['NumberOfSteps']),"MadeOnElixys":True,"MoleculeID":int(data_from_user['MoleculeID']),"Name":data_from_user['Name'],"Yield":None,
     "PurificationMethod":data_from_user['PurificationMethod'],"SynthesisModule":data_from_user['SynthesisModule'],"SpecificActivity": None if data_from_user['SpecificActivity'] == '' else data_from_user['SpecificActivity'],
     "StartingActivity": None if data_from_user['StartingActivity'] == '' else data_from_user['StartingActivity'] ,"SpecificActivityStandardDeviation":None if data_from_user['SpecificActivityStandardDeviation'] == '' else data_from_user['SpecificActivityStandardDeviation'],
     "StartingActivityStandardDeviation": None if data_from_user['StartingActivityStandardDeviation'] == '' else data_from_user['StartingActivityStandardDeviation'],"YieldStandardDeviation": None if data_from_user['YieldStandardDeviation'] == '' else data_from_user['YieldStandardDeviation'],
