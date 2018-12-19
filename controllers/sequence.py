@@ -283,11 +283,41 @@ def update_sequence_file(sequence_id, sequence_data):
 class NoPermissionException(Exception):
     pass
 
+def json_loads_byteified(json_text):
+    return _byteify(
+        json.loads(json_text, object_hook=_byteify),
+        ignore_dicts=True
+    )
+def _byteify(data, ignore_dicts = False):
+    # if this is a unicode string, return its string representation
+    if isinstance(data, unicode):
+        return data.encode('utf-8')
+    # if this is a list of values, return list of byteified values
+    if isinstance(data, list):
+        return [ _byteify(item, ignore_dicts=True) for item in data ]
+    # if this is a dictionary, return dictionary of byteified keys and values
+    # but only if we haven't already byteified it
+    if isinstance(data, dict) and not ignore_dicts:
+        return {
+            _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
+            for key, value in data.iteritems()
+        }
+    # if it's anything else, return it in its original form
+    return data
+
 # ========= get the form request to create sequence ==============
 @sequencecontroller.route("/sequence/create/", methods=["POST"])
 def edit_sequence():
-    data = request.form
-    # print json.dumps(data)
+
+    data_from_user = json_loads_byteified(json.dumps(request.form))
+
+    data = {"IsDownloadable":False, "hasReactionScheme":False, "TermsAndConditions":None, "SynthesisTime":int(0 if data_from_user['SynthesisTime'] == '' else float(data_from_user['SynthesisTime'])),
+    "NumberOfSteps": 0 if data_from_user['NumberOfSteps'] == '' else int(data_from_user['NumberOfSteps']),"MadeOnElixys":True,"MoleculeID":14,"Name":data_from_user['Name'],"Yield":None,
+    "PurificationMethod":data_from_user['PurificationMethod'],"SynthesisModule":data_from_user['SynthesisModule'],"SpecificActivity": None if data_from_user['SpecificActivity'] == '' else data_from_user['SpecificActivity'],
+    "StartingActivity": None if data_from_user['StartingActivity'] == '' else data_from_user['StartingActivity'] ,"SpecificActivityStandardDeviation":None if data_from_user['SpecificActivityStandardDeviation'] == '' else data_from_user['SpecificActivityStandardDeviation'],
+    "StartingActivityStandardDeviation": None if data_from_user['StartingActivityStandardDeviation'] == '' else data_from_user['StartingActivityStandardDeviation'],"YieldStandardDeviation": None if data_from_user['YieldStandardDeviation'] == '' else data_from_user['YieldStandardDeviation'],
+    "SynthesisTimeStandardDeviation": None if data_from_user['SynthesisTimeStandardDeviation'] == '' else data_from_user['SynthesisTimeStandardDeviation'],"NumberOfRuns":None}
+
     try:
         if "SequenceID" in data:
             seq = Sequence.query.filter_by(SequenceID=data['SequenceID']).first()
@@ -300,17 +330,16 @@ def edit_sequence():
             is_new = True
             seq = Sequence()
             seq.merge_fields(**data)
-            print seq
             seq.UserID = g.user.UserID
             seq.validate_required_fields()
 
         if seq.can_save(g.user):
-            #seq.save()
-            print "we here"
+            seq.save()
 
     except NoPermissionException:
         return Response({"error_details": "No Permissions Error"}, status=400, content_type="application/json")
     except Exception as e:
+        print e.message
         db.session.rollback()
         msg = str(e)
         if e.__class__ == ValidationException().__class__:
@@ -329,13 +358,6 @@ def edit_sequence():
         return Response(json.dumps(seq.to_hash()), headers={"Content-Type": "application/json"})
 
     return redirect("/")
-
-
-
-
-
-
-
 
 def sequence_saved_trigger(is_new, seq):
     if is_new:

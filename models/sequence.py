@@ -232,6 +232,7 @@ class Sequence(SObject, db.Model):
 
 
     def validate_required_fields(self):
+
         validations = {"Name": self.validate_name,
                        "MoleculeID": self.validate_moleculeid,
                        "PurificationMethod": self.validate_purification_method}
