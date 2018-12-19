@@ -18,7 +18,7 @@
         <a class="nav-link dropdown-toggle" href="/support/field_support" id="navbarSupportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Support
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarSupportDropdown">
+        <div class="dropdown-menu m-0" aria-labelledby="navbarSupportDropdown">
           <a class="dropdown-item" href="/support/field_support">Field Support</a>
           <a class="dropdown-item" href="/support/documentation">Documentation</a>
           <a class="dropdown-item" href="/support/software">Software</a>
@@ -31,7 +31,7 @@
         <a class="nav-link dropdown-toggle" href="/orders/" id="navbarOrderDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Orders
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarOrderDropdown">
+        <div class="dropdown-menu m-0" aria-labelledby="navbarOrderDropdown">
           <a class="dropdown-item" href="/orders/my_order/">Pending Order</a>
           <a class="dropdown-item" href="/orders/old_orders/">Past Orders</a>
           <div class="dropdown-divider"></div>
@@ -42,9 +42,10 @@
         <a class="nav-link dropdown-toggle" href=/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Probes & Sequences
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarProbeDropdown">
+        <div class="dropdown-menu m-0" aria-labelledby="navbarProbeDropdown">
           <a class="dropdown-item" href="/probe">All probes</a>
           <a class="dropdown-item" href="/probe/new">Create new probe</a>
+          <a class="dropdown-item" href="/sequence/new">Create new sequence</a>
         </div>
       </li>
       <li class="nav-item border-right">
@@ -56,7 +57,7 @@
                     <img class="avatar" data-bind="attr:{src: '/user/' + runninguser.UserID + '/avatar'}" src="/user/{{ runninguser.UserID }}/avatar">
                 </div>
         </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+        <div class="dropdown-menu m-0 dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">My Profile</a>
           <a class="dropdown-item" href="#">My Organization</a>
           <a class="dropdown-item" href="/user/logout">Logout</a>
