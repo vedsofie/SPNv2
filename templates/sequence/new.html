@@ -90,9 +90,9 @@
                     <div class="mb-3 align-items-center d-none" id="upload-sequence">
                       <label><b>Upload ELIXYS Sequence</b></label>
                       <div class="row align-items-center">
-                        <div class="col-4 custom-file">
+                        <div class="col-12 custom-file">
                             <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="molecule-image" name="Image">
+                            <input type="file" class="custom-file-input" id="sequence-file" name="SequenceFile">
                             <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                           </div>
                         </div>
@@ -160,6 +160,17 @@
     </div>
 </div>
 <script>
+   function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#molecule-image-preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
   molecule_names = {{ molecule_names|safe }};
   $( "#probe-id-dummy" ).autocomplete({
       source: molecule_names,
@@ -178,5 +189,13 @@
       $("#upload-sequence").addClass("d-none");
     }
   });
+
+  // change the name of input field when file is selected
+  $(".custom-file-input").change(function(e){
+        readURL(this);
+        var fileName = e.target.files[0].name;
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    });
 </script>
 {% endblock %}
