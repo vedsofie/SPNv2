@@ -8,6 +8,9 @@
     console.log(accountLocations)
     var probeinformation = loginModel.set_number_probelist(JSON.parse({{probe_data|tojson|safe}})); //Original List with updated the number of probes each site has
     console.log(probeinformation)
+    $(function(){
+        search();
+    });
 </script>
 <div class="container-fluid">
 	<div class="row">
@@ -44,31 +47,63 @@
 searchList = document.getElementById("search-list")
 function search(){
     var user_insert = document.getElementById("probe-search1").value
-    console.log(user_insert)
     searchList.innerHTML = ""
-    probeinformation.forEach(searchedList)
+    console.log(user_insert)
+    if(user_insert == '') {
+        //going to initial state, when the page is first load
+        //probeformation is initial list for probes!
+        probeinformation.forEach(searchedList)
+    }else{
+        //use  
+        find_probe(user_insert)
+    }
+
+    
 }
 function searchedList(item, index) {
     searchName = "'" + item.searchName +"'"
-    searchFunction = '<a onclick="loginModel.selectLocationByProbe('+searchName +')">'
-    console.log(searchFunction) 
+    searchFunction = '<a onclick="click_searched_probe('+ searchName +')">'
     searchList.innerHTML = searchList.innerHTML +
                             searchFunction +
                                 '<div class="probe-card featured-probe-card">' +
                                     '<div class="probe-card-content col-sm-6">' +
                                         '<h6 class="text-left">'+ item.Name  +'</h6>' +
-                                       /*'<h6 class="text-left">'+ item.number  +'</h6>' +*/
+                                        '<h6 class="text-left">'+ item.number  +'</h6>' +
                                         '<img src="'+item.url+'" class="img-responsive" alt="">' +
                                     '</div>' +
                                 '</div>' +
                             '</a>';
 }
+//searchedList for the site -> TODO
+
+
 function find_probe(keyword) {
     $.ajax({
         url : '/probe/hint/' + keyword,
         type : 'GET',
         success : function(res) {
             console.log("search result");
+            console.log(res)
+            if(res.length == 0) {
+                //inform user that there is no probe
+                console.log("no result")
+                searchList.innerHTML = ""
+                searchList.innerHTML = searchList.innerHTML + '<div>' + No result + '</div>'
+
+            }else{
+                searched_result = []
+                for(var i = 0; i < res.length; i++) {
+                    for(var j = 0; j < probeinformation.length; j++) {
+                        if(res[i].searchName == probeinformation[j].searchName) {
+                            searched_result.push(probeinformation[j])
+                            break;
+                        }
+                    }
+                }
+                console.log(searched_result)
+                searched_result.forEach(searchedList)        
+            }
+            // update probeinformation array to array with only probe which user searached for
         },
         error : function(request,error)
         {
@@ -77,7 +112,41 @@ function find_probe(keyword) {
     });
 }
 
-function clieck_searched_probe(probe_number) {
+function click_searched_probe(probe_name) {
+    //update map on the right
+    var sites = loginModel.selectLocationByProbe(probe_name)
+    //update searched list on the left
+    //probe information and site information needed
+    console.log(sites)
+    var probe = null
+    for(var i = 0; i < probeinformation.length; i++) {
+        if(probe_name == probeinformation[i].searchName) {
+            probe = probeinformation[i];
+            break;            
+        }
+    }
+    //update the probe uppper part
+    searchList.innerHTML = "" 
+    searchList.innerHTML = searchList.innerHTML +
+                            '<a>' +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content col-sm-6">' +
+                                        '<h6 class="text-left">'+ probe.Name  +'</h6>' +
+                                       /*'<h6 class="text-left">'+ item.number  +'</h6>' +*/
+                                        '<img src="'+probe.url+'" class="img-responsive" alt="">' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>' +
+                            '<div>'+ 'Site With ' + probe.Name +'</div>';
+    //update bottom parts for the sites with the probe
+    for(var i = 0; i < sites.length; i++) {
+        searchList.innerHTML = searchList.innerHTML + 
+                            '<a>' +
+                            '<div>' + sites[i].name + '</div>' +
+                            '</a>';
+    }
+
+
 
 }
 

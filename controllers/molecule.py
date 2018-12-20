@@ -400,13 +400,15 @@ def search_hints(keyword):
                                      )).all()
     resp = []
     for molecule in molecules:
+        isotope_name = molecule.Name.split(']')[0].split('[')[1]
+        probeName = getName(molecule.Name) + isotope_name
         resp.append({
             "master_name": molecule.Name,
             "formatted_master_name": molecule.DisplayFormat,
             "keywords": molecule_id_to_keywords.get(molecule.ID, []),
             "molecule_id": molecule.ID,
             "url":'/probe/'+str(molecule.ID)+'/image/',
-            "searchName": getName(molecule.Name)
+            "searchName": probeName
         })
     return Response(json.dumps(resp), content_type="application/json")
 

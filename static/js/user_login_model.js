@@ -58,7 +58,8 @@ UserLoginModel = function(accountLocations){
         self.map.showLocations(newLocation);
         //reset map with specific map location
         var list = self.averageGeolocation(newLocation)
-        self.map.initMap(list.Latitude, list.Longitude);    
+        self.map.initMap(list.Latitude, list.Longitude);
+        return newLocation    
     }
 
     /////previous////////
