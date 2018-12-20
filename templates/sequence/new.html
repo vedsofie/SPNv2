@@ -87,6 +87,17 @@
                           <option value="Other">Other</option>
                       </select>
                     </div>
+                    <div class="mb-3 align-items-center d-none" id="upload-sequence">
+                      <label><b>Upload ELIXYS Sequence</b></label>
+                      <div class="row align-items-center">
+                        <div class="col-4 custom-file">
+                            <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="molecule-image" name="Image">
+                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                          </div>
+                        </div>
+                     </div>
+                    </div>
                     <div class="mb-3">
                       <label for="sequence-description"><b>Description</b></label>
                       <textarea type="text" class="form-control" id="sequence-description" name="Comment" value=""></textarea>
@@ -132,7 +143,7 @@
                       <div class="row align-items-center">
                         <div class="col-4 custom-file">
                             <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="molecule-image" name="Image">
+                            <input type="file" class="custom-file-input" id="sequence-reaction-scheme" name="Image">
                             <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                           </div>
                         </div>
@@ -158,5 +169,14 @@
       }
     });
   console.log(molecule_names);
+  // enable sequence upload input depending on module input value
+  $('#sequence-module').on('change', function(){
+    var sequence_module_val = $('#sequence-module').val();
+    if (sequence_module_val == "SOFIE ELIXYS") {
+      $("#upload-sequence").removeClass("d-none");
+    } else {
+      $("#upload-sequence").addClass("d-none");
+    }
+  });
 </script>
 {% endblock %}
