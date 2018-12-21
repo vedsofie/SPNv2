@@ -44,7 +44,8 @@
       </div>
 </div>
 <script>
-searchList = document.getElementById("search-list")
+var searchList = document.getElementById("search-list")
+
 function search(){
     var user_insert = document.getElementById("probe-search1").value
     searchList.innerHTML = ""
@@ -88,7 +89,7 @@ function find_probe(keyword) {
                 //inform user that there is no probe
                 console.log("no result")
                 searchList.innerHTML = ""
-                searchList.innerHTML = searchList.innerHTML + '<div>' + No result + '</div>'
+                searchList.innerHTML = searchList.innerHTML + '<div>' + 'No result' + '</div>'
 
             }else{
                 searched_result = []
