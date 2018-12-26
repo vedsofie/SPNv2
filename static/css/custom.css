@@ -230,7 +230,17 @@ img#hero-sofie-logo {
 }
 
 /* Maps page*/
+.left-info-pane {
+    overflow-y: scroll;
+    height: calc(100% - 75px);
+}
 
+#maps-page, #map-row{
+  overflow-y: hidden;
+}
+#map-row{
+  height: 100%;
+}
 #map{
   border-radius: 3px;
 }
@@ -287,7 +297,7 @@ div.map-legend img{
 }
 
 div.map-body, #map{
-  height: calc(100% - 500px);
+  height: calc(100% - 75px);
   overflow-y: hidden;
   padding-top: 20px;
   padding-bottom: 20px;

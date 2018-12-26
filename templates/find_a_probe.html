@@ -13,32 +13,45 @@
         search();
     });
 </script>
-<div class="container-fluid">
-	<div class="row">
+<div class="container-fluid" id="maps-page">
+	<div class="row" id="map-row">
         <!-- Left information card pane -->
-        <div class="col-md-4 left-info-pane">
-            <div class="input-group ui-widget">
+        <div class="col-4 left-info-pane pt-3">
+            <div class="input-group ui-widget mb-3">
                 <span class="input-group-btn input-btn-left">
                     <a href="javascript:history.back()"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> BACK</button></a>
                 </span>
                 <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search1">
-                <span class="input-group-btn input-btn-right">
-                    <button class="btn btn-default" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
-                </span>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
             </div>
-            <div class="probe-default-headline">
-                <h3>Probes</h3>
+            <ul class="nav nav-tabs" id="map-tabs" role="tablist">
+              <li class="nav-item col-6 text-center pl-0 pr-0">
+                <a class="nav-link active" id="probe-tab" data-toggle="tab" href="#probe" role="tab" aria-controls="probe" aria-selected="true">Probes</a>
+              </li>
+              <li class="nav-item col-6 text-center pl-0 pr-0">
+                <a class="nav-link" id="site-tab" data-toggle="tab" href="#site" role="tab" aria-controls="site" aria-selected="false">Site</a>
+              </li>
+            </ul>
+            <div class="tab-content mt-3 p-1" id="myTabContent">
+              <div class="tab-pane fade show active" id="probe" role="tabpanel" aria-labelledby="probe-tab">
                 <div class="info">
                     <p><i class="fa fa-info-circle" aria-hidden="true"></i> Tap on a card to see sites with that probe</p>
                 </div>
-            </div>
-            
-            <div class="search-results" id=search-list>
+                <div class="search-results" id=search-list>
 
+                </div>
+              </div>
+              <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
+                  <!-- sites tab content -->
+
+              </div>
             </div>
+
         </div>
         <!-- right map pane -->
-        <div id='map' class="col-md-8"></div>
+        <div id='map' class="col-8"></div>
         <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
