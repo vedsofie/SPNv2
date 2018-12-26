@@ -150,7 +150,12 @@ def edit(account_id):
 def get_account(account_id):
     account = Account.query.filter_by(id=account_id).first()
     resp = account
-    account_users = account.users
+
+    account_users = []
+    for user in account.users:
+        if user.Active == True:
+            account_users.append(user)
+
     sequences = account.sequences
     private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
     public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]          
