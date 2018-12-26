@@ -7,8 +7,13 @@ UserLoginModel = function(accountLocations){
     //self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
     self.probe_list;
     self.probe_map = new Map();
+    self.all_probe_information = new Map();
     self.pure_probe_list = [];
 
+    self.get_probe_info = function(siteName) {
+        //return the list of probe information regarding the site
+        return self.all_probe_information.get(siteName);
+    }
 
     self.set_number_probelist = function(list) {
         var map = new Map();
@@ -41,6 +46,21 @@ UserLoginModel = function(accountLocations){
         for (var value of map.values()) {
             result.push(value)
         }
+        // Crete site probe maping
+        for(var i = 0; i < result.length; i++) {
+            if(self.all_probe_information.has(result[i].AccountName)) {
+                var temp = self.all_probe_information.get(result[i].AccountName)
+                temp.push(result[i]);
+                self.all_probe_information.delete(result[i].AccountName);
+                self.all_probe_information.set(result[i].AccountName, temp);
+            }else{
+                temp = []
+                temp.push(result[i]);
+                self.all_probe_information.set(result[i].AccountName, temp)
+            }
+        } 
+
+
         return result
     }
     self.find_site_for_probe = function(site_name) {

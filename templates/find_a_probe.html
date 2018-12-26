@@ -6,7 +6,8 @@
     var accountLocations = JSON.parse({{sequence_data|tojson|safe}}) //account location
     var loginModel = new UserLoginModel(accountLocations);
     console.log(accountLocations)
-    var probeinformation = loginModel.set_number_probelist(JSON.parse({{probe_data|tojson|safe}})); //Original List with updated the number of probes each site has
+    var allProbeInfo = JSON.parse({{probe_data|tojson|safe}});
+    var probeinformation = loginModel.set_number_probelist(allProbeInfo); //Original List with updated the number of probes each site has
     console.log(probeinformation)
     $(function(){
         search();
@@ -76,8 +77,6 @@ function searchedList(item, index) {
                             '</a>';
 }
 //searchedList for the site -> TODO
-
-
 function find_probe(keyword) {
     $.ajax({
         url : '/probe/hint/' + keyword,
@@ -141,13 +140,29 @@ function click_searched_probe(probe_name) {
                             '<div>'+ 'Site With ' + probe.Name +'</div>';
     //update bottom parts for the sites with the probe
     for(var i = 0; i < sites.length; i++) {
+        Name = "'" +  sites[i].name +"'"
+        searchFunction = '<a onclick="click_site_for_probes('+  Name +')">'
         searchList.innerHTML = searchList.innerHTML + 
-                            '<a>' +
+                            searchFunction +
                             '<div>' + sites[i].name + '</div>' +
                             '</a>';
     }
 
 
+
+}
+
+function click_site_for_probes(site_name) {
+    var list = loginModel.get_probe_info(site_name);
+    searchList.innerHTML = "<div>" + "Site" + '</div>'
+
+    searchList.innerHTML = searchList.innerHTML + 
+                            '<div>' + site_name
+                            '</div>';
+    console.log(list)
+    if(list != undefined) {
+        list.forEach(searchedList)
+    }
 
 }
 
