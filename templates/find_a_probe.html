@@ -13,10 +13,10 @@
         search();
     });
 </script>
-<div class="container-fluid">
-	<div class="row">
+<div class="container-fluid" id="maps-page">
+	<div class="row" id="map-row">
         <!-- Left information card pane -->
-        <div class="col-md-4 left-info-pane">
+        <div class="col-4 left-info-pane pt-3">
             <div class="input-group ui-widget">
                 <span class="input-group-btn input-btn-left">
                     <a href="javascript:history.back()"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> BACK</button></a>
@@ -38,7 +38,7 @@
             </div>
         </div>
         <!-- right map pane -->
-        <div id='map' class="col-md-8"></div>
+        <div id='map' class="col-8"></div>
         <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
