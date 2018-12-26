@@ -385,9 +385,7 @@ def search_by_name():
 def search_hints(keyword):
 
     if 'site' in request.args:
-        print 'hey'
         keyword = keyword.lower()
-        print keyword
         accounts = Account.query.filter(and_(func.lower(Account.name).like('%' + keyword + '%'))).all()
         resp = []
         for account in accounts:
