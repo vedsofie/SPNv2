@@ -24,6 +24,14 @@
             <div class="card-columns mt-3">
             {% for molecule in molecules %}
                 <div class="card text-center">
+
+                  <div class="col-12 p-3 text-right">
+                    {% if molecule.Downloadable %}
+                    <span class="badge badge-pill badge-warning text-light" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
+                    {% else %}
+                    <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
+                    {% endif %}
+                  </div>
                   <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
                   <div class="card-body">
                     <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>

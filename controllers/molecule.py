@@ -50,7 +50,10 @@ def index():
     sorted_molecules = []
     for molecule in all_molecules:
         x = molecule.to_hash()
-        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1]}
+        sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
+        public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+        isDownloadable = True if len(public_sequences) > 0 else False
+        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
         sorted_molecules.append(y)
     
     #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
@@ -76,7 +79,7 @@ def index():
 
 
 
-@moleculecontroller.route("/my_probes", methods=['GET'])
+@moleculecontroller.route("/my_probes/", methods=['GET'])
 def my_probes():
     specific_ids = request.args.get("MoleculeIDs", '')
     specific_ids = specific_ids.split(',')
@@ -107,7 +110,10 @@ def my_probes():
     sorted_molecules = []
     for molecule in all_molecules:
         x = molecule.to_hash()
-        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1]}
+        sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
+        public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+        isDownloadable = True if len(public_sequences) > 0 else False
+        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
         sorted_molecules.append(y)
     
     #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
