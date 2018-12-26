@@ -57,7 +57,9 @@ function search(){
         probeinformation.forEach(searchedList)
     }else{
         //use  
-        find_probe(user_insert)
+        //find_probe(user_insert)
+        find_site(user_insert)
+        
     }
 
     
@@ -91,6 +93,46 @@ function find_probe(keyword) {
                 searchList.innerHTML = searchList.innerHTML + '<div>' + 'No result' + '</div>'
 
             }else{
+                searched_result = []
+                for(var i = 0; i < res.length; i++) {
+                    for(var j = 0; j < probeinformation.length; j++) {
+                        if(res[i].searchName == probeinformation[j].searchName) {
+                            searched_result.push(probeinformation[j])
+                            break;
+                        }
+                    }
+                }
+                console.log(searched_result)
+                searched_result.forEach(searchedList)        
+            }
+            // update probeinformation array to array with only probe which user searached for
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+}
+
+function find_site(keyword) {
+    console.log(keyword)
+    $.ajax({
+        url : '/probe/hint/' + keyword,
+        type : 'GET',
+        dataType: 'json',
+        data: {site:true},
+        success : function(res) {
+            console.log("search result");
+            console.log(res)
+            if(res.length == 0) {
+                //inform user that there is no probe
+                console.log("no result")
+                searchList.innerHTML = ""
+                searchList.innerHTML = searchList.innerHTML + '<div>' + 'No result' + '</div>'
+
+            }else{
+                console.log("suhoaijsoi")
+                console.log(res)
                 searched_result = []
                 for(var i = 0; i < res.length; i++) {
                     for(var j = 0; j < probeinformation.length; j++) {

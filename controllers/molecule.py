@@ -9,6 +9,7 @@ from flask import Flask, url_for
 import datetime
 from Crypto.Cipher import AES
 from flask import Blueprint, render_template, request, Response, session, g, flash, redirect
+from models.account import Account
 from models.keyword import Keyword, db
 from models.comment import Comment
 from models.molecule import Molecule, ValidationException
@@ -382,41 +383,53 @@ def search_by_name():
 
 @moleculecontroller.route("/hint/<keyword>", methods=['GET'])
 def search_hints(keyword):
-    include_keywords = request.args.get("includeKeywords", True)
-    include_keywords = False if include_keywords == 'false' else True
-    keyword = keyword.lower()
-    #if len(keyword) >= 3:
-    keyword_filters = and_(func.lower(Keyword.Keyword).like("%" + keyword + "%"),
-                           Keyword.Type=='Molecules')
-    if not include_keywords:
-        keyword_filters = and_(keyword_filters, Keyword.Category=='Synonym')
 
-    molecule_id_to_keywords = {}
-    for key in Keyword.query.filter(keyword_filters).all():
-        if key.ParentID not in molecule_id_to_keywords:
-            molecule_id_to_keywords[key.ParentID] = []
-        molecule_id_to_keywords[key.ParentID].append(key.DisplayFormat)
+    if 'site' in request.args:
+        print 'hey'
+        keyword = keyword.lower()
+        print keyword
+        accounts = Account.query.filter(and_(func.lower(Account.name).like('%' + keyword + '%'))).all()
+        resp = []
+        for account in accounts:
+            resp.append(account.name)
 
-    running_user_id = g.user.UserID if g.user else None
+        return Response(json.dumps(resp), content_type="application/json") 
+    else:
+        include_keywords = request.args.get("includeKeywords", True)
+        include_keywords = False if include_keywords == 'false' else True
+        keyword = keyword.lower()
+        #if len(keyword) >= 3:
+        keyword_filters = and_(func.lower(Keyword.Keyword).like("%" + keyword + "%"),
+                               Keyword.Type=='Molecules')
+        if not include_keywords:
+            keyword_filters = and_(keyword_filters, Keyword.Category=='Synonym')
 
-    molecules = Molecule.query.filter(and_(or_(Molecule.Approved==True,Molecule.UserID==running_user_id),
-                                           or_(Molecule.ID.in_(molecule_id_to_keywords.keys()),
-                                               func.lower(Molecule.Name).like('%' + keyword + '%')
-                                           )
-                                     )).all()
-    resp = []
-    for molecule in molecules:
-        isotope_name = molecule.Name.split(']')[0].split('[')[1]
-        probeName = getName(molecule.Name) + isotope_name
-        resp.append({
-            "master_name": molecule.Name,
-            "formatted_master_name": molecule.DisplayFormat,
-            "keywords": molecule_id_to_keywords.get(molecule.ID, []),
-            "molecule_id": molecule.ID,
-            "url":'/probe/'+str(molecule.ID)+'/image/',
-            "searchName": probeName
-        })
-    return Response(json.dumps(resp), content_type="application/json")
+        molecule_id_to_keywords = {}
+        for key in Keyword.query.filter(keyword_filters).all():
+            if key.ParentID not in molecule_id_to_keywords:
+                molecule_id_to_keywords[key.ParentID] = []
+            molecule_id_to_keywords[key.ParentID].append(key.DisplayFormat)
+
+        running_user_id = g.user.UserID if g.user else None
+
+        molecules = Molecule.query.filter(and_(or_(Molecule.Approved==True,Molecule.UserID==running_user_id),
+                                               or_(Molecule.ID.in_(molecule_id_to_keywords.keys()),
+                                                   func.lower(Molecule.Name).like('%' + keyword + '%')
+                                               )
+                                         )).all()
+        resp = []
+        for molecule in molecules:
+            isotope_name = molecule.Name.split(']')[0].split('[')[1]
+            probeName = getName(molecule.Name) + isotope_name
+            resp.append({
+                "master_name": molecule.Name,
+                "formatted_master_name": molecule.DisplayFormat,
+                "keywords": molecule_id_to_keywords.get(molecule.ID, []),
+                "molecule_id": molecule.ID,
+                "url":'/probe/'+str(molecule.ID)+'/image/',
+                "searchName": probeName
+            })
+        return Response(json.dumps(resp), content_type="application/json")
 
 def getName(name) :
     return name.split("]")[1].rstrip()
