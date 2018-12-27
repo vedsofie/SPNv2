@@ -160,6 +160,17 @@ def testing():
             err = str(e) + "\n Please reset your SFDC credentials"
             email_sender.auto_report_bug(err)
 
+@issuecontroller.route("/delete/<int:issue_id>", methods=["GET"])
+def delete_issue():
+    #Delete o
+    follower = Follower.query.filter(Follower.FollowerID==issue_id).first()
+    if follower.Type == 'Forums':
+        forum = Forum.query.filter(Forum.ForumID==follower.ParentID).first()
+        running_users_role = g.user.role.Type
+        if running_users_role == 'super-admin':
+            forum.delete_salesforce_case()
+            return True
+    return False
 
 def do_close_issue(issue_id, user):
     follower = Follower.query.filter(Follower.FollowerID==issue_id).first()
