@@ -39,9 +39,9 @@
                 </div>
                 <div class="col-4 text-right">
                   <select class="selectpicker" multiple>
-                    <option>Mustard</option>
-                    <option>Ketchup</option>
-                    <option>Relish</option>
+                    {% for isotope in isotopes %}
+                      <option>{{isotope}}</option>
+                    {% endfor %}
                   </select>
                   <button class="btn btn-outline-secondary">Go</button>
                 </div>

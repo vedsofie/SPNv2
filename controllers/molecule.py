@@ -57,7 +57,7 @@ def index():
         sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
         public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
         isDownloadable = True if len(public_sequences) > 0 else False
-        isotopes.add(x["Isotope"])
+        isotopes[x["Isotope"]] = x["Isotope"]
         y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
         sorted_molecules.append(y)
     
