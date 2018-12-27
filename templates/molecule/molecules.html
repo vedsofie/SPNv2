@@ -22,15 +22,28 @@
             <div class="card p-3 mt-3">
               <div class="row">
                 <div class="col-3 text-left">Filter results</div>
-                <div class="col-9 text-right">
+                <div class="col-4 text-right">
                   <div class="input-group mb-3">
                     <div class="input-group">
                       <div class="input-group-text">
+                        {% if request.args.get('with_sequences') %}
+                        <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only probes with sequences
+                        {% else %}
                         <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input"> Only probes with sequences
+                        {% endif %}
                       </div>
                     </div>
-                  </div>
 
+                  </div>
+                 
+                </div>
+                <div class="col-4 text-right">
+                  <select class="selectpicker" multiple>
+                    <option>Mustard</option>
+                    <option>Ketchup</option>
+                    <option>Relish</option>
+                  </select>
+                  <button class="btn btn-outline-secondary">Go</button>
                 </div>
               </div>
             </div>
