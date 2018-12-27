@@ -40,6 +40,8 @@ def index():
     if len(specific_ids) > 0:
         sql_filter = and_(sql_filter, Molecule.ID.in_(ids))
 
+    isotopes = {}
+
     #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
     all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).limit(9)
     all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
@@ -54,6 +56,7 @@ def index():
         sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
         public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
         isDownloadable = True if len(public_sequences) > 0 else False
+        isotopes.add(x["Isotope"])
         y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
         sorted_molecules.append(y)
     
@@ -75,10 +78,11 @@ def index():
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
     resp = molecules_list
     userid = session["userid"]
-    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
-
-
+    isotope_list = []
+    for isotope in isotopes:
+        isotope_list.append(isotope)
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash(), isotopes = isotope_list)
 
 @moleculecontroller.route("/my_probes/", methods=['GET'])
 def my_probes():
