@@ -19,26 +19,60 @@
 
         <div class="col-9">
             <h5 class="text-center mt-2">Probes List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
+            <div class="card p-3 mt-3">
+              <div class="row">
+                <div class="col-3 text-left">Filter results</div>
+                <div class="col-9 text-right">
+                  <div class="input-group mb-3">
+                    <div class="input-group">
+                      <div class="input-group-text">
+                        <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input"> Only probes with sequences
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
             <div class="card-columns mt-3">
             {% for molecule in molecules %}
-                <div class="card text-center">
-                  <div class="col-12 p-3 text-right">
-                    {% if molecule.Downloadable %}
-                    <span class="badge badge-pill badge-warning text-light" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
-                    {% else %}
-                    <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
-                    {% endif %}
-                  </div> 
-                  <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
-                    
+              {% if molecule.Downloadable %}
+                  <div class="card text-center with-sequence">
+                    <div class="col-12 p-3 text-right">
+                      
+                      <span class="badge badge-pill badge-warning text-light" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
+                      
+           
+                      
+                    </div> 
+                    <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
+                      
+                    </div>
+                    <div class="card-footer">
+                      <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                      <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                   </div>
-                  <div class="card-footer">
-                    <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
-                    <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
-                </div>
-
+              {% else %}
+               <div class="card text-center no-sequence">
+                    <div class="col-12 p-3 text-right">
+                      
+                      
+                      
+                      <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
+                      
+                    </div> 
+                    <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
+                      
+                    </div>
+                    <div class="card-footer">
+                      <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                      <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
+                  </div>
+              {% endif %}
             {% endfor %}
             </div>
             <nav aria-label="Page navigation example" class="text-center">
@@ -102,6 +136,22 @@ $(document).ready(function(){
   // enable tooltips on this page
   $(function () {
     $('[data-toggle="tooltip"]').tooltip()
+  });
+
+  // view only probes with sequences
+  $(".with-seq-checkbox").change(function(){
+    if (this.checked) {
+      $(".no-sequence").hide();
+      if(window.location.href.indexOf('?') > -1) {
+          var url = document.location.href+"&with_sequences=true";
+      }else{
+          var url = document.location.href+"?with_sequences=true";
+      }
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
   });
 
 });

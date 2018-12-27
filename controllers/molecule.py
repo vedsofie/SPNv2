@@ -28,6 +28,7 @@ def index():
     specific_ids = request.args.get("MoleculeIDs", '')
     specific_ids = specific_ids.split(',')
     specific_ids = specific_ids if specific_ids[0] != '' else []
+    with_sequences = request.args.get("with_sequences",False)
     page_number = request.args.get("page", 1, type=int)
     ids = []
     for specific_id in specific_ids:
