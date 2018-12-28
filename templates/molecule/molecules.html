@@ -43,7 +43,7 @@
                       <option>{{isotope}}</option>
                     {% endfor %}
                   </select>
-                  <button class="btn btn-outline-secondary">Go</button>
+                  <button class="btn btn-outline-secondary" id="go-isotope">Go</button>
                 </div>
               </div>
             </div>
@@ -165,6 +165,18 @@ $(document).ready(function(){
     else{
       $(".no-sequence").show();
     }
+  });
+
+  // When user click "go" after selecting isotopes
+  $("#go-isotope").click(function(){
+      var isotopes_js = $('.selectpicker').selectpicker('val');
+      $(".no-sequence").hide();
+      if(window.location.href.indexOf('?') > -1) {
+          var url = document.location.href+"&isotopes="+isotopes_js;
+      }else{
+          var url = document.location.href+"?isotopes="+isotopes_js;
+      }
+      window.location.href = url;
   });
 
 });
