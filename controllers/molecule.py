@@ -30,6 +30,13 @@ def index():
     specific_ids = specific_ids if specific_ids[0] != '' else []
     with_sequences = request.args.get("with_sequences",False)
     page_number = request.args.get("page", 1, type=int)
+    isotope_value = request.args.get("isotopes", type=str)
+    isotope_checker = {}
+    if isotope_value != None:
+        isotope_value = isotope_value.split(',')
+        for value in isotope_value:
+            isotope_checker[value] = value
+
     ids = []
     for specific_id in specific_ids:
         try:
@@ -58,8 +65,15 @@ def index():
         public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
         isDownloadable = True if len(public_sequences) > 0 else False
         isotopes[x["Isotope"]] = x["Isotope"]
-        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
-        sorted_molecules.append(y)
+
+        if len(isotope_checker) == 0:
+            y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable} 
+            sorted_molecules.append(y)
+        else:
+            if x["Isotope"] in isotope_checker:
+                y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
+                sorted_molecules.append(y)
+        
     
     #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
     mole_dict = {}
