@@ -388,7 +388,11 @@ h3#availability-number {
     margin-top: 125px;
   }
 }
+/* additional overrides */
 
+button.dropdown-toggle{
+  padding: 1rem!important;
+}
 
 /* Tablets */
 
