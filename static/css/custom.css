@@ -390,10 +390,12 @@ h3#availability-number {
 }
 /* additional overrides */
 
-button.dropdown-toggle{
+button.dropdown-toggle.bs-placeholder{
   padding: 1rem!important;
 }
-
+.bootstrap-select .dropdown-toggle .filter-option{
+  top: -8px !important;
+}
 /* Tablets */
 
 @media only screen 

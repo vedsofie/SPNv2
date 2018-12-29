@@ -22,14 +22,45 @@
         <div class="col-6 page-contents sidebar-padding">
             <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
               <li class="nav-item pl-0 pr-0 col-6 text-center">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Open cases</a>
+                <a class="nav-link active" id="opencases-tab" data-toggle="tab" href="#opencases" role="tab" aria-controls="opencases" aria-selected="true">Open cases</a>
               </li>
               <li class="nav-item pl-0 pr-0 col-6 text-center">
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Closed cases</a>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+              <div class="tab-pane fade show active" id="opencases" role="tabpanel" aria-labelledby="opencases-tab">
+                  {% for opencase in open_cases %}
+                  {{ opencase }}
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <h5>Case Number: {{ opencase.CaseNumber }}</h5>
+                                    <p class="card-text"><small class="text-muted">{{ opencase.CreatedDate }} </small></p>
+                                </div>
+                                <div class="col-6 text-right">
+                                    
+                                    <div class="dropdown">
+                                      <button class="btn btn-secondary dropdown-toggle" type="button" id="caseMenuButton_{{ loop.index }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Case Options
+                                      </button>
+                                      <div class="dropdown-menu" aria-labelledby="caseMenuButton_{{ loop.index }}">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ opencase.Title }}</h5>
+                            <p class="card-text">{{ opencase.SubTitle }}</p>
+                        </div>
+                    </div>
+                  {% endfor %}
+              </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
               <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
             </div>
