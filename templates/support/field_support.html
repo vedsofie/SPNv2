@@ -96,8 +96,8 @@
                             </div>
                         {% endfor %}
                         <div class="form-group mt-3 text-right">
-                            <textarea name="comment" id="new-comment" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
-                            <button class="btn btn-outline-primary mt-3" id="post-comment-button" data-case="{{ opencase.ForumID }}">Post comment</button>
+                            <textarea name="comment" id="new-comment-{{loop.index}}" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
+                            <button class="btn btn-outline-primary mt-3 post-comment-button" data-index="{{loop.index}}" id="post-comment-{{loop.index}}" data-case="{{ opencase.ForumID }}">Post comment</button>
                         </div>
                       </div>
                     </div>
@@ -117,14 +117,17 @@
 <script>
 $(document).ready(function(){
         // make a new comment with ajax
-    $("button#post-comment-button").click(function(){
-        var new_comment = $("#new-comment").val();
+    $("button.post-comment-button").click(function(){
+        // loop index number to formulate a unique ID for the textarea
+        var loopIndex = $(this).data('index');
+        var textAreaComment = "new-comment-"+loopIndex;
+        var commentText = $("#"+textAreaComment).val();
         var case_id = $(this).data('case');
         $.ajax({
             url: "/comment/",
             method: "POST",
             data: {
-                Message: new_comment,
+                Message: commentText,
                 ParentID: case_id,
                 Type: "Forums"
             },
