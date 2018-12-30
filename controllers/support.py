@@ -87,7 +87,7 @@ def software():
 def field_support():
     userid = session["userid"]
     openCase, closedCase = getUserFollowingIssue()
-    return render_template("/support/field_support.html", open_cases=openCase, closedCase=closedCase, uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("/support/field_support.html", open_cases=openCase, closedCase=closedCase, uid = userid, runninguser=g.user.to_hash())
 
 def as_assets(resp):
     spn_domain = os.environ['SOFIE_PROBE_DOMAIN']

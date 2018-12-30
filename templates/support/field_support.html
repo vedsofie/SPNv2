@@ -28,16 +28,16 @@
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Closed cases</a>
               </li>
             </ul>
-            <div class="tab-content" id="myTabContent">
+            <div class="tab-content border p-3" id="myTabContent">
               <div class="tab-pane fade show active" id="opencases" role="tabpanel" aria-labelledby="opencases-tab">
                   {% for opencase in open_cases %}
-                  {{ opencase }}
-                    <div class="card">
+
+                    <div class="card mb-3">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
                                     <h5>Case Number: {{ opencase.CaseNumber }}</h5>
-                                    <p class="card-text"><small class="text-muted">{{ opencase.CreatedDate }} </small></p>
+                                    <p class="card-text"><small class="text-muted">Created: {{ opencase.CreatedDate }} </small></p>
                                 </div>
                                 <div class="col-6 text-right">
                                     
@@ -49,6 +49,10 @@
                                         <a class="dropdown-item" href="#">Action</a>
                                         <a class="dropdown-item" href="#">Another action</a>
                                         <a class="dropdown-item" href="#">Something else here</a>
+                                        {% if runninguser.RoleID == 2 %}
+                                            <a class="dropdown-item" href="{{ opencase.RedirectURL }}">View on Salesforce</a>
+                                        {% endif %}
+                                        
                                       </div>
                                     </div>
                                 </div>
@@ -58,6 +62,38 @@
                             <h5 class="card-title">{{ opencase.Title }}</h5>
                             <p class="card-text">{{ opencase.SubTitle }}</p>
                         </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a href="/account/{{ opencase.AccountID }}/">
+                                        <img src="/account/{{ opencase.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="ml-3">{{ opencase.AccountName }}</span>
+                                    </a>
+                                </div>
+                                <div class="col-6 text-right"><i class="far fa-comments mr-1"></i>{{ opencase.comments|length }} Comments</div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="comments">
+                        {% for comment in opencase.comments %}
+                        <div id="comment-card-body">    
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {{ comment.Message|safe }}
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-8">
+                                    <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
+                                    <b>{{ comment.username }}</b>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        {{ comment.CreationDate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endfor %}
                     </div>
                   {% endfor %}
               </div>

@@ -380,7 +380,8 @@ def getUserFollowingIssue():
                             resp['RedirectURL'] = '%s%s' % (SFDC_PATH_URL, account_name_by_forumids[following.ParentID]['SFDC_ID'])
                         comment_list = get_comment(resp['UnfollowDetails']['ForumID'])
                         resp['numComments'] = len(comment_list)
-                        resp["comments"] = comment_list 
+                        resp["comments"] = comment_list
+                        resp['AccountName'] = Account.query.filter_by(id = account_id).first().name
                     resp['ImageURL'] = "/account/%s/logo/" % account_id
                     if resp['SubType'] == 'FieldService' and resp['ClosedDate'] == None:
                         openCase.append(resp)
