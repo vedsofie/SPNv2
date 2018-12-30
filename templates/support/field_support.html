@@ -28,11 +28,11 @@
                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Closed cases</a>
               </li>
             </ul>
-            <div class="tab-content border p-3" id="myTabContent">
+            <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="opencases" role="tabpanel" aria-labelledby="opencases-tab">
                   {% for opencase in open_cases %}
 
-                    <div class="card mb-3">
+                    <div class="card mt-3">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
@@ -69,30 +69,54 @@
                                         <img src="/account/{{ opencase.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="ml-3">{{ opencase.AccountName }}</span>
                                     </a>
                                 </div>
-                                <div class="col-6 text-right"><i class="far fa-comments mr-1"></i>{{ opencase.comments|length }} Comments</div>
+                                <div class="col-6 text-right"><button class="btn btn-link"  type="button" data-toggle="collapse" data-target="#collapsibleComments_{{loop.index}}" aria-expanded="false" aria-controls="collapsibleComments_{{loop.index}}"><i class="far fa-comments mr-1"></i>{{ opencase.comments|length }} Comments</button></div>
                             </div> 
                         </div>
                     </div>
-                    <div class="comments">
-                        {% for comment in opencase.comments %}
-                        <div id="comment-card-body">    
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                {{ comment.Message|safe }}
-                            </div>
-                            <div class="card-footer">
-                                <div class="row">
-                                    <div class="col-8">
-                                    <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
-                                    <b>{{ comment.username }}</b>
+                    <div class="collapse" id="collapsibleComments_{{loop.index}}">
+  <div class="card card-body">
+   {% for comment in opencase.comments %}
+                            <div id="comment-card-body">    
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        {{ comment.Message|safe }}
                                     </div>
-                                    <div class="col-4 text-right">
-                                        {{ comment.CreationDate }}
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-8">
+                                            <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
+                                            <b>{{ comment.username }}</b>
+                                            </div>
+                                            <div class="col-4 text-right">
+                                                {{ comment.CreationDate }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+  </div>
+</div>
+                    <div class="comments border p-3 d-none">
+                        {% for comment in opencase.comments %}
+                            <div id="comment-card-body">    
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        {{ comment.Message|safe }}
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-8">
+                                            <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
+                                            <b>{{ comment.username }}</b>
+                                            </div>
+                                            <div class="col-4 text-right">
+                                                {{ comment.CreationDate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </div>
                   {% endfor %}

@@ -379,6 +379,8 @@ def getUserFollowingIssue():
                     
                             resp['RedirectURL'] = '%s%s' % (SFDC_PATH_URL, account_name_by_forumids[following.ParentID]['SFDC_ID'])
                         comment_list = get_comment(resp['UnfollowDetails']['ForumID'])
+                        for comment in comment_list:
+                            comment['username'] = User.query.filter_by(UserID = comment['UserID']).first().username
                         resp['numComments'] = len(comment_list)
                         resp["comments"] = comment_list
                         resp['AccountName'] = Account.query.filter_by(id = account_id).first().name
