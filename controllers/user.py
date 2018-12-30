@@ -336,6 +336,7 @@ def getUserFollowingIssue():
                 if following.ParentID in account_name_by_forumids:
                     resp = {}
                     resp['Type'] = 'Forums'
+                    resp['ForumID'] = following.ParentID
                     resp['Title'] = account_name_by_forumids[following.ParentID]['Subject']
                     resp["OwnerID"] = following.ParentID
                     subtitle = account_name_by_forumids[following.ParentID]['Subtitle']

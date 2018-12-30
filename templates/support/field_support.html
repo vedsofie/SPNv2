@@ -97,7 +97,7 @@
                         {% endfor %}
                         <div class="form-group mt-3 text-right">
                             <textarea name="comment" id="new-comment" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
-                            <button class="btn btn-outline-primary mt-3" id="post-comment-button">Post comment</button>
+                            <button class="btn btn-outline-primary mt-3" id="post-comment-button" data-case="{{ opencase.ForumID }}">Post comment</button>
                         </div>
                       </div>
                     </div>
@@ -119,14 +119,14 @@ $(document).ready(function(){
         // make a new comment with ajax
     $("button#post-comment-button").click(function(){
         var new_comment = $("#new-comment").val();
-        molecule_id = {{ molecule.ID }};
+        var case_id = $(this).data('case');
         $.ajax({
             url: "/comment/",
             method: "POST",
             data: {
                 Message: new_comment,
-                ParentID: molecule_id,
-                Type: "Molecules"
+                ParentID: case_id,
+                Type: "Forums"
             },
             success: function(result){
                 var parsed_response = JSON.parse(result)
