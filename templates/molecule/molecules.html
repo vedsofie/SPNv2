@@ -176,7 +176,20 @@ $(document).ready(function(){
       }else{
           var url = document.location.href+"?isotopes="+isotopes_js;
       }
-      window.location.href = url;
+      $.ajax({
+          url : url,
+          type : 'GET',
+          dataType: 'json',
+          data: {isotopeF:isotopes_js},
+          success : function(res) {
+            console.log("asd")
+          },
+          error : function(request,error)
+          {
+            console.log("fail")
+              alert("Request: "+JSON.stringify(request));
+          }
+      });
   });
 
 });

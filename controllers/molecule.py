@@ -33,9 +33,11 @@ def index():
     isotope_value = request.args.get("isotopes", type=str)
     isotope_checker = {}
     if isotope_value != None:
+        print "fuck this"
         isotope_value = isotope_value.split(',')
         for value in isotope_value:
             isotope_checker[value] = value
+        print isotope_value
 
     ids = []
     for specific_id in specific_ids:
