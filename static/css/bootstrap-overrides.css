@@ -62,6 +62,6 @@ li.nav-item.active {
     font-weight: 500;
 }
 
-.dropdown:hover>.dropdown-menu {
+/*.dropdown:hover>.dropdown-menu {
  display: block;
-}
+}*/

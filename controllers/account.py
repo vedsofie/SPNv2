@@ -311,7 +311,18 @@ def users(account_id):
 @back.anchor
 def show():
     page_number = request.args.get("page", 1, type=int)
-    all_accounts = Account.query.order_by(Account.name).all()
+    pharma_only = request.args.get("pharma_only",False)
+    academic_only = request.args.get("academic_only",False)
+    # if there is a filter in the url, filter those results
+    if pharma_only:
+        print "pharma only"
+        all_accounts = Account.query.filter_by(Pharma=True).order_by(Account.name).all()
+    elif academic_only:
+        print "academic only"
+        all_accounts = Account.query.filter_by(Pharma=False).order_by(Account.name).all()
+    else:
+        all_accounts = Account.query.order_by(Account.name).all()
+    #all_accounts = Account.query.order_by(Account.name).all()
     all_accounts_count = Account.query.order_by(Account.name).count()
     number_of_pages = int(math.ceil(all_accounts_count / 9.0))
     response = []
