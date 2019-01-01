@@ -23,6 +23,41 @@
 
         <div class="col-9">
             <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
+
+            <div class="card p-3 mt-3">
+              <div class="row">
+                <div class="col-3 text-left">Filter results</div>
+                <div class="col-3 offset-2 text-right">
+                  <div class="input-group mb-3">
+                    <div class="input-group">
+                      <div class="input-group-text">
+                        {% if request.args.get('academic_only') %}
+                        <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Academic Orgs
+                        {% else %}
+                        <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Academic Orgs
+                        {% endif %}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-4 text-right">
+                  <div class="input-group mb-3">
+                    <div class="input-group">
+                      <div class="input-group-text">
+                        {% if request.args.get('pharma_only') %}
+                        <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Pharma
+                        {% else %}
+                        <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Pharma
+                        {% endif %}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="mt-3 row">
             {% for account in accounts %}
               <div class="col-4 mb-3">
@@ -107,6 +142,38 @@ $(document).ready(function(){
             }
           });
     });
+
+     // view only probes with sequences
+  $(".pharma-only-checkbox").change(function(){
+    if (this.checked) {
+      if(window.location.href.indexOf('?') > -1) {
+          var url = document.location.href+"&pharma_only=true";
+      }else{
+          var url = document.location.href+"?pharma_only=true";
+      }
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
+  });
+
+  // view only probes with sequences
+  $(".academic-only-checkbox").change(function(){
+    if (this.checked) {
+      if(window.location.href.indexOf('?') > -1) {
+          var url = document.location.href+"&academic_only=true";
+      }else{
+          var url = document.location.href+"?academic_only=true";
+      }
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
+  });
+
+
 });
 </script>
 {% endblock %}
