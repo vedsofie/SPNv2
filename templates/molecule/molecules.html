@@ -156,8 +156,24 @@ $(document).ready(function(){
     if (this.checked) {
       $(".no-sequence").hide();
       if(window.location.href.indexOf('?') > -1) {
-          var url = document.location.href+"&with_sequences=true";
+        //multiple try
+          var temp = document.location.href.split('?')
+          var address = temp[0]
+          var rest = '';
+          for(var i = 1; i < temp.length; i++) {
+              rest += temp[i];
+          }
+          var argument = rest.split('&')
+          rest = '';
+          for(var i = 0; i < argument.length; i++) {
+            if(argument[i] != 'with_sequences=true') {
+              rest += "&" + argument[i];
+            }
+          }
+          //var url = document.location.href+"&with_sequences=true";
+          var url = address + "?with_sequences=true" + rest 
       }else{
+        //first try
           var url = document.location.href+"?with_sequences=true";
       }
       window.location.href = url;
@@ -172,8 +188,12 @@ $(document).ready(function(){
       var isotopes_js = $('.selectpicker').selectpicker('val');
       $(".no-sequence").hide();
       if(window.location.href.indexOf('?') > -1) {
-          var url = document.location.href+"&isotopes="+isotopes_js;
+        //multiple if there is already ? in the address
+          var first = window.location.href.split('?')[0]
+          //var url = document.location.href+"&isotopes="+isotopes_js;
+          var url = first+"?isotopes="+isotopes_js
       }else{
+          //first
           var url = document.location.href+"?isotopes="+isotopes_js;
       }
       window.location.href = url;
