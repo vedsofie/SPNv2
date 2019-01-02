@@ -166,7 +166,7 @@ $(document).ready(function(){
           var argument = rest.split('&')
           rest = '';
           for(var i = 0; i < argument.length; i++) {
-            if(argument[i] != 'with_sequences=true') {
+            if(argument[i] != 'with_sequences=true' && argument[i].split('=')[0] == 'page') {
               rest += "&" + argument[i];
             }
           }
