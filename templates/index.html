@@ -1,5 +1,59 @@
 {% extends "application.html" %}
 {% block login_content_body %}
+<div class="container-fluid">
+    <div class="row align-items-center" id="hero-banner">
+        <div class="col-6 offset-3 text-center">
+            <img src="http://res.cloudinary.com/sofie/image/upload/v1517436571/7B3928ED-F550-4C5D-A6C4-2DE59C048360_2x_sovvin.png" alt="" id="hero-sofie-logo">
+            <h1 class="hero-banner">SOFIE Probe Network (SPN) is a tool to find PET probes and share knowledge with organizations</h1>
+            <a href="" class="btn btn-primary btn-lg" data-bind="click: goToMap"><i class="fas fa-search"></i> Search Probes</a>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12">
+            <h2 class="homepage-headings text-center">Features</h2>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/testtube.svg" alt="Test tube icon">
+            <h6 class="about-spn-text">Share PET probe synthesis, purification, formulation, and quality control protocols between radiochemists</h6>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/magnifying glass1.svg" alt="Magnifying glass icon">
+            <h6 class="about-spn-text">Discover new probes from other organizations around the world</h6>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/feedback.svg" alt="Comments icon">
+            <h6 class="about-spn-text">Give and receive feedback about probe protocols on the network and get real-time support for your ELIXYS system</h6>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12 text-center"><h2>Featured probes</h2></div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/20/image/" class="img-fluid">
+                <h4 class="text-center">Florbetaben</h4>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/11/image/" class="img-fluid">
+                <h4 class="text-center">FDHT</h4>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/30/image/" class="img-fluid">
+                <h4 class="text-center">MK-6240</h4>
+            </div>
+        </div>
+        <div class="col-12" id="probes-link-div"><a>
+            </a><a href="/find_a_probe/" class="btn btn-outline-primary">See more probes</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
 <!-- Hero banner -->
 <div class="container-fluid" id="hero-banner" data-bind="visible: !mapOn()">
     <div class="row align-items-center">
@@ -122,4 +176,3 @@
         </div>
     </div>
 </div>
-{% endblock %}

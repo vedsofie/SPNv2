@@ -78,10 +78,10 @@ h2.homepage-headings{
 /* ---- Hero banners --- */
 div#hero-banner{
 	height: 50%;
-	border: solid 1px #f8f8f8;
+/*	border: solid 1px #f8f8f8;
   display: flex;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: column;*/
 }
 
 div#hero-banner{
