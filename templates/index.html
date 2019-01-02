@@ -1,5 +1,107 @@
 {% extends "application.html" %}
 {% block login_content_body %}
+<div class="container-fluid">
+    <div class="row align-items-center" id="hero-banner">
+        <div class="col-6 offset-3 text-center">
+            <img src="http://res.cloudinary.com/sofie/image/upload/v1517436571/7B3928ED-F550-4C5D-A6C4-2DE59C048360_2x_sovvin.png" alt="" id="hero-sofie-logo">
+            <h1 class="hero-banner">SOFIE Probe Network (SPN) is a tool to find PET probes and share knowledge with organizations</h1>
+            <a href="" class="btn btn-primary btn-lg" data-bind="click: goToMap"><i class="fas fa-search"></i> Search Probes</a>
+        </div>
+    </div>
+    <div class="row align-items-center homepage-rows">
+        <div class="col-12">
+            <h2 class="homepage-headings text-center">Features</h2>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/testtube.svg" alt="Test tube icon">
+            <h6 class="about-spn-text">Share PET probe synthesis, purification, formulation, and quality control protocols between radiochemists</h6>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/magnifying glass1.svg" alt="Magnifying glass icon">
+            <h6 class="about-spn-text">Discover new probes from other organizations around the world</h6>
+        </div>
+        <div class="col-4 text-center">
+            <img src="/static/img/feedback.svg" alt="Comments icon">
+            <h6 class="about-spn-text">Give and receive feedback about probe protocols on the network and get real-time support for your ELIXYS system</h6>
+        </div>
+    </div>
+    <div class="row align-items-center bg-white homepage-rows">
+        <div class="col-12 text-center"><h2>Featured probes</h2></div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/20/image/" class="img-fluid">
+                <h4 class="text-center">Florbetaben</h4>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/11/image/" class="img-fluid">
+                <h4 class="text-center">FDHT</h4>
+            </div>
+        </div>
+        <div class="col-4 text-center">
+            <div class="col-8 offset-2">
+                <img src="/probe/30/image/" class="img-fluid">
+                <h4 class="text-center">MK-6240</h4>
+            </div>
+        </div>
+        <div class="col-12 text-center mt-3"><a>
+            </a><a href="/find_a_probe/" class="btn btn-outline-primary">See more probes</a>
+        </div>
+    </div>
+    <div class="row homepage-rows">
+        <div class="col-12 text-center">
+            <h2 class="homepage-headings">SPN & ELIXYS</h2>
+        </div>
+        <div class="col-6 offset-3">
+            <div class="embed-responsive embed-responsive-16by9 container">
+                <iframe class="embed-responsive-item" width="560" src="https://www.youtube.com/embed/48e2pOVvrj8" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div class="col-8 offset-2">
+            <h6 class="text-left">
+            SOFIE Probe Network is an ELIXYS-user focused community. Visit our website to learn more about SOFIE's automated radiochemical synthesizer platform for the production of preclinical and clinical PET probes.
+            </h6>
+        </div>
+        <div class="col-12 about-elixys-columns text-center"><a href="https://sofie.com/radiochemistry/" class="btn btn-outline-primary" target="_blank">Learn more about ELIXYS</a></div>
+    </div>
+    <div class="row bg-white homepage-rows">
+        <div class="contact"></div>
+        <div class="col-sm-12 text-center">
+            <h2 class="homepage-headings">Contact us</h2>
+        </div>
+        <div class="col-4 offset-1 align-self-center">
+            <div class="card text-center">
+                <div class="card-img"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3308.324586208451!2d-118.39175258390006!3d33.98419562875886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2b75398cefdc1%3A0x7c6410af2ada732c!2s6160+Bristol+Pkwy+%23200%2C+Culver+City%2C+CA+90230!5e0!3m2!1sen!2sus!4v1540421577657" frameborder="0" style="border:0" allowfullscreen></iframe></div>
+                <address class="pt-3 pb-3">
+                    <strong>SOFIE</strong><br>
+                    6160 Bristol Pkwy Suite 200<br>
+                    Culver City, CA 90230<br>
+                    (310) 215-3159
+                </address>
+            </div>
+        </div>
+        <div class="col-4 offset-1 text-center">
+            <h6 class="visible-xs-block">Send us a message</h6>
+            <form action="" method="">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Your name">
+                </div>
+                <div class="form-group thirty-four">
+                    <input type="text" class="form-control" placeholder="Your email">
+                </div>
+                <div class="form-group thirty-four">
+                    <textarea name="" id="" cols="30" rows="10" class="form-control" placeholder="Message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
 <!-- Hero banner -->
 <div class="container-fluid" id="hero-banner" data-bind="visible: !mapOn()">
     <div class="row align-items-center">
@@ -122,4 +224,3 @@
         </div>
     </div>
 </div>
-{% endblock %}
