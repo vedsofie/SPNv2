@@ -620,8 +620,9 @@ def do_create(data, running_user):
 def as_assets(resp):
     spn_domain = os.environ['SOFIE_PROBE_DOMAIN']
     assets = []
-
     for release in resp:
+        if isinstance(release, basestring):
+            continue
         if not release['prerelease']:
             rel = {}
             tag_name = release['tag_name']
