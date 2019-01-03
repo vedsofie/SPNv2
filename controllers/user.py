@@ -417,15 +417,16 @@ def edit(user_id):
     redirect_url = request.args["redirect_url"] if "redirect_url" in request.args else None
     redirect_url = "" if redirect_url == "/user/login" or redirect_url == "/user/logout" or redirect_url == "/user/new" else redirect_url
     user = User.query.filter_by(UserID=user_id).first()
-
+    company_name = Account.query.filter_by(id= user.AccountID).first().name
+    role_name = Role.query.filter_by(RoleID=user.RoleID).first().Type
     terms_need_signing = user.TermsAndConditions is None
     if not user.can_save(g.user.to_hash()):
         return Response("You do not have the appropriate role type to update this record", 403)
     return render_template("user/edit.html", \
                            redirect_url=redirect_url, \
                            user=json.dumps(user.to_hash()), \
-                           runninguser=json.dumps(g.user.to_hash()),\
-                           terms_required=terms_need_signing)
+                           runninguser=g.user.to_hash(),\
+                           terms_required=terms_need_signing, company_name = company_name, role_name = role_name)
 
 @usercontroller.route("/user/<int:user_id>/account")
 def users_account(user_id):

@@ -1,10 +1,82 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-{% endblock %}
-
 {% block content_body %}
-	{% if terms_required%}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href=""><i class="far fa-building"></i> All Organizations</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Probes</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <h5 class="text-center mt-3">My Profile </h5>
+            <form action="/user/{{ runninguser.UserID }}/update/" method="POST">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <h6 class="text-left">Username: {{ runninguser.username }}</h6>
+                        </div>
+                        <div class="form-group">
+                            <h6 class="text-left">Organization Name: {{ company_name }}</h6>
+                        </div>
+                        <div class="form-group">
+                            <h6 class="text-left">Role: {{ role_name }}</h6>
+                        </div>
+                        <div class="form-group">
+                            <h6 class="text-left">Email: {{ runninguser.Email }}</h6>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" class="form-control" id="FirstName" name="FirstName" value="{{ runninguser.FirstName }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="Phone">Last Name</label>
+                            <input type="text" class="form-control" id="LastName" name="LastName" value="{{ runninguser.LastName }}">
+                        </div>
+                        <div class="form-group">
+                            <div class="row align-items-center p-3">
+                                <div class="col-6">
+                                    <label class="custom-file-label" for="user-dp">Avatar</label>
+                                    <img src="/user/{{ runninguser.UserID }}/avatar" alt="" class="avatar-large">
+                                </div>
+                                <div class="col-6">
+                                    <input type="file" class="custom-file-input" id="user-dp" name="avatar">
+                                    <label class="custom-file-label" for="user-dp">Upload new picture</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Phone">Phone</label>
+                            <input type="text" class="form-control" id="Phone" name="Phone" value="{{ runninguser.Phone }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" value="{{ runninguser.title }}">
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock %}
+{% if terms_required%}
         <span data-bind="with: termsAndConditions">
             <div class="yes-no popup l-popup-overlay" data-bind="visible: isOpen">
                 <div class="m-popup m-terms-popup">
@@ -18,7 +90,7 @@
                 </div>
             </div>
         </span>
-	{%endif%}
+    {%endif%}
     <span data-bind="with: userDetailPopup">
         <div class="m-form-wrapper">
             <span data-bind="template: {name: 'user-detail-template', data: userDetailViewModel}"></span>
@@ -29,32 +101,3 @@
             </div>
         </div>
     </span>
-{% endblock %}
-
-{% block footer %}
-    {{super()}}
-    <script>
-        var user = new User([JSON.parse({{user|tojson|safe}})][0]);
-        var userDetailPopup = new UserDetailPopupCtrl({user: user});
-    </script>
-
-    <script>
-        TermsAndConditions = function(){
-            var self = this;
-            self.isOpen = ko.observable(true);
-            this.confirm = function(doAgree){
-                if(doAgree){
-                    $.get('/user/agreeToTerms/').success(function(res){
-                        self.isOpen(false);
-                    }).fail(function(err){
-                        alert(err);
-                    });
-                }
-                else{
-                    window.location = '/user/logout/';
-                }
-            }
-        }
-        termsAndConditions = new TermsAndConditions();
-    </script>
-{% endblock %}
