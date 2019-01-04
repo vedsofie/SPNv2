@@ -382,16 +382,20 @@ $(document).ready(function(){
           $progress.show();
           $alert.removeClass('alert-success alert-warning');
           canvas.toBlob(function (blob) {
-            var formData = new FormData();
+            var formImageData = {"Type": "Molecules", "ParentID": {{molecule.ID}}, "Image": blob}
+            // var formData = new FormData();
 
-            formData.append('comment-image', blob, fileName);
+            // formData.append('Image', blob, fileName);
+            // formData.append('Type', "Molecules");
+            // formData.append('ParentID', {{molecule.ID}});
             $.ajax('/comment/image', {
               method: 'POST',
-              data: formData,
+              data: formImageData,
               processData: false,
               contentType: false,
 
               xhr: function () {
+                console.log(formImageData);
                 var xhr = new XMLHttpRequest();
 
                 xhr.upload.onprogress = function (e) {
@@ -424,9 +428,6 @@ $(document).ready(function(){
           });
         }
       });
-
-
-
 
     });
 });
