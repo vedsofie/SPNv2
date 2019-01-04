@@ -1,7 +1,8 @@
 {% extends "application.html" %}
 {% block content_body %}
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mt-3">
+        
         <!-- <div class="col-3 sidebar-padding">
             <div class="card">
                 <div class="card-header bg-secondary text-center">
@@ -19,7 +20,32 @@
             </div>
         </div> -->
 
-        <div class="col-6">
+        <div class="col-8 offset-2">
+            <div class="row">
+            {% for i in range(9) %}
+                <div class="col-4 mb-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <img src="https://via.placeholder.com/200" class="mb-3" alt="">
+                            <p><strong>FLEX/CHEM Cassettes</strong></p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary">View</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="col-2 text-right">
+            <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> 2 Items in Cart</button>
+             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 1</li>
+                    <li>Item 1</li>
+                </ul>
+              </div>
         </div>
     </div>
 </div>
