@@ -1,0 +1,86 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row mt-3">
+    	<div class="col-8 offset-2">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="text-center">FLEX/CHEM Cassettes</h5>
+					<div class="row">
+						<div class="col-3">
+							<img src="https://via.placeholder.com/200" class="mb-3 img-fluid" alt="">
+						</div>
+						<div class="col-9">
+							<p>Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC.</p>
+							<br>
+							<strong>NOTE: Cassettes are sold in sets of 3</strong>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<table class="table">
+							  <thead>
+							    <tr>
+							      <th scope="col">#</th>
+							      <th scope="col"># of Cassettes</th>
+							      <th scope="col">List price / Cassette</th>
+							      <th scope="col">Your price / Cassette</th>
+							      <th scope="col">Add to cart</th>
+							    </tr>
+							  </thead>
+							  <tbody>
+							    <tr>
+							      <th scope="row">1</th>
+							      <td>Mark</td>
+							      <td>Otto</td>
+							      <td>@mdo</td>
+							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">2</th>
+							      <td>Jacob</td>
+							      <td>Thornton</td>
+							      <td>@fat</td>
+							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">3</th>
+							      <td>Larry</td>
+							      <td>the Bird</td>
+							      <td>@twitter</td>
+							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							    </tr>
+							    <tr>
+							      <th scope="row">4</th>
+							      <td>Select Custom Quantity:<br>
+									 <select class="custom-select mt-3" id="inputGroupSelect01">
+									    <option selected>Choose Quantity...</option>
+									    <option value="1">9 Cassettes (3 Sets)</option>
+									    <option value="2">12 Cassettes (4 Sets)</option>
+									    <option value="3">15 Cassettes (5 Sets)</option>
+									  </select>
+							      </td>
+							      <td>the Bird</td>
+							      <td>@twitter</td>
+							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+    	</div>
+    	<div class="col-2 text-right">
+            <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> 2 Items in Cart</button>
+             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 1</li>
+                    <li>Item 1</li>
+                </ul>
+              </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
