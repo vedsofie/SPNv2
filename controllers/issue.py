@@ -61,7 +61,7 @@ def toggle_unsubscribe(following_id):
 
 @issuecontroller.route("/new/",methods=["GET"])
 def report_issue_forum():
-    return render_template('/issue/edit.html',runninguser=json.dumps(g.user.to_hash()))
+    return render_template('/issue/edit.html',runninguser=g.user.to_hash())
 
 @issuecontroller.route("/",methods=["POST"])
 def report_issue():
