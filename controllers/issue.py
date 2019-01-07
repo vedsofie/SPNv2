@@ -59,7 +59,7 @@ def toggle_unsubscribe(following_id):
         follow.save()
     return "OK"
 
-@issuecontroller.route("/",methods=["GET"])
+@issuecontroller.route("/new/",methods=["GET"])
 def report_issue_forum():
     return render_template('/issue/edit.html',runninguser=json.dumps(g.user.to_hash()))
 

@@ -1,14 +1,78 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-    <script type="text/javascript">
-        $(function(){
-            navbar.currentlyOpenedTab("support");
-        });
-    </script>
-{% endblock %}
-
 {% block content_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            <h5 class="text-center mt-3">ELIXYS Support Form</h5>
+            <p class="text-center"><i class="fas fa-info mr-3"></i><small>If this is an emergency, please contact ELIXYS Support at: 1-(714)-679-2820</small></p>
+            <div class="card mt-3">
+                <form action="">
+                    <div class="card-body">
+                        <div class="mb-3">
+                          <label for="title"><b>What can we help with? </b></label>
+                          <input type="text" class="form-control" id="title" name="title">
+                          <div class="invalid-feedback">
+                            Please enter a valid title
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="message"><b>Explain what happened and steps to replicate this issue: </b></label>
+                          <textarea class="form-control" id="message" name="message" rows="4"></textarea>
+                          <div class="invalid-feedback">
+                            Please enter a valid message
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="module"><b>Which ELIXYS module do you need help with?</b></label>
+                          <select class="custom-select" id="elixys-module">
+                            <option selected>Choose Synthesis module...</option>
+                            <option value="PURE/FORM">PURE/FORM</option>
+                            <option value="FLEX/CHEM">FLEX/CHEM</option>
+                          </select>
+                          <div class="invalid-feedback">
+                            Please enter a valid module
+                          </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for=""><b>Attach a supporting file</b></label> <br>
+                          <div class="custom-file w-100">
+                            <input type="file" class="custom-file-input" id="inputGroupFile02">
+                            <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                          </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for=""><b>Attach an Image</b></label> <br>
+                          <div class="custom-file w-100">
+                            <input type="file" class="custom-file-input" id="inputGroupFile02">
+                            <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                          </div>
+                        </div>
+
+                    <div class="card-footer text-right">
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
     <div class="m-form-wrapper google-card-1" id="support-request-form">
         <div data-bind="css: {'savingBlockUI': issueCtrl.issue().isSaving,
@@ -69,12 +133,3 @@
         </div>
 
     </div>
-{% endblock %}
-
-{% block footer %}
-    {{super()}}
-    <script>
-        var issueCtrl = new ReportIssueCtrl({hideButton: true});
-
-    </script>
-{% endblock %}
