@@ -39,7 +39,7 @@
         </div>
       </li>
       <li {% if "/probe/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
-        <a class="nav-link dropdown-toggle" href=/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Probes & Sequences
         </a>
         <div class="dropdown-menu m-0" aria-labelledby="navbarProbeDropdown">
@@ -48,8 +48,15 @@
           <a class="dropdown-item" href="/sequence/new/">Create new sequence</a>
         </div>
       </li>
-      <li class="nav-item border-right">
-        <a class="nav-link" href="/account/">Organizations</a>
+      <li {% if "/account/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/account/" id="navbarOrgDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Organizations
+        </a>
+        <div class="dropdown-menu m-0" aria-labelledby="navbarOrgDropdown">
+          <a class="dropdown-item" href="/account/">All organizations</a>
+          <a class="dropdown-item" href="/account/{{runninguser.AccountID}}/">My organization</a>
+          <a class="dropdown-item" href="/account/new/">Create new organization</a>
+        </div>
       </li>
       <li class="nav-item dropdown" id='avatar-button'>
         <a href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
