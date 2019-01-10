@@ -37,20 +37,32 @@
             {% endfor %}
             </div>
         </div>
-        <div class="col-2 text-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> 2 Items in Cart</button>
-             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 1</li>
-                    <li>Item 1</li>
-                </ul>
-              </div>
-        </div>
+        {% if cart %}
+            <div class="col-2 text-right" data-exists="">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="text-center card-title"><i class="fas fa-shopping-cart"></i> Your cart</h5>
+                    </div>
+                    <div class="card-body">
+                        
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-primary">Place order</button>
+                    </div>
+                    
+                </div>
+            </div>
+        {% endif %}
     </div>
 </div>
 
 {% endblock %}
+
+
+
+
+
+<!-- code below is kept only as a reference, and it does not work/render in the browser -->
 <h1>hello</h1>
 <script type="text/html" id="product-list-template">
     <div data-bind="foreach: {data: familySelectors, as: 'family'}">

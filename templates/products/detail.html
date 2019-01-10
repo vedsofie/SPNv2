@@ -31,24 +31,24 @@
 							  <tbody>
 							    <tr>
 							      <th scope="row">1</th>
-							      <td>Mark</td>
+							      <td class="title">Mark</td>
 							      <td>Otto</td>
 							      <td>@mdo</td>
-							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							      <td><button class="btn btn-outline-primary to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
 							    </tr>
 							    <tr>
 							      <th scope="row">2</th>
-							      <td>Jacob</td>
+							      <td class="title">Jacob</td>
 							      <td>Thornton</td>
 							      <td>@fat</td>
-							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							      <td><button class="btn btn-outline-primary to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
 							    </tr>
 							    <tr>
 							      <th scope="row">3</th>
-							      <td>Larry</td>
+							      <td class="title">Larry</td>
 							      <td>the Bird</td>
 							      <td>@twitter</td>
-							      <td><button class="btn btn-outline-primary"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
+							      <td><button class="btn btn-outline-primary to-cart"><i class="fas fa-cart-plus"></i> Add to Cart</button></td>
 							    </tr>
 							    <tr>
 							      <th scope="row">4</th>
@@ -71,15 +71,20 @@
 				</div>
 			</div>
     	</div>
-    	<div class="col-2 text-right">
-            <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-shopping-cart"></i> 2 Items in Cart</button>
-             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 1</li>
-                    <li>Item 1</li>
-                </ul>
-              </div>
+    	<div class="col-2">
+    		<div class="card">
+    			<div class="card-header">
+    				<h5 class="text-center card-title"><i class="fas fa-shopping-cart"></i> Your cart</h5>
+    			</div>
+    			<div class="card-body">
+    				
+    			</div>
+    			<div class="card-footer text-center">
+    				<a class="btn btn-primary" href="/product/cart/">View cart</a>
+    			</div>
+    			
+    		</div>
+            
         </div>
     </div>
 </div>

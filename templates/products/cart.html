@@ -1,3 +1,71 @@
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row mt-3">
+    	<div class="col-8 offset-2">
+    		<h5 class="text-center card-title">Cart</h5>
+			<div class="card">
+				<div class="card-body">
+					<p class="text-center card-title"><span class="badge badge-pill badge-primary mr-2">Step 1 of 2</span><strong>Order details</strong></p>
+					<table class="table">
+						<thead>
+							<tr>
+							  <th scope="col" id="cart-col-1">Item</th>
+							  <th scope="col">Quantity</th>
+							  <th scope="col">Part #</th>
+							  <th scope="col">Price / Unit</th>
+							  <th scope="col">Subtotals</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+							  <td scope="row">Cassettes <br>
+								<small>ELIXYS FLEX/CHEM universal cassettes. <br>
+								Each cassette contains all wetted paths and are guaranteed for one run.</small>
+							  </td>
+							  <td>1</td>
+							  <td>121113</td>
+							  <td>$500</td>
+							  <td>$500</td>
+							</tr>
+							<tr>
+							  <td>Reactor Vias (pack of 12)<br>
+								<small>Standard FLEX/CHEM glass reactor vials</small>
+							  </td>
+							  <td>2</td>
+							  <td>122223</td>
+							  <td>$300</td>
+							  <td>$600</td>
+							</tr>
+							<tr>
+							  <td>Reactor Vias (pack of 12)<br>
+								<small>Standard FLEX/CHEM glass reactor vials</small>
+							  </td>
+							  <td>2</td>
+							  <td>1210003</td>
+							  <td>$300</td>
+							  <td>$600</td>
+							</tr>
+
+							<!-- Last row -->
+							<tr>
+								<td colspan="4"></td>
+								<td><strong>$1200</strong></td>
+							</tr>
+						</tbody>
+
+					</table>
+
+				</div>
+				<div class="card-footer text-right">
+					<button class="btn btn-primary">Generate Quote</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
 <script type="text/html" id="cart-template">
     <div data-bind="css: {'savingBlockUI': record.isSaving,
                       'savingBlockHidden': !record.isSaving()}">

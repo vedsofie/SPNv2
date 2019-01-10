@@ -125,3 +125,8 @@ a.org-cards:hover .card{
     max-width: 150px;
     max-height: 150px;
 }
+
+/* Consumables ordering */
+#cart-col-1{
+    max-width: 35%;
+}
