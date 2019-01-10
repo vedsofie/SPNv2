@@ -53,7 +53,8 @@ def cart():
     cart = session.get('cart', [])
     #return Response(cart, content_type='application/json')
     return render_template('/products/cart.html',
-                           runninguser=running_user)
+                           runninguser=running_user,
+                           quote_generated = True)
 
 @productscontroller.route("/products", methods=["GET"])
 def get_pdts():
