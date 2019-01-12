@@ -38,7 +38,14 @@ def product_detail(product_id):
                            simProducts=SIM_PRODUCTS,
                            runningUserAccount=json.dumps(runningUserAccount.to_hash()))
 
-
+@productscontroller.route("/previous_orders/", methods=["GET"])
+def previous_orders():
+    runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
+    running_user = g.user.to_hash()
+    return render_template('/products/previous_orders.html',
+                           runninguser=running_user,
+                           simProducts=SIM_PRODUCTS,
+                           runningUserAccount=json.dumps(runningUserAccount.to_hash()))
 
 @productscontroller.route("/set_cart/", methods=["POST"])
 def set_cart():
