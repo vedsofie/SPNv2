@@ -3,6 +3,11 @@ nav.navbar img{
 	max-width: 37%;
 }
 
+#banner-text{
+    /*background: rgba(152, 152, 152, 0.45);*/
+    padding: 38px 0;
+}
+
 /* Login page */
 #sign-in-box{
 	margin-top: 100px;
