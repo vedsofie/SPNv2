@@ -300,7 +300,7 @@ div.map-legend img{
 }
 
 div.map-body, #map{
-  height: calc(100% - 75px);
+  height: calc(100% - 200px);
   overflow-y: hidden;
   padding-top: 20px;
   padding-bottom: 20px;

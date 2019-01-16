@@ -8,6 +8,24 @@ nav.navbar img{
     padding: 38px 0;
 }
 
+#circle-sites{
+  height: 75px;
+  width: 75px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #f1f13a;
+  margin-bottom: 16px;
+}
+
+#circle-sites-container{
+    width: fit-content;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 16px;
+}
+
 /* Login page */
 #sign-in-box{
 	margin-top: 100px;

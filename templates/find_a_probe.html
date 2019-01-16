@@ -56,12 +56,21 @@
 
         </div>
         <!-- right map pane -->
-        <div id='map' class="col-8"></div>
+        <div class="col-8">
+        <div id='map' class="col-12"></div>
+        <div class="map-legend probe-card col-12">
+            <div class="col-sm-12"><h4>Legend</h4></div>
+            <div class="col-sm-4"><img src="https://docs.google.com/uc?id=1n28ewwZiK2eLHyo8r2YfKDOhIrrlzbg4" alt="" class="img-responsive"> : Multiple location group</div>
+            <div class="col-sm-4"><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" alt="" class="img-responsive"> : SOFIE Radiopharmacy</div>
+            <div class="col-sm-4"><img src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" alt="" class="img-responsive"> : Independent site</div>
+        </div>
+        </div>
         <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
         <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
-      </div>
+    </div>
 </div>
+<p>Available at</p>
 <script>
 var searchList = document.getElementById("search-list")
 var searchList_site = document.getElementById("search-list-site")
@@ -89,10 +98,12 @@ function searchedList(item, index) {
     searchList.innerHTML = searchList.innerHTML +
                             searchFunction +
                                 '<div class="probe-card featured-probe-card">' +
-                                    '<div class="probe-card-content col-sm-6">' +
-                                        '<h6 class="text-left">'+ item.Name  +'</h6>' +
-                                        '<h6 class="text-left">'+ item.number  +'</h6>' +
-                                        '<img src="'+item.url+'" class="img-responsive" alt="">' +
+                                    '<div class="probe-card-content row align-items-center h-100">' +
+                                        '<div class="col-6">'+
+                                            '<h6 class="">'+ item.Name  +'</h6>' +
+                                            '<img src="'+item.url+'" class="img-responsive" alt="">' +
+                                        '</div><div class="col-6 text-center">'+
+                                            '<p>Available at</p><div id="circle-sites-container"><div id="circle-sites">'+ item.number  +'</div></div><p>Sites</p></div>' +
                                     '</div>' +
                                 '</div>' +
                             '</a>';
