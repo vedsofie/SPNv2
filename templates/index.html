@@ -1,6 +1,6 @@
 {% extends "application.html" %}
 {% block login_content_body %}
-<div class="container-fluid">
+<div class="container-fluid" id="homepage-container">
     <div class="row align-items-center" id="hero-banner">
         <div class="col-6 offset-3 text-center" id="banner-text">
             <img src="http://res.cloudinary.com/sofie/image/upload/v1517436571/7B3928ED-F550-4C5D-A6C4-2DE59C048360_2x_sovvin.png" alt="" id="hero-sofie-logo">
@@ -25,6 +25,82 @@
             <h6 class="about-spn-text">Give and receive feedback about probe protocols on the network and get real-time support for your ELIXYS system</h6>
         </div>
     </div>
+
+
+
+    <div id="carouselExampleIndicators" class="carousel slide bg-white" data-ride="carousel" data-interval="5000" data-pause="hover">
+        <div class="col-12 text-center"><h2>Featured probes</h2></div>
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="row">
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/20/image/" class="img-fluid">
+                        <h4 class="text-center">Florbetaben</h4>
+                        <p>Diagnostic PET probe to image ß-amyloid neuritic plaque density in the brains of adult patients with cognitive impairment to evaluate Alzheimer’s disease and other cognitive impairments.</p>
+                    </div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/11/image/" class="img-fluid">
+                        <h4 class="text-center">FDHT</h4>
+                        <p>Dihydrotrotestosterone analog PET probe with high affinity for androgen receptor (AR) used to image AR expression in castration-resistant prostate cancer and measure pharmacodynamics of AR-binding drugs.</p>
+                    </div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/30/image/" class="img-fluid">
+                        <h4 class="text-center">MK-6240</h4>
+                        <p>PET probe designed to bind neurofibrillary tau tangles in Alzheimer’s disease.
+                            <br><br><br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="row">
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/20/image/" class="img-fluid">
+                        <h4 class="text-center">Florbetaben</h4>
+                        <p>Diagnostic PET probe to image ß-amyloid neuritic plaque density in the brains of adult patients with cognitive impairment to evaluate Alzheimer’s disease and other cognitive impairments.</p>
+                    </div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/11/image/" class="img-fluid">
+                        <h4 class="text-center">FDHT</h4>
+                        <p>Dihydrotrotestosterone analog PET probe with high affinity for androgen receptor (AR) used to image AR expression in castration-resistant prostate cancer and measure pharmacodynamics of AR-binding drugs.</p>
+                    </div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="col-8 offset-2">
+                        <img src="/probe/30/image/" class="img-fluid">
+                        <h4 class="text-center">MK-6240</h4>
+                        <p>PET probe designed to bind neurofibrillary tau tangles in Alzheimer’s disease.
+                            <br><br><br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
     <div class="row align-items-top bg-white homepage-rows" id="featured">
         <div class="col-12 text-center"><h2>Featured probes</h2></div>
         <div class="col-4 text-center">
@@ -61,7 +137,8 @@
         </div>
         <div class="col-4 offset-1 align-self-center">
             <div class="card text-center">
-                <div class="card-img"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3308.324586208451!2d-118.39175258390006!3d33.98419562875886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2b75398cefdc1%3A0x7c6410af2ada732c!2s6160+Bristol+Pkwy+%23200%2C+Culver+City%2C+CA+90230!5e0!3m2!1sen!2sus!4v1540421577657" frameborder="0" style="border:0" allowfullscreen></iframe></div>
+                <div class="card-img">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3308.324759346436!2d-118.39175258463808!3d33.984191180624464!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2b7539db94ddd%3A0x9512acc685ccda81!2sSofie!5e0!3m2!1sen!2sus!4v1547676963677" frameborder="0" style="border:0" allowfullscreen class="card-img-top"></iframe></div>
                 <address class="pt-3 pb-3">
                     <strong>SOFIE</strong><br>
                     6160 Bristol Pkwy Suite 200<br>

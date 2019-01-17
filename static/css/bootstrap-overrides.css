@@ -65,3 +65,11 @@ li.nav-item.active {
 /*.dropdown:hover>.dropdown-menu {
  display: block;
 }*/
+
+
+.carousel-indicators li{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.carousel-control-next-icon{
+  background: url("../img/arrow-right.png");
+}
