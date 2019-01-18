@@ -65,7 +65,7 @@ def documentation():
 @supportcontroller.route("/faq",methods=["GET"])
 def faq():
     userid = session["userid"]
-    return render_template("/support/faq.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("/support/faq.html", uid = userid, runninguser=g.user.to_hash())
 
 
 @supportcontroller.route("/software",methods=["GET"])
