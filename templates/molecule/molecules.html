@@ -21,10 +21,11 @@
             <h5 class="text-center mt-2">Probes List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
             <div class="card p-3 mt-3">
               <div class="row align-items-center">
-                <div class="col-3 text-left">Filter results</div>
-                <div class="col-3 text-right">
+                <div class="col-3 text-left pl-2 ml-3"><strong>Filter Probe List</strong></div>
+                <div class="col-4 text-left">
                   <div class="input-group">
                     <div class="input-group">
+                      <label for="">Sequence filter</label>
                       <div class="input-group-text">
                         {% if request.args.get('with_sequences') %}
                         <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only probes with sequences
@@ -35,10 +36,12 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-4 text-right">
-                  <select class="selectpicker" multiple>
+                <div class="col-4 text-left" id="mp-select-container">
+                  <label for="">Filter probes by Isotope</label>
+                  <select class="selectpicker" multiple title="Click to filter by Isotope">
                     {% for isotope in isotopes %}
-                      <option>{{isotope}}</option>
+                      <!-- In the next line, only display "selected" attribute if the Isotope has been selected by user -->
+                      <option selected>{{isotope}}</option>
                     {% endfor %}
                   </select>
                   <button class="btn btn-outline-secondary" id="go-isotope">Go</button>

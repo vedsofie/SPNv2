@@ -370,10 +370,18 @@ h3#availability-number {
   padding: 100px 0 100px 0;
 }
 
-
+#mp-select-container button.btn.dropdown-toggle.bs-placeholder.btn-light {
+    border: 1px solid #ced4da;
+    height: 38px;
+}
+#mp-select-container .btn-light{
+  height: 38px !important;
+  border: 1px solid #ced4da !important;
+}
 #homepage-container .carousel{
   padding: 100px 0 100px 0;
 }
+
 /* Responsive */
 
 /* Phones */
@@ -399,14 +407,9 @@ h3#availability-number {
     margin-top: 125px;
   }
 }
+
 /* additional overrides */
 
-button.dropdown-toggle.bs-placeholder{
-  padding: 1rem!important;
-}
-.bootstrap-select .dropdown-toggle .filter-option{
-  top: -8px !important;
-}
 /* Tablets */
 
 @media only screen 
