@@ -25,10 +25,10 @@
             <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
 
             <div class="card p-3 mt-3">
-              <div class="row">
-                <div class="col-3 text-left">Filter results</div>
-                <div class="col-3 offset-2 text-right">
-                  <div class="input-group mb-3">
+              <div class="row align-items-center">
+                <div class="col-3 text-left pl-2 ml-3"><strong>Filter Organization List</strong></div>
+                <div class="col-4 text-left">
+                  <div class="input-group">
                     <div class="input-group">
                       <div class="input-group-text">
                         {% if request.args.get('academic_only') %}
@@ -41,8 +41,8 @@
 
                   </div>
                 </div>
-                <div class="col-4 text-right">
-                  <div class="input-group mb-3">
+                <div class="col-4 text-left">
+                  <div class="input-group">
                     <div class="input-group">
                       <div class="input-group-text">
                         {% if request.args.get('pharma_only') %}
