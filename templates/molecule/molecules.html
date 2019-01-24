@@ -2,7 +2,7 @@
 {% block content_body %}
 <div class="container-fluid pt-3" id="molecules-page">
     <div class="row">
-        <div class="col-3 sidebar-padding">
+        <div class="col-2 sidebar-padding">
             <div class="card page-contents">
                 <div class="card-header bg-secondary text-center">
                     <h5 class="mb-0 text-white">Quick links</h5>
@@ -16,11 +16,11 @@
         </div>
 
 
-        <div class="col-9">
+        <div class="col-10">
             <h5 class="text-center mt-2">Probes List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
-            <div class="card p-3 mt-3">
+            <div class="p-3 mt-3">
               <div class="row align-items-center">
-                <div class="col-3 text-left pl-2 ml-3"><strong>Filter Probe List</strong></div>
+                
                 <div class="col-4 text-left">
                   <div class="input-group">
                     <div class="input-group">
@@ -51,6 +51,16 @@
                     {% endfor %}
                   </select>
                   <button class="btn btn-outline-secondary" id="go-isotope">Go</button>
+                </div>
+                <div class="col-4 text-left">
+                  <label for="">Search for a probe</label>
+                  <div class="input-group">
+
+                  <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
