@@ -233,6 +233,7 @@ class Molecule(SObject, db.Model):
             function = validations[col]
             val = getattr(self, col, None)
             try:
+                print col
                 function(col, val)
             except AssertionError as e:
                 exceptions.append({"field": col, "message": str(e)})

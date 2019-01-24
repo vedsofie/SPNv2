@@ -546,9 +546,13 @@ def do_save(user, **kwargs):
             mole = Molecule()
             mole.merge_fields(**kwargs)
             mole.Name = html2text.html2text(mole.DisplayFormat).strip()
-            print mole.Formula
             mole.UserID = user.UserID
-            mole.Approved = can_approve and kwargs['Approved']
+            if 'Approved' not in kwargs:
+                mole.Approved = False
+            elif can_approve and kwargs['Approved']:
+                mole.Approved = True
+            else:
+                mole.Approved = False
             mole.validate_required_fields()
         mole.save()
 

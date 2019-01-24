@@ -43,7 +43,8 @@ def do_authenticate():
         running_user = User.authenticate(username, password)
         g.user = running_user
     if userid:
-        running_user = User.query.filter_by(UserID=userid).first()
+        #running_user = User.query.filter_by(UserID=userid).first()
+        running_user = User.query.filter(User.UserID == userid).first()
         g.user = running_user
         session['userid'] = running_user.UserID
     elif request and request.authorization and 'username' in request.authorization and 'password' in request.authorization:
