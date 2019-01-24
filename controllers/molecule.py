@@ -495,10 +495,15 @@ def create():
     data['Image'] = file
     #print data
     try:
+        """
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
-            #return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-            return redirect(url_for("add_synonyms", molecule_id=mole.id, new_probe=True))
+            resp = json.dumps(mole.to_hash())
+            return render_template("molecule/add_synonyms.html", molecule=resp, runninguser=g.user.to_hash())
+        """
+        mole = do_save(g.user, **data)
+        resp = mole.to_hash()
+        return render_template("molecule/add_synonyms.html", new_probe=True, molecule=resp, runninguser=g.user.to_hash())
     except Exception as e:
         db.session.rollback()
         msg = str(e)
@@ -510,7 +515,6 @@ def create():
             return Response(json.dumps({"molecule": Molecule.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
         flash(msg)
         return render_template("molecule/new.html", molecule=Molecule().to_hash())
-
 
 @moleculecontroller.route("/<int:molecule_id>/add_synonyms/", methods=["GET"])
 def add_synonyms(molecule_id):
