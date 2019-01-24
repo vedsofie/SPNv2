@@ -11,7 +11,6 @@
                     <li class="list-group-item lh-condensed"><a href="/probe/new"><i class="far fa-plus-square"></i> Create Probe</a></li>
                     <li class="list-group-item lh-condensed"><a href="/sequence/new"><i class="far fa-plus-square"></i> Create Sequence</a></li>
                     <li class="list-group-item lh-condensed"><a href="/probe/my_probes"><i class="fas fa-vial"></i> My Probes</a></li>
-                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
                 </ul>
             </div>
         </div>
@@ -41,24 +40,32 @@
                   <select class="selectpicker" multiple title="Click to filter by Isotope">
                     {% for isotope in isotopes %}
                       <!-- In the next line, only display "selected" attribute if the Isotope has been selected by user -->
-                      <option selected>{{isotope}}</option>
+
+                      {% if (isotope_values) and (isotope in isotope_values)  %}
+                        <option selected>{{isotope}}</option>
+                      {% elif isotope_values == None %}
+                        <option selected>{{isotope}}</option>
+                      {% else %}
+                        <option>{{isotope}}</option>
+                      {% endif %}
                     {% endfor %}
                   </select>
                   <button class="btn btn-outline-secondary" id="go-isotope">Go</button>
                 </div>
               </div>
             </div>
-            <div class="card-columns mt-3">
+            <div class="row mt-3">
             {% for molecule in molecules %}
               {% if molecule.Downloadable %}
-                  <div class="card text-center with-sequence">
-                    <div class="col-12 p-3 text-right">
-                      
+              <div class="col-4">
+                  <div class="card text-center with-sequence mb-3">
+                    
+                      <div class="sequence-badge-container text-right mt-2 pr-2">
                       <span class="badge badge-pill badge-warning text-light" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
-                      
+                      </div>
            
                       
-                    </div> 
+                    
                     <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
                     <div class="card-body">
                       <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
@@ -68,17 +75,16 @@
                       <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
                       <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                   </div>
+                </div>
               {% else %}
-               <div class="card text-center no-sequence">
-                    <div class="col-12 p-3 text-right">
-                      
-                      
-                      
-                      <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
-                      
-                    </div> 
-                    <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
+              <div class="col-4">
+               <div class="card text-center no-sequence mb-3">
+                      <div class="sequence-badge-container text-right mt-2 pr-3">
+                      <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span> 
+                      </div>
+                      <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
                     <div class="card-body">
+                      
                       <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
                       
                     </div>
@@ -86,6 +92,7 @@
                       <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
                       <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
                   </div>
+                </div>
               {% endif %}
             {% endfor %}
             </div>

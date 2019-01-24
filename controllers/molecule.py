@@ -97,7 +97,7 @@ def index():
     isotope_list = []
     for isotope in isotopes:
         isotope_list.append(isotope)
-    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash(), isotopes = isotope_list)
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash(), isotopes = isotope_list, isotope_values = isotope_value )
 
 @moleculecontroller.route("/my_probes/", methods=['GET'])
 def my_probes():
@@ -497,18 +497,19 @@ def create():
     try:
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
-            return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-        return redirect(url_for("add_synonyms", molecule_id=mole.id, new_probe=True))
+            #return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
+            return redirect(url_for("add_synonyms", molecule_id=mole.id, new_probe=True))
     except Exception as e:
         db.session.rollback()
         msg = str(e)
         if e.__class__ == ValidationException().__class__:
             msg = e.errors()
+            print msg
 
         if request.headers.get("Accept") == "application/json":
             return Response(json.dumps({"molecule": Molecule.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
         flash(msg)
-    return render_template("molecule/new.html", molecule=Molecule().to_hash())
+        return render_template("molecule/new.html", molecule=Molecule().to_hash())
 
 
 @moleculecontroller.route("/<int:molecule_id>/add_synonyms/", methods=["GET"])

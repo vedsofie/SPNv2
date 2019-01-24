@@ -13,7 +13,6 @@
                             <a href=""><i class="fas fa-vial"></i> My Probes</a>
                         </div>
                     </li>
-                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
                     <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
                 </ul>
             </div>
@@ -29,7 +28,7 @@
                 <form action="/probe/create/" enctype="multipart/form-data" method="POST">
                     <div class="mb-3">
                       <label for="probe-name"><b>Probe name</b></label> <span class="text-danger">*</span>
-                      <textarea id="editor" name="DisplayFormat"></textarea>
+                      <textarea id="editor" name="DisplayFormat" required></textarea>
                     </div>                
                     <div class="mb-3 align-items-center">
                       <label><b>Probe structure</b></label><span class="text-danger">*</span>
@@ -55,7 +54,7 @@
                     </div>                    
                     <div class="mb-3">
                       <label for="Isotope"><b>Isotope</b></label><span class="text-danger">*</span>
-                      <input type="text" class="form-control" id="Isotope" name="Isotope" placeholder="Probe name" value="">
+                      <input type="text" class="form-control" id="Isotope" name="Isotope" placeholder="Probe name" value="" required>
                     </div>
                     <div class="mb-3">
                       <div class="input-group-prepend">
@@ -92,6 +91,20 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+
+    $("form").submit( function(e) {
+            var messageLength = CKEDITOR.instances['editor'].getData().replace(/<[^>]*>/gi, '').length;
+            if( !messageLength ) {
+                alert( 'Please enter a Probe name' );
+                e.preventDefault();
+            }
+            if(! $('#molecule-image').val()){
+                alert( 'Please upload probe structure image' );
+                e.preventDefault();        
+            }
+        });
+
     $("#molecule-image").change(function(e){
         readURL(this);
         var fileName = e.target.files[0].name;
