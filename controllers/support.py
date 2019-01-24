@@ -31,8 +31,7 @@ GIT_OWNER = "SofieBiosciences"
 GIT_REPO = "Elixys"
 PYELIXYS_BASE_DIR = "https://api.github.com/repos/%s/%s/" % (GIT_OWNER, GIT_REPO)
 INSTALLER_BASE_DIR = "https://api.github.com/repos/%s/%s/" % ('SofieBiosciences', 'SofieDeploymentInstaller')
-#GIT_OATH = os.environ["GIT_TOKEN"]
-GIT_OATH = '4e71be023c265b4bfb14af91d8e562ae5d8cfcd7'
+GIT_OATH = os.environ["GIT_TOKEN"]
 ENCRYPTION_KEY = '1234567890123456'
 
 db = modules.database.get_db()

@@ -535,7 +535,6 @@ def do_save(user, **kwargs):
     id = kwargs.get("ID", None)
     was_approved = None
     uid = None
-    print "------in do save---------"
     if not id or can_approve:# Only super-admins can edit a molecule for now
         if id:
             mole = Molecule.query.filter_by(ID=kwargs['ID']).first()
@@ -551,7 +550,6 @@ def do_save(user, **kwargs):
             mole.UserID = user.UserID
             mole.Approved = can_approve and kwargs['Approved']
             mole.validate_required_fields()
-            print "right before saving ________"
         mole.save()
 
         uid = mole.ID
