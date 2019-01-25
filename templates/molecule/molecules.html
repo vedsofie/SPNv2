@@ -55,8 +55,7 @@
                 <div class="col-4 text-left">
                   <label for="">Search for a probe</label>
                   <div class="input-group">
-
-                  <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                  <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" id="probe-names">
                     <div class="input-group-append">
                       <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
@@ -108,11 +107,15 @@
             </div>
             <nav aria-label="Page navigation example" class="text-center">
               <ul class="pagination justify-content-center">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                {% if current_page_number != 1 %}
+                <li class="page-item"><a class="page-link" href="/probe/?page={{ current_page_number - 1 }}">Previous</a></li>
+                {% endif %}
                 {% for page in range(number_of_pages) %}
                 <li {% if current_page_number == (page + 1) %}  class="page-item active" {% else %} class="page-item" {% endif %}><a class="page-link" href="/probe/?page={{ page + 1 }}">{{ page + 1 }}</a></li>
                 {% endfor %}
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                {% if current_page_number != number_of_pages %}
+                <li class="page-item"><a class="page-link" href="/probe/?page={{ current_page_number + 1 }}">Next</a></li>
+                {% endif %}
               </ul>
             </nav>
 
@@ -143,10 +146,10 @@
 <script>
 $(document).ready(function(){
     $('#synonymModal').on('show.bs.modal', function (e) {
+          $('ul.item-list').empty();
            var id = e.relatedTarget.id;
            var molecule_name = $(e.relatedTarget).data("mol");
            $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
-           console.log(molecule_name);
            // AJAX request
            $.ajax({
             url: '/keyword/Molecules/'+id+'/synonym',
@@ -154,6 +157,7 @@ $(document).ready(function(){
             success: function(response){ 
               // Add response in Modal body
               $(response).each(function(index){
+
                 $('ul.item-list').append("<li>"+response[index]['DisplayFormat']+"</li>");
                 console.log(response[index]['DisplayFormat']);
                 });
@@ -217,6 +221,26 @@ $(document).ready(function(){
       window.location.href = url;
   });
 
+
+
+  $( "#probe-names" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax( {
+          url: "search.php",
+          dataType: "jsonp",
+          data: {
+            term: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        } );
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+      }
+    } );
 });
 </script>
 {% endblock %}
