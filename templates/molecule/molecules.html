@@ -146,10 +146,10 @@
 <script>
 $(document).ready(function(){
     $('#synonymModal').on('show.bs.modal', function (e) {
+          $('ul.item-list').empty();
            var id = e.relatedTarget.id;
            var molecule_name = $(e.relatedTarget).data("mol");
            $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
-           console.log(molecule_name);
            // AJAX request
            $.ajax({
             url: '/keyword/Molecules/'+id+'/synonym',
@@ -157,6 +157,7 @@ $(document).ready(function(){
             success: function(response){ 
               // Add response in Modal body
               $(response).each(function(index){
+
                 $('ul.item-list').append("<li>"+response[index]['DisplayFormat']+"</li>");
                 console.log(response[index]['DisplayFormat']);
                 });
