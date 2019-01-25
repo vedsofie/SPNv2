@@ -14,6 +14,7 @@
     });
 </script>
 <div class="container-fluid" id="maps-page">
+    <button onclick='reset()'>Reset</button>
 	<div class="row" id="map-row">
         <!-- Left information card pane -->
         <div class="col-4 left-info-pane pt-3">
@@ -74,6 +75,14 @@
 <script>
 var searchList = document.getElementById("search-list")
 var searchList_site = document.getElementById("search-list-site")
+
+
+function reset(){
+    //reset map and search result
+    loginModel.resetMap()
+    probeinformation.forEach(searchedList)
+    accountLocations.forEach(searchedList_site)
+}
 
 function search(){
     var user_insert = document.getElementById("probe-search1").value

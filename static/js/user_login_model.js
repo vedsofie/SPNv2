@@ -3,6 +3,7 @@ UserLoginModel = function(accountLocations){
     this.featuredOrganization = null;
     this.featuredSequences = [];
     self.accountLocations = accountLocations;
+    self.probeinformation = []
     self.probe_with_site = new Map();
     //self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
     self.probe_list;
@@ -60,7 +61,7 @@ UserLoginModel = function(accountLocations){
             }
         } 
 
-
+        self.probeinformation = result
         return result
     }
     self.find_site_for_probe = function(site_name) {
