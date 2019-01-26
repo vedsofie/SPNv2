@@ -41,6 +41,7 @@
                             <input type="text" class="form-control" id="new-user-ln" name="LastName" required>
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <label for="new-user-role">Role</label><span class="text-danger">*</span>
                         <select name="RoleID" id="new-user-role" class="custom-select">
@@ -51,16 +52,26 @@
                             <option value="2">Super-admin</option>
                             {% endif %}
                         </select><br>
-                        <div class="alert alert-light" role="alert">
+                        <div class="alert alert-light mt-2" role="alert">
                             <small><strong><i class="fas fa-info-circle"></i> Role Info</strong></small><br>
                             <small><strong>Basic:</strong> Basic privileges</small><br>
                             <small><strong>Admin:</strong> Allows control of your organization's account</small><br>
                             <small><strong>Super-admin:</strong> Allows control of the entire SPN platform</small>
                         </div>
                     </div>
-                    <div class="custom-file mb-3">
-                        <input type="file" class="custom-file-input" id="new-user-dp" name="avatar">
-                        <label class="custom-file-label" for="new-user-dp">Upload a Profile Picture</label>
+                    <div class="mb-3 align-items-center">
+                      <label><b>Profile picture</b></label>
+                      <div class="row align-items-center">
+                        <div class="col-4">
+                          <img src="https://place-hold.it/150x150?text=Profile%20Image&italic=true" id="dp-preview" alt="" class="img-fluid">
+                        </div>
+                        <div class="col-6 custom-file">
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" id="new-user-dp" name="avatar">
+                              <label class="custom-file-label" for="new-user-dp">Choose picture...</label>
+                            </div>
+                        </div>
+                     </div>
                     </div>
                     <div class="form-group">
                         <label for="new-user-phone">Phone</label>
@@ -81,4 +92,23 @@
         </div>
     </div>
 </div>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#dp-preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#new-user-dp").change(function(e){
+        readURL(this);
+        var fileName = e.target.files[0].name;
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    });
+</script>
 {% endblock %}

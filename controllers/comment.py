@@ -67,18 +67,17 @@ def create_attachment():
 
     return Response(resp,content_type='application/json')
 
-@commentcontroller.route("image", methods=["POST"])
+@commentcontroller.route("image/", methods=["POST"])
 def create_image():
     file_name = 'SPN Image Attachment'
+
     if request.headers.get('Content-Type', "").startswith('application/json'):
-        data = request.json
         data = request.json
         image = base64.b64decode(data['Image'])
     else:
         data = request.form
         image = request.files['file'].read()
         file_name = "Unknown_Image"#request.files['file']
-
     parentid = data['ParentID']
     type = data['Type']
     comment = Comment(ParentID=parentid,Type=type,Message="",RenderType='image',UserID=g.user.UserID)

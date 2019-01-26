@@ -370,6 +370,14 @@ h3#availability-number {
   padding: 100px 0 100px 0;
 }
 
+#map-reset-button {
+    position: absolute;
+    right: 20px;
+    top: 80px;
+    z-index: 9999;
+    background: #fff;
+}
+
 #mp-select-container button.btn.dropdown-toggle.bs-placeholder.btn-light {
     border: 1px solid #ced4da;
     height: 38px;
