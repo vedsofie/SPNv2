@@ -188,7 +188,7 @@
                     </li>
                     <li class="list-group-item lh-condensed">
                         <b>Isotope:</b>
-                        <div> {{ molecule.Isotope }}</div>
+                        <div id="isotope"> {{ molecule.Isotope }}</div>
                     </li>
                     <li class="list-group-item lh-condensed">
                         <b>Formula:</b>
@@ -293,6 +293,10 @@ $(document).ready(function(){
     var formula = $("#formula").text();
     formatted = formula.replace(/([0-9])/g, "<sub>$1</sub>");
     $("#formula").html(formatted);
+
+    var isotope_superscript = $("#isotope").text();
+    isotope_formatted = isotope_superscript.replace(/([0-9])/g, "<sup>$1</sup>");
+    $("#isotope").html(isotope_formatted);
 
     // make a new comment with ajax
     $("button#post-comment-button").click(function(){
