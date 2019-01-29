@@ -23,36 +23,27 @@
         <div class="col-9">
             <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
 
-            <div class="card p-3 mt-3">
+            <div class="p-3 mt-3">
               <div class="row align-items-center">
-                <div class="col-3 text-left pl-2 ml-3"><strong>Filter Organization List</strong></div>
-                <div class="col-4 text-left">
-                  <div class="input-group">
+                <div class="col-3 text-left"><strong>Filter Organization List</strong></div>
+                <div class="col-8 text-left">
                     <div class="input-group">
-                      <div class="input-group-text">
+                      <div class="input-group-text mr-3">
                         {% if request.args.get('academic_only') %}
                         <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Academic Orgs
                         {% else %}
                         <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Academic Orgs
                         {% endif %}
                       </div>
-                    </div>
-
-                  </div>
-                </div>
-                <div class="col-4 text-left">
-                  <div class="input-group">
-                    <div class="input-group">
-                      <div class="input-group-text">
+                      <div class="input-group-text mr-3">
                         {% if request.args.get('pharma_only') %}
                         <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Pharma
                         {% else %}
                         <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Pharma
                         {% endif %}
                       </div>
+                      <a href="/account/" class="btn btn-link">Show all</a>
                     </div>
-
-                  </div>
                 </div>
               </div>
             </div>
@@ -119,6 +110,7 @@
 <!-- scripts -->
 <script>
 $(document).ready(function(){
+    url = '';
     $('#synonymModal').on('show.bs.modal', function (e) {
            var id = e.relatedTarget.id;
            var molecule_name = $(e.relatedTarget).data("mol");
@@ -145,11 +137,12 @@ $(document).ready(function(){
      // view only probes with sequences
   $(".pharma-only-checkbox").change(function(){
     if (this.checked) {
-      if(window.location.href.indexOf('?') > -1) {
-          var url = document.location.href+"&pharma_only=true";
-      }else{
-          var url = document.location.href+"?pharma_only=true";
-      }
+      // when pharma only is checked, uncheck academic chekckbox
+      $("input.academic-only-checkbox").removeAttr("checked");
+
+        // var url = window.location.hostname+"/account/?pharma=true"
+        url = location.protocol + '//' + location.host + location.pathname+"?pharma_only=true";
+
       window.location.href = url;
     }
     else{
@@ -160,11 +153,10 @@ $(document).ready(function(){
   // view only probes with sequences
   $(".academic-only-checkbox").change(function(){
     if (this.checked) {
-      if(window.location.href.indexOf('?') > -1) {
-          var url = document.location.href+"&academic_only=true";
-      }else{
-          var url = document.location.href+"?academic_only=true";
-      }
+      // when academic only is checked, uncheck pharma chekckbox
+      $("input.pharma-only-checkbox").removeAttr("checked");
+
+          url = location.protocol + '//' + location.host + location.pathname+"?academic_only=true";
       window.location.href = url;
     }
     else{
