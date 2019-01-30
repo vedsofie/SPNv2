@@ -59,7 +59,7 @@ def report_issue_forum():
 @supportcontroller.route("/documentation",methods=["GET"])
 def documentation():
     userid = session["userid"]
-    return render_template("/support/documentation.html", uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("/support/documentation.html", uid = userid, runninguser=g.user.to_hash())
 
 @supportcontroller.route("/faq",methods=["GET"])
 def faq():
@@ -80,7 +80,7 @@ def software():
     for release in range(2):
         old_release.append(releases[release])
 
-    return render_template("/support/software.html", new_release=new_release, old_release=old_release, uid = userid, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("/support/software.html", new_release=new_release, old_release=old_release, uid = userid, runninguser=g.user.to_hash())
 
 @supportcontroller.route("/field_support",methods=["GET"])
 def field_support():
