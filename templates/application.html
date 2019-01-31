@@ -43,11 +43,13 @@
 			<div class="container-fluid row">
 				<div class="col-3 text-left offset-1">
 					<ul class="list-unstyled" id="footer-links">
+                        {% if runninguser is defined %}
 						<li>                    
 							<section data-bind="if: runningUser">
 	                        	<a href="/user/privacy_policy">Privacy Policy</a>
 	                    	</section>
 	                	</li>
+                        {% endif %}
 						<li> <a href="https://sofie.com/radiochemistry/" target="_blank">About ELIXYS</a> </li>
 						<li> <a href="https://sofie.com/about" target="_blank">About SOFIE</a> </li>					
                         <li> <a href="https://sofie.com/" target="_blank">SOFIE.com</a> </li>

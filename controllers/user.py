@@ -460,9 +460,9 @@ def running_user():
     else:
         return ''
 
-@usercontroller.route("/user/privacy_policy/")
+@usercontroller.route("/user/privacy_policy/", methods=["GET"])
 def privacy_policy():
-    return render_template('/user/privacy-policy.html', runninguser=json.dumps(g.user.to_hash()))
+    return render_template('/user/privacy-policy.html', runninguser=g.user.to_hash())
 
 @usercontroller.route("/user/password_reset/<reset_url>", methods=["GET"])
 def reset_for_user(reset_url):

@@ -106,6 +106,7 @@
           url: "/keyword/save_keyword/{{ molecule.ID }}/",
           data: {DisplayFormat: keywordData},
           success: function(data){
+            CKEDITOR.instances['editor'].setData('');
             var newRow = "<tr><td>"+data['DisplayFormat']+"</td><td><button class='btn btn-outline-primary delete-keyword' data-key='"+data['ID']+"' data-syn='"+data['ID']+"' data-toggle='modal' data-target='#deleteKeywordModal'>Delete</button></td></tr>";
             $("#keyword-table").prepend(newRow);
           },
