@@ -19,6 +19,7 @@ import urllib
 import models.model_helpers as model_helpers
 import base64,zipfile,io,os
 import modules
+import datetime
 from sqlalchemy import or_, and_, func
 from sqlalchemy.sql.expression import alias
 SOFIEBIO_USER = int(os.getenv("SOFIEBIO_USERID", 0))
@@ -57,14 +58,19 @@ def get_probe(sequence_id):
     sequence = Sequence.query.filter(Sequence.SequenceID==sequence_id).first()
     resp = json.dumps(sequence.molecule.to_hash())
     return Response(resp, content_type="application/json")
-    
+
+# ============ Display form to create a sequence =======
 @sequencecontroller.route("/sequence/new/", methods=["GET"])
-def create_sequence():
-    seq = Sequence()
-    resp = json.dumps(seq.to_hash())
-    return render_template("/sequence/edit.html",
-                           sequence=resp,
-                           runninguser=json.dumps(g.user.to_hash()))
+def new_sequence():
+    # seq = Sequence()
+    # resp = seq.to_hash()
+    molecule_names_result = Molecule.query.with_entities(Molecule.Name, Molecule.ID).all()
+    molecule_names = []
+    for mol in molecule_names_result:
+        jsonobject = {'label': mol[0].strip(), 'id': mol[1]}
+        molecule_names.append(jsonobject)
+    return render_template("/sequence/new.html",runninguser=g.user.to_hash(), molecule_names=json.dumps(molecule_names))
+
 
 @sequencecontroller.route("/sequence/module/list/", methods=["GET"])
 def list_module_options():
@@ -82,11 +88,34 @@ def get_details(sequence_id):
         message = urllib.quote("The sequence does not exist")
         return redirect('/user/dashboard?notificationMessage=%s' % message)
 
-    resp = json.dumps(sequence.to_hash())
-    running_user = json.dumps(g.user.to_hash())
+    resp = sequence.to_hash()
+    running_user = g.user.to_hash()
     showNotification = request.args.get("showThankyou", False)
     showNotification = showNotification and not sequence.molecule.Approved
+    components = sequence.components
 
+    r_scheme = SequenceAttachment.query.filter(and_(SequenceAttachment.SequenceID==sequence_id, SequenceAttachment.Type=='ReactionScheme')).first()
+    if r_scheme:
+        reaction_scheme = Response(r_scheme.Attachment)
+    else:
+        reaction_scheme = r_scheme
+    reagents_hash = []
+    follower = Follower.query.filter(and_(Follower.ParentID == sequence_id, Follower.UserID == running_user['UserID'], Follower.Type == 'Sequences')).first()
+    # get comments for this probe
+    all_comments = []
+    comments = Comment.query.filter(and_(Comment.ParentID == sequence_id,Comment.Type == 'Sequences')).order_by(Comment.CreationDate.asc()).all()
+    for comment in comments:
+        users_name = User.query.filter_by(UserID=comment.UserID).first()
+        comments_aggr = comment.to_hash()
+        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%m / %d / %Y')
+        comments_aggr['username'] = users_name.username
+        all_comments.append(comments_aggr)
+    # Check if logged in user is following this probe
+    for component in components:
+        reagents = component.reagents
+        for reagent in reagents:
+            if reagent.Name:
+                reagents_hash.append(reagent.Name)
     if request.headers.get("accept", "") == "application/json":
         return Response(resp, content_type='application/json')
 
@@ -97,8 +126,12 @@ def get_details(sequence_id):
     else:
         return render_template("/sequence/detail.html",
                                sequence=resp,
+                               reagents = reagents_hash,
                                running_user=running_user,
                                runninguser=running_user,
+                               follower = follower,
+                               comments = all_comments,
+                               reaction_scheme = reaction_scheme,
                                back=back,
                                showNotification=showNotification)
 
@@ -250,9 +283,41 @@ def update_sequence_file(sequence_id, sequence_data):
 class NoPermissionException(Exception):
     pass
 
-@sequencecontroller.route("/sequence/create", methods=["POST"])
+def json_loads_byteified(json_text):
+    return _byteify(
+        json.loads(json_text, object_hook=_byteify),
+        ignore_dicts=True
+    )
+def _byteify(data, ignore_dicts = False):
+    # if this is a unicode string, return its string representation
+    if isinstance(data, unicode):
+        return data.encode('utf-8')
+    # if this is a list of values, return list of byteified values
+    if isinstance(data, list):
+        return [ _byteify(item, ignore_dicts=True) for item in data ]
+    # if this is a dictionary, return dictionary of byteified keys and values
+    # but only if we haven't already byteified it
+    if isinstance(data, dict) and not ignore_dicts:
+        return {
+            _byteify(key, ignore_dicts=True): _byteify(value, ignore_dicts=True)
+            for key, value in data.iteritems()
+        }
+    # if it's anything else, return it in its original form
+    return data
+
+# ========= get the form request to create sequence ==============
+@sequencecontroller.route("/sequence/create/", methods=["POST"])
 def edit_sequence():
-    data = request.json
+
+    data_from_user = json_loads_byteified(json.dumps(request.form))
+
+    data = {"IsDownloadable":False, "hasReactionScheme":False, "TermsAndConditions":None, "SynthesisTime":int(0 if data_from_user['SynthesisTime'] == '' else float(data_from_user['SynthesisTime'])),
+    "NumberOfSteps": 0 if data_from_user['NumberOfSteps'] == '' else int(data_from_user['NumberOfSteps']),"MadeOnElixys":True,"MoleculeID":int(data_from_user['MoleculeID']),"Name":data_from_user['Name'],"Yield":None,
+    "PurificationMethod":data_from_user['PurificationMethod'],"SynthesisModule":data_from_user['SynthesisModule'],"SpecificActivity": None if data_from_user['SpecificActivity'] == '' else data_from_user['SpecificActivity'],
+    "StartingActivity": None if data_from_user['StartingActivity'] == '' else data_from_user['StartingActivity'] ,"SpecificActivityStandardDeviation":None if data_from_user['SpecificActivityStandardDeviation'] == '' else data_from_user['SpecificActivityStandardDeviation'],
+    "StartingActivityStandardDeviation": None if data_from_user['StartingActivityStandardDeviation'] == '' else data_from_user['StartingActivityStandardDeviation'],"YieldStandardDeviation": None if data_from_user['YieldStandardDeviation'] == '' else data_from_user['YieldStandardDeviation'],
+    "SynthesisTimeStandardDeviation": None if data_from_user['SynthesisTimeStandardDeviation'] == '' else data_from_user['SynthesisTimeStandardDeviation'],"NumberOfRuns":None}
+
     try:
         if "SequenceID" in data:
             seq = Sequence.query.filter_by(SequenceID=data['SequenceID']).first()
@@ -274,6 +339,7 @@ def edit_sequence():
     except NoPermissionException:
         return Response({"error_details": "No Permissions Error"}, status=400, content_type="application/json")
     except Exception as e:
+        print e.message
         db.session.rollback()
         msg = str(e)
         if e.__class__ == ValidationException().__class__:

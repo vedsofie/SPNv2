@@ -1,41 +1,248 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-    <script type="text/javascript">
-        var molecules = ko.observableArray();
-        var moleSearch = new MoleculeSearch({searchType: 'local', displayResults: molecules, placeHolder: 'Search for a Probe'});
-        var moles = JSON.parse({{molecules|tojson|safe}});
-        for(var i = 0; i < moles.length; i++){
-            molecules().push(new Molecule(moles[i]));
-        }
-        var paginationSize = 12;
-        var currentPage = ko.observable(1);
-
-        $(function(){
-            navbar.currentlyOpenedTab("tracers");
-        });
-
-    </script>
-{% endblock %}
-
 {% block content_body %}
-
-    <div class="col-sm-12" id="probes-page">
-
-        <div class="">
-            <span data-bind="foreach: {data: molecules, as: 'molecule'}">
-                <!--<span data-bind="if: (parseInt($index()/paginationSize) + 1) == currentPage()">-->
-                <span>
-                    <div data-bind="template: { name: 'molecule_template', data: molecule}"></div>
-                </span>
-            </span>
-            <div class="clear"></div>
+<div class="container-fluid pt-3" id="molecules-page">
+    <div class="row">
+        <div class="col-2 sidebar-padding">
+            <div class="card page-contents">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed"><a href="/probe/new"><i class="far fa-plus-square"></i> Create Probe</a></li>
+                    <li class="list-group-item lh-condensed"><a href="/sequence/new"><i class="far fa-plus-square"></i> Create Sequence</a></li>
+                    <li class="list-group-item lh-condensed"><a href="/probe/my_probes"><i class="fas fa-vial"></i> My Probes</a></li>
+                </ul>
+            </div>
         </div>
 
-        <div data-bind="pagination:{'itemsOnPage': paginationSize,
-                                    'currentPage': currentPage,
-                                    'items': molecules().length}"></div>
 
+        <div class="col-10">
+            <h5 class="text-center mt-2">Probes List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
+            <div class="p-3 mt-3">
+              <div class="row align-items-center">
+                
+                <div class="col-4 text-left">
+                  <div class="input-group">
+                    <div class="input-group">
+                      <label for="">Sequence filter</label>
+                      <div class="input-group-text">
+                        {% if request.args.get('with_sequences') %}
+                        <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only probes with sequences
+                        {% else %}
+                        <input type="checkbox" class="with-seq-checkbox mr-3" aria-label="Checkbox for following text input"> Only probes with sequences
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 text-left" id="mp-select-container">
+                  <label for="">Filter probes by Isotope</label>
+                  <select class="selectpicker" multiple title="Click to filter by Isotope">
+                    {% for isotope in isotopes %}
+                      <!-- In the next line, only display "selected" attribute if the Isotope has been selected by user -->
+
+                      {% if (isotope_values) and (isotope in isotope_values)  %}
+                        <option selected>{{isotope}}</option>
+                      {% elif isotope_values == None %}
+                        <option selected>{{isotope}}</option>
+                      {% else %}
+                        <option>{{isotope}}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                  <button class="btn btn-outline-secondary" id="go-isotope">Go</button>
+                </div>
+                <div class="col-4 text-left">
+                  <label for="">Search for a probe</label>
+                  <div class="input-group">
+                  <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)" id="probe-names">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+            {% for molecule in molecules %}
+              {% if molecule.Downloadable %}
+              <div class="col-4">
+                  <div class="card text-center with-sequence mb-3">
+                    
+                      <div class="sequence-badge-container text-right mt-2 pr-2">
+                      <span class="badge badge-pill badge-warning text-light" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span>
+                      </div>
+           
+                      
+                    
+                    <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
+                      
+                    </div>
+                    <div class="card-footer">
+                      <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                      <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
+                  </div>
+                </div>
+              {% else %}
+              <div class="col-4">
+               <div class="card text-center no-sequence mb-3">
+                      <div class="sequence-badge-container text-right mt-2 pr-3">
+                      <span class="badge badge-pill badge-primary invisible" data-toggle="tooltip" data-placement="top" title="Probe has downloadable sequences"><i class="fas fa-star"></i></span> 
+                      </div>
+                      <img src="/probe/{{ molecule.ID }}/image" alt="" class="card-img-top">
+                    <div class="card-body">
+                      
+                      <h5 class="card-title">{{ molecule.DisplayFormat|safe }}</h5>
+                      
+                    </div>
+                    <div class="card-footer">
+                      <button href="#" class="btn btn-outline-dark view-synonym-button" data-mol="{{ molecule.Name }}" data-toggle="modal" data-target="#synonymModal" id="{{ molecule.ID }}">View Synonyms</button>
+                      <a href="/probe/{{ molecule.ID }}" class="btn btn-primary">View Probe <i class="fas fa-angle-right"></i></a> </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+            </div>
+            <nav aria-label="Page navigation example" class="text-center">
+              <ul class="pagination justify-content-center">
+                {% if current_page_number != 1 %}
+                <li class="page-item"><a class="page-link" href="/probe/?page={{ current_page_number - 1 }}">Previous</a></li>
+                {% endif %}
+                {% for page in range(number_of_pages) %}
+                <li {% if current_page_number == (page + 1) %}  class="page-item active" {% else %} class="page-item" {% endif %}><a class="page-link" href="/probe/?page={{ page + 1 }}">{{ page + 1 }}</a></li>
+                {% endfor %}
+                {% if current_page_number != number_of_pages %}
+                <li class="page-item"><a class="page-link" href="/probe/?page={{ current_page_number + 1 }}">Next</a></li>
+                {% endif %}
+              </ul>
+            </nav>
+
+        </div>
     </div>
-   
+</div>
+<!-- modal -->
+
+<div class="modal fade" id="synonymModal" tabindex="-1" role="dialog" aria-labelledby="synonymModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="synonymModalCenterTitle">Synonyms</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="item-list">
+            
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- scripts -->
+<script>
+$(document).ready(function(){
+    $('#synonymModal').on('show.bs.modal', function (e) {
+          $('ul.item-list').empty();
+           var id = e.relatedTarget.id;
+           var molecule_name = $(e.relatedTarget).data("mol");
+           $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
+           // AJAX request
+           $.ajax({
+            url: '/keyword/Molecules/'+id+'/synonym',
+            type: 'get',
+            success: function(response){ 
+              // Add response in Modal body
+              $(response).each(function(index){
+
+                $('ul.item-list').append("<li>"+response[index]['DisplayFormat']+"</li>");
+                console.log(response[index]['DisplayFormat']);
+                });
+
+              
+              // Display Modal
+              // $('#empModal').modal('show'); 
+            }
+          });
+    });
+  // enable tooltips on this page
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+
+  // view only probes with sequences
+  $(".with-seq-checkbox").change(function(){
+    if (this.checked) {
+      $(".no-sequence").hide();
+      if(window.location.href.indexOf('?') > -1) {
+        //multiple try
+          var temp = document.location.href.split('?')
+          var address = temp[0]
+          var rest = '';
+          for(var i = 1; i < temp.length; i++) {
+              rest += temp[i];
+          }
+          var argument = rest.split('&')
+          rest = '';
+          for(var i = 0; i < argument.length; i++) {
+            if(argument[i] != 'with_sequences=true' && argument[i].split('=')[0] == 'page') {
+              rest += "&" + argument[i];
+            }
+          }
+          //var url = document.location.href+"&with_sequences=true";
+          var url = address + "?with_sequences=true" + rest 
+      }else{
+        //first try
+          var url = document.location.href+"?with_sequences=true";
+      }
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
+  });
+
+  // When user click "go" after selecting isotopes
+  $("#go-isotope").click(function(){
+      var isotopes_js = $('.selectpicker').selectpicker('val');
+      $(".no-sequence").hide();
+      if(window.location.href.indexOf('?') > -1) {
+        //multiple if there is already ? in the address
+          var first = window.location.href.split('?')[0]
+          //var url = document.location.href+"&isotopes="+isotopes_js;
+          var url = first+"?isotopes="+isotopes_js
+      }else{
+          //first
+          var url = document.location.href+"?isotopes="+isotopes_js;
+      }
+      window.location.href = url;
+  });
+
+
+
+  $( "#probe-names" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax( {
+          url: "search.php",
+          dataType: "jsonp",
+          data: {
+            term: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        } );
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+      }
+    } );
+});
+</script>
 {% endblock %}
+
+

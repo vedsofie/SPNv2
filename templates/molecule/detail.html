@@ -1,182 +1,448 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-    <script>
-        var molecule = new Molecule(JSON.parse({{molecule|tojson|safe}}));
-        var moleculeDetail = new MoleculeDetailView({molecule: molecule});
-        var paginationSize = 3;
-        var keywordPaginationSize = 5;
-        var keywordCurrentPage = ko.observable(1);
-        var synonymsCurrentPage = ko.observable(1);
-
-        $(function(){
-            navbar.currentlyOpenedTab("tracers");
-        });
-    </script>
-    <style>
-        #molecule-upload-sequence #popup-text-button {
-            display: inline-block;
-        }
-
-        .form_wrap {
-            /*width: 638px;*/
-            margin: 0 auto;
-            margin-top: 20px;
-                margin-left: 10px;
-    margin-right: 10px;
-
-        }
-
-        .main_form {
-            background-color: #f3f6f9;
-            border: none;
-            outline: none;
-            border-radius: 3px;
-            padding: 14px 16px;
-            width: 100%;
-            height: 52px;
-
-        }
-
-    </style>
-{% endblock %}
-
 {% block content_body %}
-    
-<div class="col-sm-6 col-sm-offset-3 col-xs-12" id="probe-page">
-    <div class="m-molecule-details">
-        <img class="molecule-details__img" data-bind="attr:{src: molecule.image_url}" />
-        <div class="probe-content-styles">
-            <formula-editor params="formula: molecule.record.Name,
-                                        userFormatted: molecule.record.DisplayFormat,
-                                        edit: false"></formula-editor>
-            <div class="elipse-overflow molecule-description">
-                <p data-bind="text: molecule.Description"></p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <div class="mx-auto">
+                            <a href=""><i class="fas fa-vial"></i> My Probes</a>
+                        </div>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-bars"></i> My Sequences</a></li>
+                    <li class="list-group-item lh-condensed"><a href=""><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
             </div>
         </div>
-        <div class="clear"></div>
-    </div>
-    <div class="left_action_box google-card-4">
-        <div style="display: inline-block;" data-bind="visible: molecule.canEdit()">
-            <div tabindex="1" data-bind="event: {click: openActionMenu,
-                                                                 blur: hideActionMenu}" class="action-context-menu">
-                <span class="action-control"><div class="action-control__arrow"></div>Actions</span>
-            </div>
-            <div class="m-toggle-menu-wrapper">
-                <div class="toggle-menu toggle-menu--probe" data-bind="visible: actionMenuOpen" style="display: none;">
-                    <a data-bind="attr: {href: '/probe/' + molecule.ID + '?edit=true'}">
-                        <div data-bind="visible: molecule.canEdit()" class="toggle-menu__control-option">Edit
-                        </div>
-                    </a>
-                    <div data-bind="visible: molecule.canEdit(),
-                                                    click: molecule.delete_self" class="toggle-menu__control-option toggle-menu__control-option--last">Delete
+        <div class="col-6 page-contents">
+            <h5 class="text-center mt-3">Probe Details</h5>
+            <div class="card p-3 mt-3">
+                <div class="row">
+                    <div class="col-5"><img src="/probe/{{ molecule.ID }}/image" alt="" class="img-fluid bg-light"></div>
+                    <div class="col-7">
+                        <h5 class="text-left mt-2">{{ molecule.DisplayFormat|safe }}</h5>
+                        <p>{{ molecule.Description }}</p>
                     </div>
                 </div>
             </div>
+            <div class="card mt-3 mb-3 p-3">
+                <div class="row">
+                    <div class="dropdown col-6">
+                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Probe Options
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/probe/{{ molecule.ID }}/add_synonyms/">Add Synonyms</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/probe/{{ molecule.ID }}/add_keywords/">Add Keywords</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/probe/{{ molecule.ID }}/edit/">Edit probe details</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteProbeModal">Delete this probe</a>
+                      </div>
+                    </div>
+                    
+                    <div class="col-6 text-right">
+                        {% if follower != None %}
+                        <button type="button" class="btn btn-primary" data-mol="{{ molecule.ID }}" id="follow-probe">Unfollow</button>
+                        {% else %}
+                        <button type="button" class="btn btn-primary" data-mol="{{ molecule.ID }}" id="follow-probe">Follow</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if public_sequences|length > 0 %}
+            <div class="divider_title col-sm-12">
+                <span>Sequences available for download</span>
+            </div>
+            <div class="card-columns column-count-2 mb-3">
+                {% for sequence in public_sequences %}
+                <div class="card text-center">
+                  <div class="card-body">
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
+                    <p>{{ sequence.Comment }}</p>
+                    <div class="dropdown-divider"></div>
+                    <div>
+                        <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
+                    </div>
+                    <div>
+                        <span>Synthesis Time: {{ sequence.SynthesisTime }}{% if sequence.SynthesisTime != None and sequence.SynthesisTimeStandardDeviation %} ± {{ sequence.SynthesisTimeStandardDeviation }} {% endif %}</span>
+                        minutes
+                    </div>
+                    <div><span># Cassettes: {{ sequence.NumberOfSteps }}</span></div>
+                    <div><span>Purification: {{ sequence.PurificationMethod }}</span></div>
+                    <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="sequence-card-footer">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
+                  </div>
+                </div>
+        
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="divider_title col-sm-12">
+                <span>Contact for further information</span>
+            </div>
+            <div class="card-columns column-count-2">
+                {% for sequence in private_sequences %}
+                <div class="card text-center">
+                  <div class="card-body">
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
+                    <p>{% if sequence.Comment != None %}  {{ sequence.Comment }} {% endif %}</p>
+                    <div class="dropdown-divider"></div>
+                    <div>
+                        <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
+                    </div>
+                    <div>
+                        <span>Synthesis Time: {{ sequence.SynthesisTime }}{% if sequence.SynthesisTime != None and sequence.SynthesisTimeStandardDeviation %} ± {{ sequence.SynthesisTimeStandardDeviation }} {% endif %}</span>
+                        minutes
+                    </div>
+                    <div><span># Cassettes: {{ sequence.NumberOfSteps }}</span></div>
+                    <div><span>Purification: {{ sequence.PurificationMethod }}</span></div>
+                    <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="sequence-card-footer text-center">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle"><span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
+                  </div>
+                    
+                </div>
+                
+
+                {% endfor %}
+            </div>
+
+            <!-- comments -->
+            <div class="accordion" id="probe-comments">
+              <div class="card">
+                <div class="card-header" id="probe-comment-1">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Comments
+                    </button>
+                  </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="probe-comment-1" data-parent="#probe-comments">
+                  <div class="card-body">
+                    {% for comment in comments %}
+                    <div id="comment-card-body">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                {{ comment.Message|safe }}
+                                {% if comment.RenderType == 'image' %}
+                                    <img src="/comment/{{ comment.CommentID }}/image" class="img-fluid" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <div class="row">
+
+                                    <div class="col-8">
+                                    <img src="/user/{{ comment.UserID }}/avatar" class="avatar-small img-fluid rounded-circle" alt="">
+                                    <b>{{ comment.username }}</b>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        {{ comment.CreationDate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="border-bottom"></div>
+                    <div class="form-group mt-3 text-right">
+                        <textarea name="comment" id="new-comment" class="form-control" rows="3" placeholder="Type your comment here"></textarea>
+                        <button class="btn btn-link mp-3"><label for="image-upload"><i class="far fa-image mr-1"></i>Upload image</label><input type="file" class="custom-file-input" id="image-upload" name="comment-image"></button>
+                        <button class="btn btn-outline-primary mt-3" id="post-comment-button">Post comment</button>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
-        <div class="button_wrap">
-            <a class="m-solid-button" data-bind="visible: !molecule.calculatedUserIsFollowing(),
-                                                                 click: molecule.follow" style="display: none;">Follow</a>
-            <a class="m-solid-button" data-bind="visible: molecule.calculatedUserIsFollowing(),
-                                                                 click: molecule.unfollow" style="display: none;">Unfollow</a>
+        <!-- right side sidebar -->
+        <div class="col-3 sidebar-padding" id="probe-right-sidebar">
+            <div class="card text-center">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Info</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                        <b>CAS:</b>
+                       <div> {{ molecule.CAS }}</div>
+                    </li>
+                    <li class="list-group-item lh-condensed">
+                        <b>Isotope:</b>
+                        <div id="isotope"> {{ molecule.Isotope }}</div>
+                    </li>
+                    <li class="list-group-item lh-condensed">
+                        <b>Formula:</b>
+                        <div id="formula">{{ molecule.Formula }}</div>
+                    </li>
+                    {% for keyw in keywords if keyw.Category == "Synonym" %}
+                    <li class="list-group-item lh-condensed">
+                        <b>Synonym {{ loop.index }}</b>
+                        <div>{{ keyw.DisplayFormat|safe}}</div>    
+                    </li>
+                    {% endfor %}
+                    <li class="list-group-item lh-condensed">
+                         <b>Keywords</b>
+                    {% for keyw in keywords if keyw.Category == "Keyword" %}
+                        <div>{{ keyw.Keyword|safe}}</div>    
+                    {% endfor %}
+                    </li>
+                </ul>
+            </div>
         </div>
+
+    </div><!-- end of row -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteProbeModal" tabindex="-1" role="dialog" aria-labelledby="deleteProbeModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center mt-3">
+        <h5 class="text-danger">Are you sure you want to delete {{ molecule.DisplayFormat|safe }}</h5>
+        <p class="text-danger">NOTE: This action cannot be undone</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-mol="{{ molecule.ID }}" id="delete-probe-button">Delete probe</button>
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="col-xs-12 col-sm-3 col-lg-2 col-lg-offset-1 right-sidebar" id="probe-sidebar">
-    <h3>Info</h3>
-    <div class="info_wrap">
-        <div>
-            <span class="info_name">CAS:</span>
-            <span data-bind="text: molecule.CAS"></span>
-        </div>
-        <div>
-            <span class="info_name">Isotope:</span>
-            <formula-editor params="formula: molecule.Isotope,
-                                            edit: false,
-                                            superscriptNumbers: true"></formula-editor>
-        </div>
-        <div>
-            <span class="info_name">Formula:</span>
-            <formula-editor params="formula: molecule.Formula, edit: false"></formula-editor>
-        </div>
-        <span data-bind="if: molecule.calculatedKeywords()">
-            <div>
-                <keyword-list-read-only-popup params="btnText: 'View Synonyms',parent_id: molecule.ID,template: 'molecule_keyword_list_read_only_open_button',
-                                                      type: 'Molecules',category: 'Synonym',autoCalculate: true"></keyword-list-read-only-popup>
+<!-- Image upload modal -->
+<div class="modal fade" tabindex="-1" id="image-upload-modal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="image-upload-body">
+        <div class="img-container">
+              <img id="image" src="" class="img-fluid">
             </div>
-            <div>
-                <span class="info_name">Keywords:</span>
-            <div data-bind="foreach: {data: molecule.keywordKeywords, as: 'keyword'}">
-                <span data-bind="if: parseInt($index() / keywordPaginationSize) + 1 == keywordCurrentPage()">
-                                        <div data-bind="text: keyword.record.Keyword"></div>
-                                    </span>
-            </div>
-            <div data-bind="pagination: {'itemsOnPage': keywordPaginationSize,
-                                                         'currentPage': keywordCurrentPage,
-                                                         'items': molecule.keywordKeywords().length}">
-            </div>
-            </div>
-        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="crop">Crop</button>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="clear"></div>
+<script>
+$(document).ready(function(){
+    // follow probe functionality
+    $("#follow-probe").click(function(){
+        if($(this).text() == "Follow"){
+            var molecule_id = $(this).data("mol");
+            $.ajax({
+              url: "/probe/"+molecule_id+"/follow/",
+              method: "POST",
+              success: function(result){
+                $("#follow-probe").text("Unfollow");
+              }
+            });
+        }
+        else{
+            var molecule_id = $(this).data("mol");
+            $.ajax({
+              url: "/probe/"+molecule_id+"/unfollow/",
+              method: "DELETE",
+              success: function(result){
+                $("#follow-probe").text("Follow");
+              }
+            });
+        }
+    }); // end of follow probe call
 
-<div class="col-sm-6 col-sm-offset-3">
-    <span data-bind="with: moleculeDetail">
-           
-    <div class="l-content-wrapper col-sm-12" id="availableForDownload" data-bind="if: publicSequences().length > 0">
-        <div class="divider_title col-sm-12">
-            <span>Available for Download</span>
-    </div>
-    <div class="">
-        <div data-bind="foreach: {data: publicSequences, as: 'sequence'}">
-            <sequence-detail-card params="sequence: sequence,displayAccountName: true"></sequence-detail-card>
-        </div>
-        <div class="clear"></div>
-    </div>
-    </div>
-    <div class="" id="contactForFurtherInformation" data-bind="if: privateSequences().length > 0">
-        <div class="divider_title col-sm-12">
-            <span>Contact For Further Information</span>
-        </div>
-        <div class="">
-            <span data-bind="foreach: {data: privateSequences(), as: 'sequence'}">
-                            <sequence-detail-card params="sequence: sequence,displayAccountName: true"></sequence-detail-card>
-                        </span>
-            <div class="clear"></div>
-        </div>
-    </div>
-    </span>
-    <div class="posts-wrapper col-sm-12">
-        <div class="wrap_c not_expandable">
-            <posts params="parent_id: molecule.ID,
-                               type: 'Molecules'"></posts>
-        </div>
-    </div>
-</div>
+    // Delete probe functionality
+    $("#delete-probe-button").click(function(){
+        var molecule_id = $(this).data("mol");
+        $.ajax({
+              url: "/probe/"+molecule_id+"/",
+              method: "DELETE",
+              success: function(result){
+                console.log(result);
+              }
+            });
+    }); // end of delete probe call
+    
+    // the code below is to subscript the formula, do not delete
+    var formula = $("#formula").text();
+    formatted = formula.replace(/([0-9])/g, "<sub>$1</sub>");
+    $("#formula").html(formatted);
+
+    var isotope_superscript = $("#isotope").text();
+    isotope_formatted = isotope_superscript.replace(/([0-9])/g, "<sup>$1</sup>");
+    $("#isotope").html(isotope_formatted);
+
+    // make a new comment with ajax
+    $("button#post-comment-button").click(function(){
+        var new_comment = $("#new-comment").val();
+        molecule_id = {{ molecule.ID }};
+        $.ajax({
+            url: "/comment/",
+            method: "POST",
+            data: {
+                Message: new_comment,
+                ParentID: molecule_id,
+                Type: "Molecules"
+            },
+            success: function(result){
+                var parsed_response = JSON.parse(result)
+                $("#new-comment").val("");
+                var comment_card = "<div class='card mb-3'><div class='card-body'>"+parsed_response['Message']+"</div><div class='card-footer'><div class='row'><div class='col-8'><img src='/user/"+parsed_response['UserID']+"/avatar' class='avatar-small img-fluid rounded-circle' alt='><b>{{ runninguser.username }}</b></div><div class='col-4 text-right'>"+parsed_response['CreationDate']+"</div></div></div></div>";
+                $("#comment-card-body").append(comment_card);
+                console.log(parsed_response);
+              }
+        });
+    });
+
+    // Image upload and crop
+      var avatar = document.getElementById('avatar');
+      var image = document.getElementById('image');
+      var input = document.getElementById('image-upload');
+      var $progress = $('.progress');
+      var $progressBar = $('.progress-bar');
+      var $alert = $('.alert');
+      var $modal = $('#image-upload-modal');
+      var cropper;
+      $progress.hide();
+    $("input#image-upload").change(function(e){
+        var fileName = e.target.files[0].name;
+        //$("#image-upload-modal").modal('show');
+        var files = e.target.files;
+        var done = function (url) {
+          input.value = '';
+          image.src = url;
+          $alert.hide();
+          $modal.modal('show');
+        };
+        var reader;
+        var file;
+        var url;
+
+        if (files && files.length > 0) {
+          file = files[0];
+
+          if (URL) {
+            done(URL.createObjectURL(file));
+          } else if (FileReader) {
+            reader = new FileReader();
+            reader.onload = function (e) {
+              done(reader.result);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+
+
+    $modal.on('shown.bs.modal', function () {
+        cropper = new Cropper(image, {
+          aspectRatio: 1,
+          viewMode: 3,
+        });
+      }).on('hidden.bs.modal', function () {
+        cropper.destroy();
+        cropper = null;
+      });
+
+      document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+        var canvas;
+
+        $modal.modal('hide');
+
+        if (cropper) {
+          canvas = cropper.getCroppedCanvas({
+            width: 160,
+            height: 160,
+          });
+          // initialAvatarURL = avatar.src;
+          // avatar.src = canvas.toDataURL();
+          $progress.show();
+          $alert.removeClass('alert-success alert-warning');
+          canvas.toBlob(function (blob) {
+            var formImageData = {"Type": "Molecules", "ParentID": {{molecule.ID}}, "Image": blob}
+            // var formData = new FormData();
+
+            // formData.append('Image', blob, fileName);
+            // formData.append('Type', "Molecules");
+            // formData.append('ParentID', {{molecule.ID}});
+            $.ajax('/comment/image/', {
+              method: 'POST',
+              data: formImageData,
+              processData: false,
+              contentType: "application/json",
+
+              xhr: function () {
+                console.log(formImageData);
+                var xhr = new XMLHttpRequest();
+
+                xhr.upload.onprogress = function (e) {
+                  var percent = '0';
+                  var percentage = '0%';
+
+                  if (e.lengthComputable) {
+                    percent = Math.round((e.loaded / e.total) * 100);
+                    percentage = percent + '%';
+                    $progressBar.width(percentage).attr('aria-valuenow', percent).text(percentage);
+                  }
+                };
+
+                return xhr;
+              },
+
+              success: function () {
+                $alert.show().addClass('alert-success').text('Upload success');
+              },
+
+              error: function () {
+                // avatar.src = initialAvatarURL;
+                $alert.show().addClass('alert-warning').text('Upload error');
+              },
+
+              complete: function () {
+                $progress.hide();
+              },
+            });
+          });
+        }
+      });
+
+    });
+});
+
+</script>
+
 {% endblock %}
 
 {% block footer %}
     {{super()}}
     <script type="text/javascript">
-        openActionMenu = function(){
-            actionMenuOpen(!actionMenuOpen());
-        }
-        hideActionMenu = function(){
-            setTimeout(function(){
-                actionMenuOpen(false);
-            }, 300);
-        }
-        actionMenuOpen = ko.observable(false);
-        editKeywords = function(){
-            viewModel.synomynsKeywordViewModel.open();
-        }
-        editSyns = function(){
-            viewModel.keywordsViewModel.open();
-        }
-        var viewModel = new MoleculeDetailViewModel({molecule: molecule});
+        
     </script>
 {% endblock %}
 

@@ -8,6 +8,7 @@ from models.molecule import Molecule
 from models.sobject import ValidationException
 import email_sender
 import json
+import math
 from back import back
 from werkzeug import secure_filename
 import urllib
@@ -84,7 +85,7 @@ def contact(account_id):
     email_sender.contact_account(guest_user, account, message)
     return "OK"
 
-@accountcontroller.route("/account/<int:account_id>/update", methods=["POST", "PUT"])
+@accountcontroller.route("/account/<int:account_id>/update_old", methods=["POST", "PUT"])
 def update(account_id):
     try:
         account_name = None
@@ -148,17 +149,60 @@ def edit(account_id):
 @back.anchor
 def get_account(account_id):
     account = Account.query.filter_by(id=account_id).first()
-    if account is not None:
-        resp = json.dumps(account.to_hash())
-        edit_page = request.args.get('edit', False)
-        if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
-            return Response(resp, headers={'Content-Type': "application/json"})
-        if edit_page and account.can_save(g.user):
-            return render_template("account/edit.html", account=resp, runninguser=json.dumps(g.user.to_hash()))
-        return render_template("account/detail.html", back=back, account=resp, runninguser=json.dumps(g.user.to_hash()))
-    message = urllib.quote("The organization does not exist")
-    return redirect('/user/dashboard?notificationMessage=%s' % message)
+    resp = account
 
+    account_users = []
+    for user in account.users:
+        if user.Active == True:
+            account_users.append(user)
+
+    sequences = account.sequences
+    private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
+    public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]          
+    return render_template("account/detail.html", back=back, account=resp, public_sequences=public_sequences, private_sequences=private_sequences, account_users = account_users,runninguser=g.user.to_hash())
+    
+    # if account is not None:
+    #     resp = json.dumps(account.to_hash())
+    #     edit_page = request.args.get('edit', False)
+    #     if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
+    #         return Response(resp, headers={'Content-Type': "application/json"})
+    #     if edit_page and account.can_save(g.user):
+    #         return render_template("account/edit.html", account=resp, runninguser=json.dumps(g.user.to_hash()))
+    #     return render_template("account/detail.html", back=back, account=resp, runninguser=json.dumps(g.user.to_hash()))
+    # message = urllib.quote("The organization does not exist")
+    # return redirect('/user/dashboard?notificationMessage=%s' % message)
+
+# ================== Edit the details of a particular account ==============
+@accountcontroller.route("/account/<int:account_id>/edit/", methods=["GET"])
+@back.anchor
+def edit_account(account_id):
+    account = Account.query.filter_by(id=account_id).first()
+    resp = account.to_hash()
+    return render_template("/account/edit.html", back=back, account=resp,runninguser=g.user.to_hash())
+
+@accountcontroller.route("/account/<int:account_id>/update/", methods=["POST"])
+@back.anchor
+def update_account(account_id):
+    account = Account.query.filter_by(id=account_id).first()
+    data = request.form
+    if account.can_save(g.user):
+        account.name = data['name']
+        account.LabName = data['LabName']
+        account.description = data['description']
+        account.City = data['City']
+        account.State = data['State']
+        account.ZipCode = data['ZipCode']
+        account.Address = data['Address']
+        account.Latitude = data['Latitude']
+        account.Longitude = data['Longitude']
+        if account.save():
+            return redirect(url_for('.get_account', account_id=account_id))
+        else:
+            error = "There was an error saving the changes to database"
+            return redirect(url_for('.edit_account', account_id=account_id), error)
+
+    # resp = account.to_hash()
+    # return render_template("/account/edit.html", back=back, account=resp,runninguser=g.user.to_hash())
 
 @accountcontroller.route("/account/undefined/logo/", methods=["GET"])
 def get_default_logo():
@@ -266,18 +310,44 @@ def users(account_id):
 @accountcontroller.route("/account/", methods=["GET"])
 @back.anchor
 def show():
-    print "show"
-    acts = Account.query.order_by(Account.name).all()
+    page_number = request.args.get("page", 1, type=int)
+    pharma_only = request.args.get("pharma_only",False)
+    academic_only = request.args.get("academic_only",False)
+    # if there is a filter in the url, filter those results
+    if pharma_only:
+        print "pharma only"
+        all_accounts = Account.query.filter_by(Pharma=True).order_by(Account.name).all()
+    elif academic_only:
+        print "academic only"
+        all_accounts = Account.query.filter_by(Pharma=False).order_by(Account.name).all()
+    else:
+        all_accounts = Account.query.order_by(Account.name).all()
+    #all_accounts = Account.query.order_by(Account.name).all()
+    all_accounts_count = Account.query.order_by(Account.name).count()
+    number_of_pages = int(math.ceil(all_accounts_count / 9.0))
     response = []
-    for act in acts:
+    for act in all_accounts:
         x = act.to_hash()
         x.update({"sequence_count": len(act.sequences)})
         response.append(x)
     response.sort(key=lambda account: account["sequence_count"], reverse=True)
-    response = json.dumps(response)
-    if 'Accept' in request.headers and request.headers['Accept'] == 'json':
-        return response
-    return render_template("account/accounts.html", accounts=response, runninguser=json.dumps(g.user.to_hash()))
+    lower_limit = page_number*9 - 9
+    upper_limit = page_number*9
+    response = response[lower_limit : upper_limit]
+
+
+
+    # #pagination
+    # all_accounts = Account.query.order_by(Account.name).limit(9)
+    
+    # number_of_pages = 0
+    # if all_accounts_count > 9:
+    #     all_accounts = all_accounts.offset((page_number*9) - 9)
+    #     number_of_pages = int(math.ceil(all_accounts_count / 9.0))
+
+
+
+    return render_template("account/accounts.html", accounts=response, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
 @accountcontroller.route('/account/<int:account_id>/user/available_roles/')
 def get_available_roles(account_id):

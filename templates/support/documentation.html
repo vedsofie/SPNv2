@@ -1,126 +1,179 @@
-<h1 class="text-center">Documentation</h1>
-<div class="col-sm-8 col-sm-offset-2">
-    <div class="col-sm-12">
-        <div class="doc-card-group">
-            <div class="col-sm-12 text-center doc-group-title">
-                <h3> User Manuals</h3>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS Software User Manual</p>
-                    <p>The Software User Manual describes how to use the ELIXYS software, from programming sequences to explaining the run screen and log files.  </p><br><br>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/bki61sfuayfog4h/ELIXYS%20Software%20Manual.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
+{% extends "application.html" %}
+{% block content_body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
                 </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS FLEX/CHEM User Manual</p>
-                    <p>The FLEX/CHEM User Manual describes how to use the instrument for automated synthesis. Pre-synthesis hardware preparation through exporting logs of past runs from the GUI are covered, including cassette setup.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/lz5qnjzam1k6tlx/ELIXYS%20FLEX-CHEM%20User%20Manual.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS PURE/FORM User Manual</p>
-                    <p>The PURE/FORM User Manual introduces the new module and explains the workflow it was designed for. All features of the PURE/FORM instrument are detailed here and an breakdown of all PURE/FORM related software features are explained.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/f81ofpq6i17inyp/ELIXYS%20PURE-FORM%20User%20Manual%20v1.1.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href="/probe/my_probes/"><i class="fas fa-vial"></i> My Probes</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href="/user/{{ runninguser.UserID }}/edit/"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li class="list-group-item lh-condensed"><a href="https://sofie.com/radiochemistry-publications" target="_blank"><i class="far fa-newspaper"></i> Radiochemistry Publications</a></li>
+                </ul>
             </div>
         </div>
-        
-        <div class="doc-card-group">
-            <div class="col-sm-12 text-center doc-group-title">
-                <h3>
-                Training & Planning
-                
-            </h3>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS Platform Facility Site Planning</p>
-                    <p>This document describes the facility requirements for a full ELIXYS platform: the FLEX/CHEM synthesizer, PURE/FORM module, and Control Box. It also describes what other items are required during the installation process.</p><br>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/50c4fcy4kl054xy/ELIXYS%20Platform%20Facility%20Site%20Planning.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
+        <!-- Center col -->
+        <div class="col-8">
+            <h5 class="text-center mt-3">Documentation</h5>
+            <div class="pt-3 text-center">
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                  User Manuals
+                                </button>
+                              </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="card-deck">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS Software User Manual</h5>
+                                            <p class="card-text">The Software User Manual describes how to use the ELIXYS software, from programming sequences to explaining the run screen and log files.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/bki61sfuayfog4h/ELIXYS%20Software%20Manual.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS FLEX/CHEM User Manual</h5>
+                                            <p class="card-text">The FLEX/CHEM User Manual describes how to use the instrument for automated synthesis. Pre-synthesis hardware preparation through exporting logs of past runs from the GUI are covered, including cassette setup.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/lz5qnjzam1k6tlx/ELIXYS%20FLEX-CHEM%20User%20Manual.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS PURE/FORM User Manual</h5>
+                                            <p class="card-text">The PURE/FORM User Manual introduces the new module and explains the workflow it was designed for. All features of the PURE/FORM instrument are detailed here and an breakdown of all PURE/FORM related software features are explained.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/f81ofpq6i17inyp/ELIXYS%20PURE-FORM%20User%20Manual%20v1.1.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  Training & Planning
+                                </button>
+                              </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="card-deck">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS Platform Facility Site Planning</h5>
+                                            <p class="card-text">This document describes the facility requirements for a full ELIXYS platform: the FLEX/CHEM synthesizer, PURE/FORM module, and Control Box. It also describes what other items are required during the installation process.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/50c4fcy4kl054xy/ELIXYS%20Platform%20Facility%20Site%20Planning.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS FLEX/CHEM Training Qualification</h5>
+                                            <p class="card-text">Provided to you by the SOFIE Engineer during the FLEX/CHEM installation, this document covers an overview of all components on the FLEX/CHEM, all Unit Operations, and finishes with a hands-on tutorial sequence.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/7tfkav6zmcvbvtm/ELIXYS%20FLEX-CHEM%20Training%20Qualification.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS PURE/FORM Training Qualification</h5>
+                                            <p class="card-text">Provided to you by the SOFIE Engineer during the PURE/FORM installation, this document covers an overview of all components on the PURE/FORM, an explanation of the Purification and Formulation Unit Operations, a breakdown of the PURE/FORM Control Page, and finishes with a hands-on tutorial sequence.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/8r2ubbm7e7f4h1o/ELIXYS%20PURE-FORM%20Training%20Qualification.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                  System Dimensions
+                                </button>
+                              </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="card-deck">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS FLEX/CHEM Dimensions</h5>
+                                            <p class="card-text">This CAD drawing shows the physical dimensions of the FLEX/CHEM synthesizer.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/3paosnoaqk597xq/ELIXYS%20FLEX-CHEM%20Dimensions.PDF?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS PURE/FORM Dimensions</h5>
+                                            <p class="card-text">This CAD drawing shows the physical dimensions of the PURE/FORM module.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/p34troips1tg11p/ELIXYS%20PURE-FORM%20Dimensions.PDF?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">ELIXYS Control Box Dimensions</h5>
+                                            <p class="card-text">This CAD drawing shows the physical dimensions of the ELIXYS Control Box.</p>
+                                        </div>
+                                        <div class="text-center card-footer">
+                                            <a href="https://www.dropbox.com/s/vkfce3umhivdo9w/Control%20Box%20Dimensions.pdf?dl=0" target="_blank">
+                                                <button class="btn btn-primary">Download</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS FLEX/CHEM Training Qualification</p>
-                    <p>Provided to you by the SOFIE Engineer during the FLEX/CHEM installation, this document covers an overview of all components on the FLEX/CHEM, all Unit Operations, and finishes with a hands-on tutorial sequence.</p><br>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/7tfkav6zmcvbvtm/ELIXYS%20FLEX-CHEM%20Training%20Qualification.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS PURE/FORM Training Qualification</p>
-                    <p>Provided to you by the SOFIE Engineer during the PURE/FORM installation, this document covers an overview of all components on the PURE/FORM, an explanation of the Purification and Formulation Unit Operations, a breakdown of the PURE/FORM Control Page, and finishes with a hands-on tutorial sequence.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/8r2ubbm7e7f4h1o/ELIXYS%20PURE-FORM%20Training%20Qualification.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
+                <!-- card row 2 -->
+                <!-- Card row 3 -->
             </div>
         </div>
-
-        <div class="doc-card-group">
-            <div class="col-sm-12 text-center doc-group-title">
-                <h3>
-                 System Dimensions
-                </h3>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS FLEX/CHEM Dimensions</p>
-                    <p>This CAD drawing shows the physical dimensions of the FLEX/CHEM synthesizer.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/3paosnoaqk597xq/ELIXYS%20FLEX-CHEM%20Dimensions.PDF?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS PURE/FORM Dimensions</p>
-                    <p>This CAD drawing shows the physical dimensions of the PURE/FORM module.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/p34troips1tg11p/ELIXYS%20PURE-FORM%20Dimensions.PDF?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-                <div class="google-card google-card-1">
-                    <p class="text-center doc-block-title">ELIXYS Control Box Dimensions</p>
-                    <p>This CAD drawing shows the physical dimensions of the ELIXYS Control Box.</p>
-                    <div class="text-center">
-                        <a href="https://www.dropbox.com/s/vkfce3umhivdo9w/Control%20Box%20Dimensions.pdf?dl=0" target="_blank">
-                            <button class="btn btn-primary">Download</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <!-- Right sidebar -->
+        <div class="col-2 sidebar-padding" id="probe-right-sidebar">
+            
         </div>
     </div>
 </div>
+{% endblock %}

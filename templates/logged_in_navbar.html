@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <a class="navbar-brand" href="/"><img src="/static/img/spn-white-top.png" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        
+  <div class="collapse navbar-collapse flex-grow-1 text-right" id="navbarNav">
+    <ul class="navbar-nav ml-auto flex-nowrap">
+      <li {% if request.path == "/dashboard" %}   class="nav-item active" {% else %} class="nav-item" {% endif %} >
+        <a class="nav-link" href="/dashboard">Dashboard <span class="sr-only">(current)</span></a>
+      </li>
+      {% if runninguser.RoleID == 2 %}   
+      <li class="nav-item">
+        <a class="nav-link" href="/user/admin">Admin</a>
+      </li>
+      {% endif %}
+      <li {% if "/support" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/support/field_support" id="navbarSupportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Support
+        </a>
+        <div class="dropdown-menu m-0" aria-labelledby="navbarSupportDropdown">
+          <a class="dropdown-item" href="/support/field_support">Field Support</a>
+          <a class="dropdown-item" href="/support/documentation">Documentation</a>
+          <a class="dropdown-item" href="/support/software">Software</a>
+          <a class="dropdown-item" href="/support/faq">FAQ & Videos</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/issue/new/">Create Support Request</a>
+        </div>
+      </li>
+      <li {% if "/orders" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/orders/" id="navbarOrderDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Orders
+        </a>
+        <div class="dropdown-menu m-0" aria-labelledby="navbarOrderDropdown">
+          <a class="dropdown-item" href="/orders/my_order/">Pending Order</a>
+          <a class="dropdown-item" href="/orders/old_orders/">Past Orders</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/product/new_order/">New Order</a>
+        </div>
+      </li>
+      <li {% if "/probe/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/probe" id="navbarProbeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Probes & Sequences
+        </a>
+        <div class="dropdown-menu m-0" aria-labelledby="navbarProbeDropdown">
+          <a class="dropdown-item" href="/probe/">All probes</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/probe/new/">Create new probe</a>
+          <a class="dropdown-item" href="/sequence/new/">Create new sequence</a>
+        </div>
+      </li>
+      <li {% if "/account/" in request.path  %}   class="nav-item active dropdown" {% else %} class="nav-item dropdown" {% endif %}">
+        <a class="nav-link dropdown-toggle" href="/account/" id="navbarOrgDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Organizations
+        </a>
+        <div class="dropdown-menu m-0" aria-labelledby="navbarOrgDropdown">
+          <a class="dropdown-item" href="/account/">All organizations</a>
+          <a class="dropdown-item" href="/account/{{runninguser.AccountID}}/">My organization</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/account/new/">Create new organization</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" id='avatar-button'>
+        <a href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div tabindex="1" class="avatar">
+                    <img class="avatar" data-bind="attr:{src: '/user/' + runninguser.UserID + '/avatar'}" src="/user/{{ runninguser.UserID }}/avatar">
+                </div>
+        </a>
+        <div class="dropdown-menu m-0 dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/user/{{ runninguser.UserID }}/edit/">My Account Details</a>
+          <a class="dropdown-item" href="/account/{{runninguser.AccountID}}/">My Organization</a>
+          <a class="dropdown-item" href="/user/logout">Logout</a>
+        </div>
+      </li>
+ 
+    </ul>
+  </div>
+</nav>

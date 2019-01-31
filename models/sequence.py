@@ -5,6 +5,7 @@ from follower import Follower
 from sobject import SObject, ValidationException, NoPermissionException
 import datetime
 from models.component import Component
+from models.molecule import Molecule
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, create_engine, ForeignKey, LargeBinary, event, and_
 from sqlalchemy.orm import relationship, backref, validates
 import zipfile, os, StringIO,json
@@ -169,6 +170,13 @@ class Sequence(SObject, db.Model):
         #res['Color'] = self.molecule.Color if self.molecule else None
         res['hasReactionScheme'] = self.has_reaction_scheme
         res['IsDownloadable'] = self.downloadable
+        seq_user = User.query.filter_by(UserID=self.UserID).first()
+        res['SequenceUserFN'] = seq_user.FirstName
+        res['SequenceUserLN'] = seq_user.LastName
+        res['AccountID'] = seq_user.AccountID
+        res['AccountName'] = seq_user.account.name
+        mol = Molecule.query.filter_by(ID = self.MoleculeID).first()
+        res['MoleculeName'] = mol.DisplayFormat
         return res
 
     @property
@@ -224,6 +232,7 @@ class Sequence(SObject, db.Model):
 
 
     def validate_required_fields(self):
+
         validations = {"Name": self.validate_name,
                        "MoleculeID": self.validate_moleculeid,
                        "PurificationMethod": self.validate_purification_method}

@@ -137,3 +137,29 @@ class Forum(SObject, db.Model):
 
         create_thread = threading.Thread(target=create, args=(self.ForumID,))
         create_thread.start()
+
+    def delete_salesforce_case(self):
+        def delete(forum_id):
+            forum = Forum.query.filter(Forum.ForumID == forum_id).first()
+            comments = Comment.query.filter(Comment.ParentID == forum_id and Comment.Type == "Forums")
+            #Delete salesforce issue
+            try:
+                sf = sfdc.get_instance()
+                response = sf.Case.delete(str(forum.SFDC_ID))
+            except Exception as e:
+                print "something wrong"
+                err = str(e) + "\n Please reset your SFDC credentials"
+                email_sender.auto_report_bug(err)
+            #Delete Comment regarding the issue
+            for comment in comments:
+                db.session.delete(comment)
+            db.session.commit()
+            #Delete forum
+            db.session.delete(forum)
+            db.session.commit()
+
+            delete_thread = threading.Thread(target=delete, args=(self.ForumID,))
+            delete_thread.start()
+
+
+

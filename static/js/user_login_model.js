@@ -1,16 +1,91 @@
 UserLoginModel = function(accountLocations){
     var self = this;
-    this.featuredOrganization = ko.observable();
-    this.featuredSequences = ko.observableArray();
-    this.navbar = new LoginNavbar();
+    this.featuredOrganization = null;
+    this.featuredSequences = [];
     self.accountLocations = accountLocations;
-    self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
+    self.probeinformation = []
+    self.probe_with_site = new Map();
+    //self.moleculeSearch = new MoleculeSearch({placeHolder: "Search for a probe"});
     self.probe_list;
     self.probe_map = new Map();
-    self.pure_probe_list = ko.observableArray();
+    self.all_probe_information = new Map();
+    self.pure_probe_list = [];
 
+    self.get_probe_info = function(siteName) {
+        //return the list of probe information regarding the site
+        return self.all_probe_information.get(siteName);
+    }
+
+    self.set_number_probelist = function(list) {
+        var map = new Map();
+        var result = [];
+        //key = searchname, value = original list element with updated number
+        for(var i = 0; i < list.length; i++) {
+            if(map.has(list[i].searchName)) {
+                var temp = map.get(list[i].searchName)
+                temp.number = temp.number + 1
+                map.delete(list[i].searchName);
+                map.set(list[i].searchName, temp);
+            }else{
+                list[i].number = 1;
+                map.set(list[i].searchName, list[i]);
+            }
+
+            if(self.probe_with_site.has(list[i].searchName)) {
+                var temp = self.probe_with_site.get(list[i].searchName)
+                temp.push(self.find_site_for_probe(list[i].AccountName))
+                self.probe_with_site.delete(list[i].searchName)
+                self.probe_with_site.set(list[i].searchName, temp)
+            }else{
+                temp_list = []
+                account_information = self.find_site_for_probe(list[i].AccountName)
+                temp_list.push(account_information)
+                self.probe_with_site.set(list[i].searchName, temp_list)
+            }
+        }
+        //make list with updated number
+        for (var value of map.values()) {
+            result.push(value)
+        }
+        // Crete site probe maping
+        for(var i = 0; i < result.length; i++) {
+            if(self.all_probe_information.has(result[i].AccountName)) {
+                var temp = self.all_probe_information.get(result[i].AccountName)
+                temp.push(result[i]);
+                self.all_probe_information.delete(result[i].AccountName);
+                self.all_probe_information.set(result[i].AccountName, temp);
+            }else{
+                temp = []
+                temp.push(result[i]);
+                self.all_probe_information.set(result[i].AccountName, temp)
+            }
+        } 
+
+        self.probeinformation = result
+        return result
+    }
+    self.find_site_for_probe = function(site_name) {
+        for(var i = 0; i < self.accountLocations.length; i++) {
+            if(site_name == self.accountLocations[i].name) {
+                return self.accountLocations[i]
+            }
+        }
+        return undefined
+    } 
+    self.selectLocationByProbe = function(probe) {
+        newLocation = []
+        newLocation = self.probe_with_site.get(probe)
+        self.map.clearMarkers();
+        self.map.showLocations(newLocation);
+        //reset map with specific map location
+        var list = self.averageGeolocation(newLocation)
+        self.map.initMap(list.Latitude, list.Longitude);
+        return newLocation    
+    }
+
+    /////previous////////
     self.setFeaturedOrganization = function() {
-        this.featuredOrganization(null)
+        this.featuredOrganization = null
     }
     self.set_pure_probe_list = function(list) {
         var set = new Set()
@@ -21,7 +96,7 @@ UserLoginModel = function(accountLocations){
                 set.add(list[i].searchName)
             }
         }
-        self.pure_probe_list(temp)
+        self.pure_probe_list = temp
     }
 
     self.set_probe_list = function() {
@@ -59,7 +134,7 @@ UserLoginModel = function(accountLocations){
     self.get_probe_number = function(site) {
         return self.probe_map.get(site);
     }
-
+/*
     self.calculatedFeaturedSequences = ko.pureComputed(function(){
         $.ajax("/featured_sequences").success(function(res){
             for(var i = 0; i < res.length; i++){
@@ -71,9 +146,9 @@ UserLoginModel = function(accountLocations){
         });
         return self.featuredSequences;
     });
-
+*/
     self.initMap = function(){
-        self.map = new GoogleMaps(self.locationSelected);
+        self.map = new GoogleMaps(self.locationSelected, self.accountLocations);
         self.map.showLocations(self.accountLocations);
         var list = self.averageGeolocation(self.accountLocations)
         self.map.initMap(list.Latitude, list.Longitude); 
@@ -97,7 +172,7 @@ UserLoginModel = function(accountLocations){
     }
 
     self.locationSelected = function(act){
-        self.featuredOrganization(act);
+        self.featuredOrganization = act;
     }
 
     self.locationSelectedFromResult = function(site) {
@@ -155,27 +230,7 @@ UserLoginModel = function(accountLocations){
       };
     }
 
-    self.selectLocationByProbe = function(probe) {
-        var set = new Set();
-        var newLocation = [];
-        for(var i = 0; i < self.probe_list.length; i++) {
-            if(self.probe_list[i]['searchName'] == probe) {
-                set.add(self.probe_list[i]['AccountName'])
-            }
-        }
-        for(let item of set) {
-            for(var i = 0; i < self.accountLocations.length; i++) {
-                if(self.accountLocations[i]['name'] == item) {
-                    newLocation.push(self.accountLocations[i])
-                }
-            }
-        }
-        self.map.clearMarkers();
-        self.map.showLocations(newLocation);
-        //reset map with specific map location
-        var list = self.averageGeolocation(newLocation)
-        self.map.initMap(list.Latitude, list.Longitude);    
-    }
+
 
     self.contactSofie = function(){
         var title = "Contact Sofie Biosciences";
@@ -194,7 +249,7 @@ UserLoginModel = function(accountLocations){
     }
 
     self.matchingMoleculeIds = {};//new Set();
-
+/*
     self.moleculeSearch.matches.subscribe(function(newVal){
         self.matchingMoleculeIds = {};//new Set();
         var acts = {}
@@ -235,89 +290,5 @@ UserLoginModel = function(accountLocations){
             self.moleculeSearch.isSearching(false);
         });
     });
-}
-
-LoginNavbar = function(){
-    var self = this;
-    self.userLoginPopup = new UserLoginPopup();
-    self.mapOn = ko.observable(false);
-    self.visit = function(){
-        self.userLoginPopup.visible(true);
-    }
-    self.contactUs = function(){
-        contactUsPopup.ctrl.to_contact_name('Contact Sofie Biosciences, Inc.');
-        contactUsPopup.ctrl.to_contact_url("/account/" + 1 + "/contact");
-        contactUsPopup.open();
-    }
-    self.mapTurnOn = function(){
-        self.mapOn(true)
-    }
-    self.mapTurnOff = function(){
-        self.mapOn(false)
-    }
-    
-
-}
-
-UserLoginPopup = function(){
-    var self = this;
-    self.displayForgotPassword = ko.observable(false);
-    $.extend(self, new PopupBox());
-    self.doClose = self.close;
-    self.username = ko.observable("");
-    self.password = ko.observable("");
-    self.error = ko.observable("");
-    self.submitting = ko.observable(false);
-    self.close = function(){
-        self.displayForgotPassword(false);
-        self.username("");
-        self.password("");
-        self.error("");
-        self.doClose();
-    }
-
-    self.forgotPassword = function(){
-        var lastVal = self.displayForgotPassword();
-        self.displayForgotPassword(!lastVal);
-    }
-
-    self.decodeEntities = function(encodedString) {
-        var textArea = document.createElement('textarea');
-        textArea.innerHTML = encodedString;
-        return textArea.value;
-    }
-
-    self.login = function(){
-        self.error("");
-        self.submitting(true);
-        $.ajax("/user/login",{data: JSON.stringify({"username": self.username(),
-                                     "password": self.password()
-                                     }),
-                              accept: 'application/json',
-                              contentType: "application/json",
-                              headers: {"Content-Type": "application/json", "Accept": "application/json"},
-                              method: "post",
-                              success: function(res){
-                                        if(redirectUrl){
-                                            window.location = self.decodeEntities(redirectUrl);
-                                        }
-                                        else{
-                                            window.location = '/';
-                                        }
-                                       },
-                              error: function(err){
-                                        self.submitting(false);
-                                        self.error("Incorrect Username or Password");
-                                    },
-
-        });
-    }
-
-    self.submitOnEnter = function(data, evt){
-        if(evt.keyCode == 13){
-            self.login();
-            return false;
-        }
-        return true;
-    }
+    */
 }

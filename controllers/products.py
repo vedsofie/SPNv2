@@ -19,6 +19,33 @@ def index():
                            runninguser=json.dumps(running_user),
                            simProducts=json.dumps(SIM_PRODUCTS),
                            runningUserAccount=json.dumps(runningUserAccount.to_hash()))
+@productscontroller.route("/new_order/", methods=["GET"])
+def new_order():
+    runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
+    running_user = g.user.to_hash()
+    return render_template('/products/product-list.html',
+                           runninguser=running_user,
+                           simProducts=json.dumps(SIM_PRODUCTS),
+                           cart = True,
+                           runningUserAccount=json.dumps(runningUserAccount.to_hash()))
+
+@productscontroller.route("/<int:product_id>/", methods=["GET"])
+def product_detail(product_id):
+    runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
+    running_user = g.user.to_hash()
+    return render_template('/products/detail.html',
+                           runninguser=running_user,
+                           simProducts=SIM_PRODUCTS,
+                           runningUserAccount=json.dumps(runningUserAccount.to_hash()))
+
+@productscontroller.route("/previous_orders/", methods=["GET"])
+def previous_orders():
+    runningUserAccount = Account.query.filter_by(id=g.user.AccountID).first()
+    running_user = g.user.to_hash()
+    return render_template('/products/previous_orders.html',
+                           runninguser=running_user,
+                           simProducts=SIM_PRODUCTS,
+                           runningUserAccount=json.dumps(runningUserAccount.to_hash()))
 
 @productscontroller.route("/set_cart/", methods=["POST"])
 def set_cart():
@@ -29,8 +56,12 @@ def set_cart():
 
 @productscontroller.route("/cart/", methods=["GET"])
 def cart():
+    running_user = g.user.to_hash()
     cart = session.get('cart', [])
-    return Response(cart, content_type='application/json')
+    #return Response(cart, content_type='application/json')
+    return render_template('/products/cart.html',
+                           runninguser=running_user,
+                           quote_generated = True)
 
 @productscontroller.route("/products", methods=["GET"])
 def get_pdts():

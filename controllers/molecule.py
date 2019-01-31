@@ -3,8 +3,13 @@ import requests
 import json
 import random
 import httpagentparser
+import math
+import html2text
+from flask import Flask, url_for
+import datetime
 from Crypto.Cipher import AES
 from flask import Blueprint, render_template, request, Response, session, g, flash, redirect
+from models.account import Account
 from models.keyword import Keyword, db
 from models.comment import Comment
 from models.molecule import Molecule, ValidationException
@@ -23,6 +28,15 @@ def index():
     specific_ids = request.args.get("MoleculeIDs", '')
     specific_ids = specific_ids.split(',')
     specific_ids = specific_ids if specific_ids[0] != '' else []
+    with_sequences = request.args.get("with_sequences",False)
+    page_number = request.args.get("page", 1, type=int)
+    isotope_value = request.args.get("isotopes", type=str)
+    isotope_checker = {}
+    if isotope_value != None:
+        isotope_value = isotope_value.split(',')
+        for value in isotope_value:
+            isotope_checker[value] = value
+
     ids = []
     for specific_id in specific_ids:
         try:
@@ -34,13 +48,32 @@ def index():
     if len(specific_ids) > 0:
         sql_filter = and_(sql_filter, Molecule.ID.in_(ids))
 
-    all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    isotopes = {}
+
+    #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).limit(9)
+    all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
+    number_of_pages = 0
+    if all_molecules_count > 9:
+        all_molecules = all_molecules.offset((page_number*9) - 9)
+        number_of_pages = int(math.ceil(all_molecules_count / 9.0))
 
     sorted_molecules = []
     for molecule in all_molecules:
         x = molecule.to_hash()
-        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1]}
-        sorted_molecules.append(y)
+        sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
+        public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+        isDownloadable = True if len(public_sequences) > 0 else False
+        isotopes[x["Isotope"]] = x["Isotope"]
+
+        if len(isotope_checker) == 0:
+            y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable} 
+            sorted_molecules.append(y)
+        else:
+            if x["Isotope"] in isotope_checker:
+                y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
+                sorted_molecules.append(y)
+        
     
     #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
     mole_dict = {}
@@ -58,8 +91,69 @@ def index():
 
     #molecules_list.reverse()
     #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
-    resp = json.dumps(molecules_list)
-    return render_template("molecule/molecules.html", molecules=resp, runninguser=json.dumps(g.user.to_hash()))
+    resp = molecules_list
+    userid = session["userid"]
+
+    isotope_list = []
+    for isotope in isotopes:
+        isotope_list.append(isotope)
+    return render_template("molecule/molecules.html", molecules=resp, uid = userid, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash(), isotopes = isotope_list, isotope_values = isotope_value )
+
+@moleculecontroller.route("/my_probes/", methods=['GET'])
+def my_probes():
+    specific_ids = request.args.get("MoleculeIDs", '')
+    specific_ids = specific_ids.split(',')
+    specific_ids = specific_ids if specific_ids[0] != '' else []
+    userid = session["userid"]
+    page_number = request.args.get("page", 1, type=int)  #this is used for pagination, dont delete
+    ids = []
+    for specific_id in specific_ids:
+        try:
+            spec_id = int(specific_id)
+            ids.append(specific_id)
+        except Exception as e:
+            pass
+    sql_filter = Molecule.Approved == True
+    if len(specific_ids) > 0:
+        sql_filter = and_(sql_filter, Molecule.ID.in_(ids))
+    molecules_list = []
+    #all_molecules = Molecule.query.order_by(Molecule.Name).filter(sql_filter).all()
+    all_molecules = Molecule.query.filter_by(UserID=userid).order_by(Molecule.Name).limit(9)
+    my_molecules_count = Molecule.query.filter_by(UserID=userid).count()
+    number_of_pages = 0
+    if my_molecules_count > 9:
+        all_molecules = all_molecules.offset((page_number*9) - 9)
+        #all_molecules_count = Molecule.query.order_by(Molecule.Name).filter(sql_filter).count()
+        number_of_pages = int(math.ceil(my_molecules_count / 9.0))
+
+
+    sorted_molecules = []
+    for molecule in all_molecules:
+        x = molecule.to_hash()
+        sequences = Sequence.query.filter_by(MoleculeID=x["ID"]).all()
+        public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+        isDownloadable = True if len(public_sequences) > 0 else False
+        y = {"ID": x["ID"],"Formula": x["Formula"],"CID": x["CID"],"CAS": x["CAS"],"Name": x["Name"],"DisplayFormat": x["DisplayFormat"],"Description": x["Description"],"Isotope": x["Isotope"],"Approved": x["Approved"],"UserID": x["UserID"],"Sort": x["Name"].split(']')[1], "Downloadable": isDownloadable}
+        sorted_molecules.append(y)
+    
+    #sorted_molecules.sort(key=lambda x: x["Sort"].lower(), reverse=False)
+    mole_dict = {}
+    for molecule in sorted_molecules:
+        if molecule['Isotope'] in mole_dict:
+            mole_dict[molecule['Isotope']].append(molecule)
+        else:
+            mole_dict[molecule['Isotope']] = []
+            mole_dict[molecule['Isotope']].append(molecule)
+
+    
+    for key, value in mole_dict.iteritems():
+        value.sort(key=lambda x: x["Sort"].lower(), reverse=False)
+        molecules_list.extend(value)
+            #molecules_list.reverse()
+    #resp = json.dumps([molecule.to_hash() for molecule in all_molecules])
+    resp = molecules_list
+
+    return render_template("molecule/my_probes.html", molecules=resp, current_page_number = page_number, number_of_pages = number_of_pages,runninguser=g.user.to_hash())
 
 @moleculecontroller.route("/<int:cid>/auto_fill/", methods=["GET"])
 def autofill(cid):
@@ -74,23 +168,56 @@ def autofill(cid):
 def new():
     mole = Molecule()
     resp = json.dumps(mole.to_hash())
-    return render_template("molecule/edit.html", molecule=resp, runninguser=json.dumps(g.user.to_hash()))
+    return render_template("molecule/new.html", molecule=resp, runninguser=g.user.to_hash())
+
+@moleculecontroller.route("/<int:molecule_id>/edit/", methods=['GET'])
+def edit(molecule_id):
+    userid = session["userid"]
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/edit.html", molecule=molecule, uid = userid,runninguser=json.dumps(g.user.to_hash()))
 
 @moleculecontroller.route("/<int:molecule_id>/", methods=['GET'])
 @back.anchor
 def get_details(molecule_id):
     edit_page = request.args.get('edit', False)
+    userid = session["userid"]
     molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    # Get sequences for this molecule
+    sequences = Sequence.query.filter_by(MoleculeID=molecule_id).all()
+    all_seq_resp = [seq.to_hash() for seq in sequences if seq.downloadable]
+    private_sequences = [seq.to_hash() for seq in sequences if not seq.MadeOnElixys or not seq.downloadable]
+    public_sequences = [seq.to_hash() for seq in sequences if seq.MadeOnElixys and seq.downloadable]
+    #fetching synonyms for probe
+    keywords = Keyword.query.filter_by( ParentID=molecule_id, Type="Molecules").all()
+    keywords_hash = [keyword.to_hash() for keyword in keywords ]
+    # Get account of the user who uploaded a sequence (this is used to get logo of that )
+
+
+    # get comments for this probe
+    all_comments = []
+    comments = Comment.query.filter(and_(Comment.ParentID == molecule_id,Comment.Type == 'Molecules')).order_by(Comment.CreationDate.asc()).all()
+    for comment in comments:
+        users_name = User.query.filter_by(UserID=comment.UserID).first()
+        comments_aggr = comment.to_hash()
+        comments_aggr['CreationDate'] = datetime.datetime.fromtimestamp(int(comments_aggr['CreationDate'] / 1000)).strftime('%m / %d / %Y')
+        comments_aggr['username'] = users_name.username
+        all_comments.append(comments_aggr)
+    # Check if logged in user is following this probe
+    follower = Follower.query.filter(and_(Follower.ParentID == molecule_id, Follower.UserID == userid, Follower.Type == 'Molecules')).first()
+
     usr = g.user.to_hash()
+    
     if molecule and (molecule.Approved or g.user.role.Type == 'super-admin'):
-        resp = json.dumps(molecule.to_hash())
+        resp = molecule.to_hash()
         if "Accept" in request.headers and request.headers['Accept'] == "application/json":
             return Response(resp, headers={"Content-Type": "application/json"})
 
         if edit_page and molecule.can_save(g.user):
-            return render_template("molecule/edit.html", molecule=resp, runninguser=json.dumps(usr))
+            return render_template("molecule/edit.html", molecule=resp, uid = userid,runninguser=json.dumps(usr))
 
-        return render_template("molecule/detail.html", molecule=resp, runninguser=json.dumps(usr))
+        return render_template("molecule/detail.html", molecule=resp, public_sequences=public_sequences, private_sequences=private_sequences, follower = follower,comments = all_comments, keywords = keywords_hash,uid = userid,runninguser=usr)
+    
+
     else:
         if(molecule):
             message = urllib.quote("%s is being reviewed by Sofie Biosciences,\n" % molecule.Name +
@@ -99,6 +226,38 @@ def get_details(molecule_id):
         else:
             message = urllib.quote("The Probe Does not exist")
         return redirect('/user/dashboard?notificationMessage=%s' % message)
+
+# ===========================
+@moleculecontroller.route("/<int:molecule_id>/edit/", methods=['POST'])
+def edit_post(molecule_id):
+    userid = session["userid"]
+    data = request.form
+    this_molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    can_save = (g.user.role.Type == 'super-admin') or (this_molecule.UserID == userid)
+    #only save updates if the current user is super-admin or owner of the current probe
+    if can_save:
+        this_molecule.Name = data['Name']
+        this_molecule.DisplayFormat = data['DisplayFormat']
+        this_molecule.CAS = data['CAS']
+        this_molecule.Isotope = data['Isotope']
+        this_molecule.Approved = True if data['Approved'] == 'on' else False
+        this_molecule.Description = data['Description']
+        if this_molecule.save():
+            return redirect(url_for('moleculecontroller.get_details', molecule_id=molecule_id))
+        else:
+            error = "There was an error saving the changes to database"
+            return redirect(url_for('moleculecontroller.edit', molecule_id=molecule_id), error)
+
+    else:
+        error = "You don't have the necessary permissions to update this molecule"
+        return redirect(url_for('moleculecontroller.edit', molecule_id=molecule_id), error)
+    # get the form data from user submitted form
+    
+    
+
+
+
+#=====================
 
 @moleculecontroller.route("/<int:molecule_id>/check_following/", methods=['GET'])
 def is_following(molecule_id):
@@ -243,39 +402,51 @@ def search_by_name():
 
 @moleculecontroller.route("/hint/<keyword>", methods=['GET'])
 def search_hints(keyword):
-    include_keywords = request.args.get("includeKeywords", True)
-    include_keywords = False if include_keywords == 'false' else True
-    keyword = keyword.lower()
-    #if len(keyword) >= 3:
-    keyword_filters = and_(func.lower(Keyword.Keyword).like("%" + keyword + "%"),
-                           Keyword.Type=='Molecules')
-    if not include_keywords:
-        keyword_filters = and_(keyword_filters, Keyword.Category=='Synonym')
 
-    molecule_id_to_keywords = {}
-    for key in Keyword.query.filter(keyword_filters).all():
-        if key.ParentID not in molecule_id_to_keywords:
-            molecule_id_to_keywords[key.ParentID] = []
-        molecule_id_to_keywords[key.ParentID].append(key.DisplayFormat)
+    if 'site' in request.args:
+        keyword = keyword.lower()
+        accounts = Account.query.filter(and_(func.lower(Account.name).like('%' + keyword + '%'))).all()
+        resp = []
+        for account in accounts:
+            resp.append(account.name)
 
-    running_user_id = g.user.UserID if g.user else None
+        return Response(json.dumps(resp), content_type="application/json") 
+    else:
+        include_keywords = request.args.get("includeKeywords", True)
+        include_keywords = False if include_keywords == 'false' else True
+        keyword = keyword.lower()
+        #if len(keyword) >= 3:
+        keyword_filters = and_(func.lower(Keyword.Keyword).like("%" + keyword + "%"),
+                               Keyword.Type=='Molecules')
+        if not include_keywords:
+            keyword_filters = and_(keyword_filters, Keyword.Category=='Synonym')
 
-    molecules = Molecule.query.filter(and_(or_(Molecule.Approved==True,Molecule.UserID==running_user_id),
-                                           or_(Molecule.ID.in_(molecule_id_to_keywords.keys()),
-                                               func.lower(Molecule.Name).like('%' + keyword + '%')
-                                           )
-                                     )).all()
-    resp = []
-    for molecule in molecules:
-        resp.append({
-            "master_name": molecule.Name,
-            "formatted_master_name": molecule.DisplayFormat,
-            "keywords": molecule_id_to_keywords.get(molecule.ID, []),
-            "molecule_id": molecule.ID,
-            "url":'/probe/'+str(molecule.ID)+'/image/',
-            "searchName": getName(molecule.Name)
-        })
-    return Response(json.dumps(resp), content_type="application/json")
+        molecule_id_to_keywords = {}
+        for key in Keyword.query.filter(keyword_filters).all():
+            if key.ParentID not in molecule_id_to_keywords:
+                molecule_id_to_keywords[key.ParentID] = []
+            molecule_id_to_keywords[key.ParentID].append(key.DisplayFormat)
+
+        running_user_id = g.user.UserID if g.user else None
+
+        molecules = Molecule.query.filter(and_(or_(Molecule.Approved==True,Molecule.UserID==running_user_id),
+                                               or_(Molecule.ID.in_(molecule_id_to_keywords.keys()),
+                                                   func.lower(Molecule.Name).like('%' + keyword + '%')
+                                               )
+                                         )).all()
+        resp = []
+        for molecule in molecules:
+            isotope_name = molecule.Name.split(']')[0].split('[')[1]
+            probeName = getName(molecule.Name) + isotope_name
+            resp.append({
+                "master_name": molecule.Name,
+                "formatted_master_name": molecule.DisplayFormat,
+                "keywords": molecule_id_to_keywords.get(molecule.ID, []),
+                "molecule_id": molecule.ID,
+                "url":'/probe/'+str(molecule.ID)+'/image/',
+                "searchName": probeName
+            })
+        return Response(json.dumps(resp), content_type="application/json")
 
 def getName(name) :
     return name.split("]")[1].rstrip()
@@ -314,69 +485,54 @@ def find():
 
     return Response(json.dumps(resp), headers={'content-type': 'application/json'})
 
-@moleculecontroller.route("/create", methods=["POST"])
+@moleculecontroller.route("/create/", methods=["POST"])
 def create():
-    data = request.json
+    #this function has been modified for accepting form data
+    data = request.form
+    file = request.files['Image'].read()
+    #print file
+    data = data.to_dict()
+    data['Image'] = file
+    #print data
     try:
+        """
         mole = do_save(g.user, **data)
         if request.headers.get("Accept") == "application/json":
-            return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-        return redirect("/")
+            resp = json.dumps(mole.to_hash())
+            return render_template("molecule/add_synonyms.html", molecule=resp, runninguser=g.user.to_hash())
+        """
+        mole = do_save(g.user, **data)
+        resp = mole.to_hash()
+        return render_template("molecule/add_synonyms.html", new_probe=True, molecule=resp, runninguser=g.user.to_hash())
     except Exception as e:
         db.session.rollback()
         msg = str(e)
         if e.__class__ == ValidationException().__class__:
             msg = e.errors()
+            print msg
 
         if request.headers.get("Accept") == "application/json":
             return Response(json.dumps({"molecule": Molecule.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
         flash(msg)
         return render_template("molecule/new.html", molecule=Molecule().to_hash())
 
-    """
-    id = data.get("ID", None)
-    was_approved = None
-    if not id or can_approve:# Only super-admins can edit a molecule for now
-        try:
-            if id:
-                mole = Molecule.query.filter_by(ID=data['ID']).first()
-                already_approved = mole.Approved
-                mole.merge_fields(**data)
-                was_approved = mole.Approved and not already_approved
-                mole.validate_required_fields()
-            else:
-                mole = Molecule()
-                mole.merge_fields(**data)
-                mole.UserID = g.user.UserID
-                mole.Approved = can_approve and data['Approved']
-                mole.validate_required_fields()
-            mole.save()
-        except Exception as e:
-            db.session.rollback()
-            msg = str(e)
-            if e.__class__ == ValidationException().__class__:
-                msg = e.errors()
+@moleculecontroller.route("/<int:molecule_id>/add_synonyms/", methods=["GET"])
+def add_synonyms(molecule_id):
+    keywords = Keyword.query.filter(and_(Keyword.Category=='Synonym',Keyword.ParentID==molecule_id)).all()
+    #keywords = Keyword.query.filter(Keyword.ParentID==molecule_id).all()
+    #resp = [keyword.to_hash() for keyword in keywords]
+    new_addition = request.args.get("new_probe")
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/add_synonyms.html",runninguser = g.user.to_hash(), new_probe = new_addition, molecule=molecule, keywords = keywords)
 
-            if request.headers.get("Accept") == "application/json":
-                return Response(json.dumps({"molecule": mole.to_hash(), "error_details": msg}), status=400, headers={"Content-Type": "application/json"})
-            flash(msg)
-            return render_template("molecule/new.html", molecule=mole.to_hash())
-
-        uid = mole.ID
-
-        if was_approved:
-            message = "%s was approved" % mole.Name
-            comment = Comment(UserID=g.user.UserID, Type='Molecules',ParentID=mole.ID, Message=message, RenderType='text')
-            comment.save()
-        mole = Molecule.query.filter_by(ID=uid).first()
-
-        if request.headers.get("Accept") == "application/json":
-            return Response(json.dumps(mole.to_hash()), headers={"Content-Type": "application/json"})
-
-        return redirect("/")
-    else:
-        return Response("You do not have permission to create molecules", 403)
-    """
+@moleculecontroller.route("/<int:molecule_id>/add_keywords/", methods=["GET"])
+def add_keywords(molecule_id):
+    keywords = Keyword.query.filter(and_(Keyword.Category=='Keyword',Keyword.ParentID==molecule_id)).all()
+    #keywords = Keyword.query.filter(Keyword.ParentID==molecule_id).all()
+    #resp = [keyword.to_hash() for keyword in keywords]
+    new_addition = request.args.get("new_probe")
+    molecule = Molecule.query.filter_by(ID=molecule_id).first()
+    return render_template("molecule/add_keywords.html",runninguser = g.user.to_hash(), new_probe = new_addition, molecule=molecule, keywords = keywords)
 
 def do_save(user, **kwargs):
     can_approve = user.role.Type == 'super-admin'
@@ -393,8 +549,14 @@ def do_save(user, **kwargs):
         else:
             mole = Molecule()
             mole.merge_fields(**kwargs)
+            mole.Name = html2text.html2text(mole.DisplayFormat).strip()
             mole.UserID = user.UserID
-            mole.Approved = can_approve and kwargs['Approved']
+            if 'Approved' not in kwargs:
+                mole.Approved = False
+            elif can_approve and kwargs['Approved']:
+                mole.Approved = True
+            else:
+                mole.Approved = False
             mole.validate_required_fields()
         mole.save()
 

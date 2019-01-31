@@ -1,29 +1,35 @@
-<!-- Static navbar -->
-<nav class="navbar navbar-default navbar-static-top">
-  <div class="container-fluid navbar-container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/" id="spn-logo"><img src="/static/img/spn-logo-top.png" alt="" class="img-responsive"></a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li data-bind="click: visitSection.bind($data, 'about')"><a href="#about" class="link-text" data-bind="click: mapTurnOff">ABOUT ELIXYS</a></li>
-        <li onclick = "goToMap()" data-bind="click: mapTurnOn"><a class="link-text">FIND A PROBE</a></li>
-        <li data-bind="click: visitSection.bind($data, 'featured')"><a href="#featured" class="link-text" data-bind="click: mapTurnOff">FEATURES</a></li>
-        <li data-bind="click: visitSection.bind($data, 'contact')"><a href="#contact" class="link-text" data-bind="click: mapTurnOff">CONTACT</a></li>
-        <li><a href="#" class="link-text btn btn-primary" data-bind="click: visit">SIGN IN</a></li>
-      </ul>
-    </div><!--/.nav-collapse -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <a class="navbar-brand" href="/"><img src="/static/img/spn-logo-top.png" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse flex-grow-1 text-righ" id="navbarNav">
+    <ul class="navbar-nav ml-auto flex-nowrap">
+      <li class="nav-item">
+        <a class="nav-link" href="https://sofie.com/radiochemistry/" target="_blank">About Elixys <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/find_a_probe">Find a Probe</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#featured">Featured</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-outline-primary" href="/login">Sign In</a>
+      </li>
+    </ul>
   </div>
 </nav>
+
+
+
+
 <!-- Static navbar end -->
 <!-- begin login popup -->
-<div data-bind="with: userLoginPopup">
+<!-- <div data-bind="with: userLoginPopup">
     <div class="l-popup-overlay" style="display:none;" data-bind="visible: visible">
         <div class="m-popup login-popup" style="display:none;" data-bind="visible: visible">
             <div class="m-popup-box">
@@ -53,11 +59,12 @@
                 </div>
 
                 <div class="m-login-form" data-bind="visible: displayForgotPassword" style="display: none;">
-                    {% include '/user/forgot_password.html' %}
+
                     <a data-bind="click: forgotPassword" class="btn-blue btn-blue--login">Cancel</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> -->
+
 <!-- end login popup -->

@@ -19,6 +19,7 @@ from models.sequenceattachment import SequenceAttachment
 from models.notification import Notification
 from models.forum import Forum
 from models.user import SOFIEBIO_USER
+from controllers.user import getUserFollowingIssue
 import models.model_helpers as model_helpers
 import base64,zipfile,io,os
 import modules
@@ -30,8 +31,7 @@ GIT_OWNER = "SofieBiosciences"
 GIT_REPO = "Elixys"
 PYELIXYS_BASE_DIR = "https://api.github.com/repos/%s/%s/" % (GIT_OWNER, GIT_REPO)
 INSTALLER_BASE_DIR = "https://api.github.com/repos/%s/%s/" % ('SofieBiosciences', 'SofieDeploymentInstaller')
-#GIT_OATH = os.environ["GIT_TOKEN"]
-GIT_OATH = '4e71be023c265b4bfb14af91d8e562ae5d8cfcd7'
+GIT_OATH = os.environ["GIT_TOKEN"]
 ENCRYPTION_KEY = '1234567890123456'
 
 db = modules.database.get_db()
@@ -43,7 +43,6 @@ supportcontroller = Blueprint("supportcontroller", __name__, url_prefix="/suppor
 
 @supportcontroller.route("/",methods=["GET"])
 def report_issue_forum():
-    
     url = PYELIXYS_BASE_DIR + "releases"
     response = requests.get(url,headers=git_headers())
     resp = response.json()
@@ -54,7 +53,40 @@ def report_issue_forum():
     print response
     resp = response.json()
     installers = json.dumps(as_assets(resp))
-    return render_template('/support/support_dashboard.html', releases=releases, installers=installers, runninguser=json.dumps(g.user.to_hash()))
+    userid = session["userid"]
+    return render_template('/support/support_dashboard.html', releases=releases, uid = userid, installers=installers, runninguser=json.dumps(g.user.to_hash()))
+
+@supportcontroller.route("/documentation",methods=["GET"])
+def documentation():
+    userid = session["userid"]
+    return render_template("/support/documentation.html", uid = userid, runninguser=g.user.to_hash())
+
+@supportcontroller.route("/faq",methods=["GET"])
+def faq():
+    userid = session["userid"]
+    return render_template("/support/faq.html", uid = userid, runninguser=g.user.to_hash())
+
+
+@supportcontroller.route("/software",methods=["GET"])
+def software():
+    userid = session["userid"]
+    url = PYELIXYS_BASE_DIR + "releases"
+    response = requests.get(url,headers=git_headers())
+    resp = response.json()
+    releases = as_assets(resp)
+    new_release = releases[0]
+    releases.pop(0)
+    old_release = []
+    for release in range(2):
+        old_release.append(releases[release])
+
+    return render_template("/support/software.html", new_release=new_release, old_release=old_release, uid = userid, runninguser=g.user.to_hash())
+
+@supportcontroller.route("/field_support",methods=["GET"])
+def field_support():
+    userid = session["userid"]
+    openCase, closedCase = getUserFollowingIssue()
+    return render_template("/support/field_support.html", open_cases=openCase, closed_cases=closedCase, uid = userid, runninguser=g.user.to_hash())
 
 def as_assets(resp):
     spn_domain = os.environ['SOFIE_PROBE_DOMAIN']
@@ -67,7 +99,8 @@ def as_assets(resp):
             rel['name'] = tag_name
             rel["versions"] = []
             rel['assets_url'] = release['assets_url']
-            rel['published_at'] = release['published_at']
+            dateSplit = release['published_at'].split('T')[0].split('-')
+            rel['published_at'] = dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0]
             rel['body'] = release['body']
             index = 0
             while index < len(release['assets']):

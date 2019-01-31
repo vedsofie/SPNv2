@@ -1,351 +1,89 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-    <script src="{{url_for('github.static',filename='js/releases.js')}}"></script>
-    <script>
-
-        var notification = JSON.parse({{notification|tojson|safe}});
-        //var onLoadTab = JSON.parse({{onLoadTab|tojson|safe}});
-        var popularDownloads = new PopularDownloads();
-        var newsTab = new NewsTabComponent();
-        var support = JSON.parse({{support|tojson|safe}});
-        var isProbes = JSON.parse({{probes|tojson|safe}});
-        var isSequences = JSON.parse({{sequences|tojson|safe}});
-        var releases = initReleases(JSON.parse({{releases|tojson|safe}}))
-        var installers = initReleases(JSON.parse({{installers|tojson|safe}}));
-
-
-        var length = releases.length - 1;
-
-        $(function(){
-            if(notification){
-                $.notify(notification, "info");
-            }
-           // newsTab.goToFollowing(onLoadTab);
-            if(support) {
-                navbar.currentlyOpenedTab("support_dashboard");
-                newsTab.currentTab = 'support_dashboard'
-            }else{
-                navbar.currentlyOpenedTab("dashboard"); 
-                newsTab.currentTab = 'dashboard'
-                if(isProbes == true) {
-                    newsTab.goToTab = "probe"
-                }else if(isSequences == true) {
-                    newsTab.goToTab = "sequence"
-                }
-
-            }
-        });
-
-        $(function() {
-             var hash = window.location.hash;
-             hash && $('ul.nav a[href="' + hash + '"]').tab('show');
-             $('.nav-tabs a').click(function(e) {
-                 $(this).tab('show');
-                 var scrollmem = $('body').scrollTop() || $('html').scrollTop();
-                 window.location.hash = this.hash;
-                 $('html,body').scrollTop(scrollmem);
-             });
-         });
-
-        function download_software(index) {
-            releases[index].download(releases[index].versions[0].url)
-        }
-
-        function download_installer() {
-            installers[0].download(installers[0].versions[0].url)
-        }
-
-        var isAll = ko.observable(true)
-        var isDoc = ko.observable(false)
-        var isSoft = ko.observable(false)
-        var isFAQ = ko.observable(false)
-        function select_tab(index) {
-            if(index == 0) {
-                isAll(true)
-                isDoc(false)
-                isSoft(false)
-                isFAQ(false)
-            }else if(index == 1) {
-                isAll(false)
-                isDoc(true)
-                isSoft(false)
-                isFAQ(false)
-            }else if(index == 2) {
-                isAll(false)
-                isDoc(false)
-                isSoft(true)
-                isFAQ(false)
-            }else if(index == 3) {
-                isAll(false)
-                isDoc(false)
-                isSoft(false)
-                isFAQ(true)
-            }
-        }
-    </script>
-
-{% endblock %}
-
 {% block title_bar %}
-    {{super()}}
-    <!-- MAIN DASHBOARD -->
-    <div class="dash-nav" data-bind="with: newsTab, visible: !support">
-        <div class="dash-nav__item" onclick="unLoading()" data-bind="click: selectTab.bind($data, 'Sequences'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Sequences'}">
-            <span>My Sequences</span>
-            <span style="display: none;" data-bind="visible: followingList()['Sequences'].hasNotifications()">
-                <span class="notification">*</span>
-            </span>
-        </div>
-
-        <div class="dash-nav__item" onclick="unLoading()" data-bind="click: selectTab.bind($data, 'Molecules'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Molecules'}">
-            <span>My Probes</span>
-            <span style="display: none;" data-bind="visible: followingList()['Molecules'].hasNotifications()">
-                <span class="notification">*</span>
-            </span>
-        </div>
-        <div class="dash-nav__item" data-bind="click: selectTab.bind($data, 'Forums'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Forums'}">
-            <span>Sofie</span>
-            <span style="display: none;" data-bind="visible: followingList()['Forums'].hasNotifications()">
-                <span class="notification">*</span>
-            </span>
-        </div>
-    </div>
-    <!-- MAIN DASHBOARD END -->
-
-    <!-- SUPPORT DASHBOARD -->
-    <div class="dash-nav" data-bind="with: newsTab, visible: support">
-        <div class="dash-nav__item" onclick="select_tab(3)" data-bind="click: selectTab.bind($data, 'Sequences'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Sequences'}">
-            <span>FAQ & Videos</span>
-        </div>
-
-        <div class="dash-nav__item" onclick="select_tab(2)" data-bind="click: selectTab.bind($data, 'Molecules'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Molecules'}">
-            <span>Software</span>
-        </div>
-        <div class="dash-nav__item" onclick="select_tab(1)" data-bind="click: selectTab.bind($data, 'Forums'),
-                                               css: {'dash-nav__item--current': selectedTab() == 'Forums'}">
-            <span>Documentation</span>
-        </div>
-        <div class="dash-nav__item" onclick="select_tab(0)" data-bind="click: selectTab.bind($data, 'FieldService'),
-                        css: {'dash-nav__item--current': selectedTab() == 'FieldService'}">
-            <span>Field Support</span>
-            <span style="display: none;" data-bind="visible: followingList()['FieldService'].hasNotifications()">
-                <span class="notification">*</span>
-            </span>
-        </div>
-    </div>
-    <!-- SUPPORT DASHBOARD END -->
-
+{{super()}}
+<!-- <nav class="nav navbar d-flex navbar-dark bg-dark justify-content-end">
+	<a class="p-2 nav-link text-light" href="#">Newsfeed</a>
+	<a class="p-2 nav-link text-light" href="#">My Probes</a>
+    <a class="p-2 nav-link text-light" href="#">My Sequences</a>
+</nav> -->
 {% endblock %}
-
 {% block content_body %}
-    
-    <!-- MAIN DASHBOARD -->
-    <div id="l-dashboard" class="col-sm-12" data-bind="visible: !support">
-        <div id="news" data-bind="with: newsTab" class="col-sm-8 col-sm-offset-1">
-            {% include 'visual_components/news-feed.html' %}
-        </div>
-
-        <div id="popularity" data-bind="with: popularDownloads" class="col-sm-3">
-            <div class="feed--popular" style="display: none;" data-bind="visible: hasPopularDownloads">
-                <h3>Most Downloaded</h3>
-                <div data-bind="foreach: popularList">
-                    <div class="download-container">
-                        <div>
-                            <a data-bind="attr:{href: '/sequence/' + $data['SequenceID'] + '/'}">
-                                <h4 class="sequence-name" data-bind="text: $data['Name']"></h4>
-                            </a>
-                            <div class="elipse-overflow popular-description-container" style="max-height: 57px;">
-                                <p class="sequence-description" data-bind="text: $data['Comment']"></p>
-                            </div>
-                            <p class="sequence-download" data-bind="text: 'Downloaded ' + $data['numdownloads'] + ' times'"></p>
-                        </div>
-                    </div>
+<div class="container-fluid pt-3">
+    <div class="row">
+    	<div class="col-3" id="dashboard-quick-links">
+    		<div class="card">
+    			<div class="card-header bg-secondary text-center">
+	    			<h5 class="mb-0 text-white">Quick links</h5>
+	    		</div>
+	    		<ul class="list-group mb-3 text-center list-group-flush">
+	    			<li class="list-group-item lh-condensed">
+	    				<div class="mx-auto">
+	    					<a href="/probe/my_probes/"><i class="fas fa-vial"></i> My Probes</a>
+	    				</div>
+	    			</li>
+	    			<li class="list-group-item lh-condensed"><a href="/user/{{ runninguser.UserID }}/edit/"><i class="fas fa-user"></i> My Account Details</a></li>
+                    <li class="list-group-item lh-condensed"><a href="https://sofie.com/radiochemistry-publications" target="_blank"><i class="far fa-newspaper"></i> Radiochemistry Publications</a></li>
+	    		</ul>
+    		</div>
+    	</div>
+        <div class="col-6" id="newsfeed">
+            <h5 class="text-center mt-2">Newsfeed</h5>
+            <div class="card mt-3">
+                <img class="card-img-top" src="/static/img/2_elixys_v2.4.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">ELIXYS Software v2.4.0 Released!</h5>
+                    <p class="card-text">Update your system to the latest ELIXYS software featuring UI improvements, increased stability, and bug fixes. Download v2.4.0 from the Software section under the Support tab.</p>
+                    <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
                 </div>
             </div>
-
-            <div class="feed--newest" style="display: none;" data-bind="visible: hasMostNewSequences">
-                <h3>Newest Sequences</h3>
-                <div data-bind="foreach: newSequences">
-                    <div class="download-container">
-                        <div>
-                            <a data-bind="attr:{href: '/sequence/' + $data.SequenceID + '/'}">
-                                <h4 class="sequence-name" data-bind="text: $data.Name"></h4>
-                            </a>
-                            <div class="elipse-overflow popular-description-container" style="max-height: 57px;">
-                                <p class="sequence-description" data-bind="text: $data.Comment"></p>
-                            </div>
-                            <p class="sequence-date" data-bind="text: $parent.displayDateTime($data.CreationDate)"></p>
-                        </div>
-                    </div>
+<!--             <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">ELIXYS Software v2.4.0 Released!</h5>
+                    <img class="card-img-top" src="/static/img/2_elixys_v2.4.png" alt="Card image cap">
+                    <p class="card-text">Update your system to the latest ELIXYS software featuring UI improvements, increased stability, and bug fixes. Download v2.4.0 from the Software section under the Support tab.</p>
+                    <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
+                </div>
+            </div> -->
+            <div class="card mt-3">
+            	<img class="card-img-top" src="/static/img/isrs2019_banner_spn.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">ISRS 2019 Conference Presentation Award</h5>
+                    <p class="card-text">We would like to announce another Conference Presentation Award for ISRS 2019 in Beijing, China! If you’re planning to attend, SOFIE could help! Present an ELIXYS-focused presentation (poster or oral) at ISRS 2019 for a chance to win $1,500 USD! <br><br>
+                        <strong>Submit your accepted abstract</strong> to <a href="mailto:eric.schopf@sofie.com">eric.schopf@sofie.com</a> by March 22, 2019 to enter the contest. <br><br>
+                        <strong>The deadline for submitting an abstract to ISRS 2019 is November 30th.</strong> Check out the conference website for more information: <a href="https://www.srsweb.org/isrs2019/" target="_blank">https://www.srsweb.org/isrs2019/</a></p>
+                    <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- MAIN DASHBOARD END -->
-    <!-- SUPPORT DASHBOARD -->
-    <div id="l-dashboard" class="col-sm-12" data-bind="visible: support">
-        <div id="news" data-bind="with: newsTab, visible: isAll" class="col-xs-12 col-md-9 col-lg-6 col-lg-offset-3 card-this">
-            {% include 'visual_components/news-feed.html' %}
-        </div>
-        <div id="popularity" data-bind="with: popularDownloads, visible: isAll" class="col-xs-12 col-sm-3 text-center right-sidebar sidebar-field-support">
-            <h4><u>Quick links</u></h4>
-            <br><br>
-            <a href="/issue"><button class="btn btn-primary">New Support Request</button></a>
-        </div>
-        <div id="documentation" data-bind="visible: isDoc">
-            {% include 'support/documentation.html' %}
-            <!-- Right sidebar -->
-            <div class="col-sm-2 text-center right-sidebar">
-                <h4><u>Quick links</u></h4>
-                <br>
-                <ul class="list-unstyled" data-bind="with: newsTab">
-                    <li><a onclick="select_tab(3)" data-bind="click: selectTab.bind($data, 'Sequences'), css: {'dash-nav__item--current': selectedTab() == 'Sequences'}">View FAQs</a></li>
-                    <li><a href="https://sofie.com/radiochemistry-publications" target="_blank">PET Publications</a></li>
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-        <div id="software" data-bind="visible: isSoft">
-            <div class="col-sm-6 col-sm-offset-3">
-                <h1 class="text-center">ELIXYS Software</h1>
-                <div class="col-sm-12" id="latest-software-release">
-                    <h4 class="text-center"><u>Latest software release</u></h4>
-                    <br>
-                    <div class="col-sm-12 software-card">
-                        <div class="row software-top-row">
-                            <div class="col-xs-12 col-md-6">
-
-                                <h4 id="recentSoftwareVersion">Version</h4>
-                                Release Date:<p id="recentReleaseDate"></p>
-                                <p id="recentDownloadSize">Download Size: 400 MB</p>
-                            </div>
-                            <div class="col-xs-12 col-md-4 col-lg-offset-2 text-center">
-                                <a id="recentDownloadVersion" "href="#" class="btn btn-primary" onclick="download_software(0)">Download version</a>
-                                <br><br>
-                            </div>
-                        </div>
-                        <div class="row software-bottom-row">
-                            <div class="col-sm-12">
-                                <h4>Release notes</h4>
-                                <p id = "recentNote">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                        </div>
-                    </div>
+<!--             <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">ISRS 2019 Conference Presentation Award</h5>
+                    <img class="card-img-top" src="/static/img/isrs2019_banner_spn.png" alt="Card image cap">
+                    <p class="card-text">We would like to announce another Conference Presentation Award for ISRS 2019 in Beijing, China! If you’re planning to attend, SOFIE could help! Present an ELIXYS-focused presentation (poster or oral) at ISRS 2019 for a chance to win $1,500 USD! <br><br>
+                        <strong>Submit your accepted abstract</strong> to <a href="mailto:eric.schopf@sofie.com">eric.schopf@sofie.com</a> by March 22, 2019 to enter the contest. <br><br>
+                        <strong>The deadline for submitting an abstract to ISRS 2019 is November 30th.</strong> Check out the conference website for more information: <a href="https://www.srsweb.org/isrs2019/" target="_blank">https://www.srsweb.org/isrs2019/</a></p>
+                    <p class="card-text"><small class="text-muted">Published: 10/16/2018</small></p>
                 </div>
-                <br>
-                <br>
-                <div class="col-sm-12" id="latest-installer-release">
-                    <h4 class="text-center"><u>Latest installer</u></h4>
-                    <br>
-                    <div class="col-sm-12 software-card">
-                        <div class="row software-top-row">
-                            <div class="col-xs-12 col-md-6">
-                                <h4 id="recentInstallerVersion">Version</h4>
-                                Release Date:<p id="recentInstallerReleaseDate"></p>
+            </div> --> 
+        </div><!-- /end of card container div -->
+        <div class="col-3" id="newest-sequences">
+            <div class="card">
+            	<div class="card-header bg-secondary text-center">
+						<h5 class="mb-0 text-white">New sequences</h5>
+                	</div>
+                    <ul class="list-group mb-3 list-group-flush">
+                        {% for seq in new_seq %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div class="mx-auto">
+                            	<a href="/sequence/{{ seq.SequenceID }}">
+                                	<h6 class="my-0">{{ seq.Name }}</h6>
+                                </a>
+                                <small class="text-muted"></small>
                             </div>
-                            <div class="col-xs-12 col-md-4 col-lg-offset-2 text-center">
-                                <a id="recentInstallerDownloadVersion" class="btn btn-primary" onclick="download_installer()">Download installer</a>
-                                <br><br>
-                            </div>
-                        </div>
-                        <div class="row software-bottom-row">
-                            <div class="col-sm-12">
-                                <h4>Release notes</h4>
-                                <p id = "recentInstallerNote">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="col-sm-12" id="previous-software-release">
-                    <br><br>
-                    <h4 class="text-center"><u>Older versions</u></h4>
-                    <br>
-                    <!-- repeatable component -->
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        {% for n in range(2) %}
-                        <div class="panel panel-default col-sm-12 software-panel-heading">
-                            <div class="panel-heading col-sm-12" role="tab" id="heading1">
-                                <div class="text-left col-xs-12 col-md-6">
-                                    <p class="panel-title text-left">
-                                        <b id="SoftwareVersion{{n}}">Version 2.3.4</b>
-                                    </p>
-                                    <p class="text-left" id="ReleaseDate{{n}}">
-                                        Release date: 10/10/2017
-                                    </p>
-                                    <p class="text-left" id="DownloadSize{{n}}">
-                                        Download Size: 400 MB
-                                    </p>
-                                </div>
-                                <div class="col-xs-12 col-md-4 col-lg-offset-2 text-center previous-software-download">
-                                    <a href="#" class="btn btn-primary download-update-button" id="DownloadVersion{{n}}" onclick="download_software({{n}}+1)">Download</a>
-                                    <br>
-                                    <p>
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{n}}" aria-expanded="false" aria-controls="collapse-{{n}}" class="collapsed">
-                                    View release notes
-                                    </a>
-                                    </p>
-                                </div>
-                            </div>
-                            <div id="collapse-{{n}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{n}}" style="height: unset;">
-                                <div class="panel-body">
-                                    <div class="col-sm-12">
-                                        <h4>Release notes</h4>
-                                            <p id="Note{{n}}">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </li>
                         {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <!-- Right sidebar -->
-            <div class="col-sm-2 col-sm-offset-1 text-center right-sidebar" id="software-sidebar">
-                <h4><u>Quick links</u></h4>
-                <br>
-                <ul class="list-unstyled">
-                    <li><a href="https://www.dropbox.com/s/bki61sfuayfog4h/ELIXYS%20Software%20Manual.pdf?dl=0" target="_blank">View software manual</a></li>
-                    <li><a href="https://www.dropbox.com/s/3w4zvwl4nklejri/Installation%20of%20ELIXYS%20Installer%20and%20Software%20-%20Updated.pdf?dl=0" target="_blank">View installation instructions</a></li>
-                    <li></li>
-                </ul>
+                    </ul>
             </div>
         </div>
-        <div id="faq" class="col-sm-12" data-bind="visible: isFAQ">
-             {% include 'support/faq.html' %}
-        </div>
-
-
-
-
     </div>
-    <!-- SUPPORT DASHBOARD END -->
-    <script>
-    //software update
-    document.getElementById("recentSoftwareVersion").innerHTML = releases[0].name
-    document.getElementById("recentReleaseDate").innerHTML = releases[0].published_at
-    document.getElementById("recentDownloadSize").innerHTML = "Download Size: " + releases[0].size + " MB"
-    document.getElementById("recentDownloadVersion").innerHTML = "Download version " + releases[0].name
-    document.getElementById("recentNote").innerHTML = releases[0].body
-    //installer update
-    document.getElementById("recentInstallerVersion").innerHTML = installers[0].name
-    document.getElementById("recentInstallerReleaseDate").innerHTML = installers[0].published_at
-    document.getElementById("recentInstallerDownloadVersion").innerHTML = "Download version " + installers[0].name
-    document.getElementById("recentInstallerNote").innerHTML = installers[0].body
-    var length = releases.length - 1;
-    for(var i = 0; i < length; i++) {
-        document.getElementById("SoftwareVersion"+""+i).innerHTML = releases[i+1].name
-        document.getElementById("ReleaseDate"+""+i).innerHTML = releases[i+1].published_at
-        document.getElementById("DownloadSize"+""+i).innerHTML = "Download Size: " + releases[i+1].size + " MB"
-        document.getElementById("DownloadVersion"+""+i).innerHTML = "Download version " + releases[i+1].name
-        document.getElementById("Note"+""+i).innerHTML = releases[i+1].body
-    }
-    </script>
+</div>
 {% endblock %}

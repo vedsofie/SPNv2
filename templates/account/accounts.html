@@ -1,54 +1,172 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-
-    <script type="text/javascript">
-        var accounts = ko.observableArray(initAccounts(JSON.parse({{accounts|tojson|safe}})));
-        var AccountSearch = function(params){
-            var self = this;
-            self.params = params || {};
-            self.displayItems = params.displayItems || ko.observableArray();
-            self.fullList = _.cloneDeep(self.displayItems());
-            self.text = ko.observable("");
-            self.search = function(){
-                var txt = self.text();
-                var matches = [];
-                for(var i = 0; i < self.fullList.length; i++){
-                    var act = self.fullList[i];
-                    var name = act.name;
-                    if(name){
-                        txt = txt.toUpperCase();
-                        name = name.toUpperCase();
-                        if(name.indexOf(txt) >= 0){
-                            matches.push(act);
-                        }
-                    }
-                }
-                self.displayItems(matches);
-            }
-        }
-        var accountSearch = new AccountSearch({displayItems: accounts});
-
-        $(function(){
-            navbar.currentlyOpenedTab("organizations");
-        });
-
-    </script>
-
-{% endblock %}
-
 {% block content_body %}
+<div class="container-fluid pt-3">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card page-contents">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href="/account/{{ runninguser.AccountID }}"><i class="far fa-building"></i> My Organization</a>
+                    </li>
+                    {% if runninguser.RoleID == 2 %}
+                      <li class="list-group-item lh-condensed"><a href="/account/new/"><i class="far fa-plus-square"></i> Create Organization</a></li>
+                    {% endif %}
+                    <li class="list-group-item lh-condensed"><a href="/user/{{ runninguser.UserID }}/edit/"><i class="far fa-user"></i> My Profile</a></li>
+                </ul>
+            </div>
+        </div>
 
-   <div class="l-content-wrapper">
-       <!--<div class="m-search-wrapper" data-bind="with: accountSearch">
-           <input type="text" data-bind="textInput: text, event:{keyup: search}" placeholder="Search..."/>
-           <div class="clear"></div>
-       </div>-->
-       <div class="col-sm-12" id="organization-screen">
-           <div data-bind="template: { name: 'account_template', foreach: accounts, as: 'account'}"></div>
-           <div class="clear"></div>
-       </div>
-   </div>
+
+        <div class="col-9">
+            <h5 class="text-center mt-2">Organizations List <span class="text-secondary">(Page {{ current_page_number }} of {{ number_of_pages }})</span></h5>
+
+            <div class="p-3 mt-3">
+              <div class="row align-items-center">
+                <div class="col-3 text-left"><strong>Filter Organization List</strong></div>
+                <div class="col-8 text-left">
+                    <div class="input-group">
+                      <div class="input-group-text mr-3">
+                        {% if request.args.get('academic_only') %}
+                        <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Academic Orgs
+                        {% else %}
+                        <input type="checkbox" class="academic-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Academic Orgs
+                        {% endif %}
+                      </div>
+                      <div class="input-group-text mr-3">
+                        {% if request.args.get('pharma_only') %}
+                        <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input" checked="true"> Only Pharma
+                        {% else %}
+                        <input type="checkbox" class="pharma-only-checkbox mr-3" aria-label="Checkbox for following text input"> Only Pharma
+                        {% endif %}
+                      </div>
+                      <a href="/account/" class="btn btn-link">Show all</a>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 row">
+            {% for account in accounts %}
+              <div class="col-4 mb-3">
+
+                  <div class="card text-center">
+                    <img src="/account/{{ account.id }}/logo" alt="" class="card-img-top p-3">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ account.name }}</h5>
+                    </div>
+                    <div class="card-footer">
+                      <div class="row align-items-center">
+                        <div class="text-left col-6">
+                          <span class="badge badge-secondary">{{ account.sequence_count }} Sequences</span>
+                        </div>
+                        <div class="text-right col-6">
+                          <a href="/account/{{ account.id }}" class="btn btn-primary">View Org <i class="fas fa-angle-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+              </div>
+            {% endfor %}
+            </div>
+            <nav aria-label="Page navigation example" class="text-center">
+              <ul class="pagination justify-content-center">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                {% for page in range(number_of_pages) %}
+                <li {% if current_page_number == (page + 1) %}  class="page-item active" {% else %} class="page-item" {% endif %}><a class="page-link" href="/account/?page={{ page + 1 }}">{{ page + 1 }}</a></li>
+                {% endfor %}
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
 
 
+<!-- modal -->
+
+<div class="modal fade" id="synonymModal" tabindex="-1" role="dialog" aria-labelledby="synonymModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="synonymModalCenterTitle">Synonyms</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="item-list">
+            
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- scripts -->
+<script>
+$(document).ready(function(){
+    url = '';
+    $('#synonymModal').on('show.bs.modal', function (e) {
+           var id = e.relatedTarget.id;
+           var molecule_name = $(e.relatedTarget).data("mol");
+           $("h5.modal-title").html("Synonyms for "+"<p>   </p>"+molecule_name);
+           console.log(molecule_name);
+           // AJAX request
+           $.ajax({
+            url: '/keyword/Molecules/'+id+'/synonym',
+            type: 'get',
+            success: function(response){ 
+              // Add response in Modal body
+              $(response).each(function(index){
+                $('ul.item-list').append("<li>"+response[index]['DisplayFormat']+"</li>");
+                console.log(response[index]['DisplayFormat']);
+                });
+
+              
+              // Display Modal
+              // $('#empModal').modal('show'); 
+            }
+          });
+    });
+
+     // view only probes with sequences
+  $(".pharma-only-checkbox").change(function(){
+    if (this.checked) {
+      // when pharma only is checked, uncheck academic chekckbox
+      $("input.academic-only-checkbox").removeAttr("checked");
+
+        // var url = window.location.hostname+"/account/?pharma=true"
+        url = location.protocol + '//' + location.host + location.pathname+"?pharma_only=true";
+
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
+  });
+
+  // view only probes with sequences
+  $(".academic-only-checkbox").change(function(){
+    if (this.checked) {
+      // when academic only is checked, uncheck pharma chekckbox
+      $("input.pharma-only-checkbox").removeAttr("checked");
+
+          url = location.protocol + '//' + location.host + location.pathname+"?academic_only=true";
+      window.location.href = url;
+    }
+    else{
+      $(".no-sequence").show();
+    }
+  });
+
+
+});
+</script>
 {% endblock %}
+
+

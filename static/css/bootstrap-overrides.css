@@ -9,13 +9,8 @@
 .voffset8 { margin-top: 100px; }
 .voffset9 { margin-top: 150px; }
  
-.btn {
-  background-color: #ffffff;
-  border: solid 1px #4a90e2;
-  border-radius: 0;
-}
 
-.btn-primary{
+.btn-alt-blue{
 	background-color: #4a90e2;
 	color: #fff;
 }
@@ -35,14 +30,18 @@
     margin-bottom: 0px;
 }
 
+.navbar-brand {
+     padding: 0 !important; 
+}
+
 h1, h2, h3, h4, h5, h6{
-    color: #6e6e6e;
+    color: #000;
 }
 
 h2{
   font-family: Nunito;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 900;
   line-height: 1.0;
   letter-spacing: 0.8px;
   text-transform: uppercase;
@@ -59,6 +58,18 @@ h6{
   text-align: center;
 }
 
-.navbar-brand{
-  padding: 10px 10px !important;
+li.nav-item.active {
+    font-weight: 500;
+}
+
+/*.dropdown:hover>.dropdown-menu {
+ display: block;
+}*/
+
+
+.carousel-indicators li{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.carousel-control-next-icon{
+  background: url("../img/arrow-right.png");
 }

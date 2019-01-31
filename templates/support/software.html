@@ -1,99 +1,85 @@
-<div class="col-sm-6 col-sm-offset-3">
-    <h1 class="text-center">Software</h1>
-    <div class="col-sm-12" id="latest-software-release">
-        <h4 class="text-center"><u>Latest software release</u></h4>
-        <br>
-        <div class="col-sm-12 software-card">
-            <div class="row software-top-row">
-                <div class="col-sm-6">
-                    <h4>Version 4.0.0</h4>
-                    <p>Release Date: 11/11/2018</p>
-                    <p>Download Size: 400 MB</p>
+{% extends "application.html" %}
+{% block content_body %}
+
+<script>
+    function download (asset_url){
+        var url = "/github/download/asset?url=" + encodeURIComponent(asset_url);
+        window.location = url;
+    }
+    function getDate(date) {
+
+    }
+</script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
                 </div>
-                <div class="col-sm-6 text-right">
-                    <a href="#" class="btn btn-primary">Download version 4.0.0</a>
-                    <br>
-                    <br>
-                    <a href="">View installation instructions</a>
-                </div>
-            </div>
-            <div class="row software-bottom-row">
-                <div class="col-sm-12">
-                    <h4>Release notes for version 4.0.0</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                    <ul>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                        <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                    </ul>
-                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href="/probe/my_probes/"><i class="fas fa-vial"></i> My Probes</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href="/user/{{ runninguser.UserID }}/edit/"><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
             </div>
         </div>
-    </div>
-    <br>
-    <br>
-    <div class="col-sm-12" id="previous-software-release">
-    	<br><br>
-        <h4 class="text-center"><u>Older versions</u></h4>
-        <br>
-        <!-- repeatable component -->
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-            {% for n in range(5) %}
-            <div class="panel panel-default col-sm-12">
-                <div class="panel-heading row software-panel-heading" role="tab" id="heading1">
-                    <div class="text-left col-sm-9">
-                        <p class="panel-title text-left">
-                            <b>Version 2.3.4</b>
-                        </p>
-                        <p class="text-left">
-                            Release date: 10/10/2017
-                        </p>
-                        <p class="text-left">
-                            Download Size: 400 MB
-                        </p>
-                    </div>
-                    <div class="col-sm-3 text-center previous-software-download">
-                        <a href="#" class="btn btn-primary download-update-button">Download 2.3.4</a>
-                        <br>
-                        <p><a href="">View installation instructions</a></p>
-                        <p>
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{n}}" aria-expanded="false" aria-controls="collapse-{{n}}" class="collapsed">
-				     	View release notes
-						</a>
-                        </p>
-                    </div>
-                </div>
-                <div id="collapse-{{n}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{n}}">
-                    <div class="panel-body">
-                        <div class="col-sm-12">
-                            <h4>Release notes for version 4.0.0</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            <ul>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                                <li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</li>
-                            </ul>
+
+        <div class="col-6">
+            <h5 class="text-center mt-3">ELIXYS Software</h5>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>ELIXYS Software {{new_release.name}}</h5>
+                            <p>Release Date:{{new_release.published_at}} </p>
+                            <p>Download Size: {{new_release.size}}</p>
                         </div>
-                    </div>
+                        <div class="col-6 text-right">
+                            <a href="#" class="btn btn-primary">Download {{new_release.name}}</a>
+                            <br>
+                            <br>
+                            <a href="">View installation instructions</a>
+                        </div>
+                   </div>
+                </div>
+                <div class="card-footer">
+                    <h5>Release notes for version {{new_release.name}}</h5>
+                    <p>{{new_release.body}}</p>
                 </div>
             </div>
-            {% endfor %}
+
+            <div class="divider_title col-sm-12">
+                <span>Latest Installer</span>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>ELIXYS Software v4.0.0</h5>
+                            <p>Release Date: 11/11/2018</p>
+                            <p>Download Size: 400 MB</p>
+                        </div>
+                        <div class="col-6 text-right">
+                            <a href="#" class="btn btn-primary">Download version 4.0.0</a>
+                            <br>
+                            <br>
+                            <a href="">View installation instructions</a>
+                        </div>
+                   </div>
+                </div>
+                <div class="card-footer">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                </div>
+            </div>
+
+
         </div>
+
+
     </div>
 </div>
-<!-- Right sidebar -->
-<div class="col-sm-2 col-sm-offset-1 text-center right-sidebar">
-	<h4><u>Quick links</u></h4>
-	<br>
-	<ul class="list-unstyled">
-		<li><a href="#documentation" >View software manual</a></li>
-		<li></li>
-		<li></li>
-	</ul>
-</div>
+
+{% endblock %}

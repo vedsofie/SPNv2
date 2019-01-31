@@ -1,176 +1,239 @@
 {% extends "application.html" %}
-{% block head %}
-    {{super()}}
-
-    <script type="text/javascript">
-        $(function(){
-            navbar.currentlyOpenedTab("organizations");
-        });
-    </script>
-
-    <style type="text/css">
-        .i_r {
-            margin: 3px -10px;
-        }
-        .action-context-menu {
-            left: -12px;
-            top: 2px;
-
-        }
-        .company_info {
-            height: 84px;
-
-        }
-
-    </style>
-{% endblock %}
-
 {% block content_body %}
-<div class="col-sm-6 col-sm-offset-3" id="organization-page">
-    <div class="m-molecule-details">
-        <img data-bind="attr: {src: '/account/' + account.id + '/logo/'}"/>
-        <div class="m-molecule-info">
-            <h1 class="molecule-name" data-bind="text: account.name"></h1>
-            <h3 style="font-size: 15px;" data-bind="text: account.LabName"></h3>
-            <p class="mol_d" data-bind="text: account.description"></p>
-            <div class="location" data-bind="visible: account.City && account.State">
-                <span class="location_icon"><img src="/static/img/location_icon.png" alt="" height="12" width="16"/></span>
-                <span data-bind="text: account.City + ','"></span>
-                <span data-bind="text: account.State"></span>
+<div class="container-fluid">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show mt-3 col-6 offset-3" role="alert">
+                <i class="fas fa-info mr-3"></i> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="row">
+        <div class="col-3 sidebar-padding">
+            <div class="card">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Quick links</h5>
+                </div>
+                <ul class="list-group text-center list-group-flush">
+                    <li class="list-group-item lh-condensed">
+                            <a href="/account/"><i class="far fa-building"></i> All Organizations</a>
+                    </li>
+                    <li class="list-group-item lh-condensed"><a href="/probe/my_probes/"><i class="fas fa-bars"></i> My Probes</a></li>
+                    <li class="list-group-item lh-condensed"><a href="/user/{{ runninguser.UserID }}/edit/"><i class="fas fa-user"></i> My Profile</a></li>
+                </ul>
             </div>
         </div>
-        <div class="clear"></div>
-    </div>
-
-    <div class="google-card-3">
-        <div class="i_r col-sm-4">
-            <ul class="list-unstyled" id="org-action-right">
-            <li><span data-bind="if: runningUser.AccountID==account.id && runningUser.calculatedRole() == 'admin' || runningUser.calculatedRole() == 'super-admin'">
-                <div tabindex="1" data-bind="event: {click: openActionMenu,blur: hideActionMenu}"
-                     class="action-context-menu">
-                    <span class="action-control"><div class="action-control__arrow"></div>Actions</span>
-                </div>
-                <div class="m-toggle-menu-wrapper">
-                    <div class="toggle-menu toggle-menu--org" data-bind="visible: actionMenuOpen"
-                         style="display: none;">
-                        <a data-bind="attr: {href: '/account/' + account.id + '?edit=true'}">
-                            <div class="toggle-menu__control-option">
-                                Edit
-                            </div>
-                        </a>
-                        <a data-bind="attr:{href: '/user/new/?account_id=' + account.id}">
-                            <div class="toggle-menu__control-option toggle-menu__control-option--last">
-                                Create User
-                            </div>
-                        </a>
+        <div class="col-6 page-contents">
+            <h5 class="text-center mt-3">Organization Details </h5>
+            <div class="card p-3 mt-3">
+                <div class="row border-bottom pb-3">
+                    <div class="col-5"><img src="/account/{{ account.id }}/logo" alt="" class="img-fluid bg-light"></div>
+                    <div class="col-7">
+                        <h5 class="text-left mt-2">{{ account.name }}</h5>
+                        <p>{{ account.description }}</p>
                     </div>
                 </div>
-                <span data-bind="template: {name: 'user-detail-popup-template', data: newUserCtrl}"></span>
-                <span data-bind="template: {name: 'account-detail-popup-template', data: organizationCtrl}"></span>
-            </span>
-            </li>
-            <li>
-            <span data-bind="if: account.primary_contact_id">
-                    <contact-us-popup params="contact: 'Contact ' + account.name,
-                                        contact_url: '/account/' + account.id + '/contact',
-                                        btnText: 'Contact Us'"></contact-us-popup>
-            </span>
-            </li>
-            </ul>
-        </div>
-        <div class="i_l col-sm-8">
-            <!--
-            <p class="employees" data-bind="visible: account.users().length > maxEmployees,
-                             text: '' + account.users().length + '+ Users'"></p>
-            -->
-            <ul class="avatar_list" data-bind="foreach: {data: account.calculatedUsers(), as: 'user'}">
-                <li>
-                    <user-detail-popup params="user: user,
-                                               openPopupButtonTemplate: 'user-image-edit-button'"></user-detail-popup>
-                </li>
-            </ul>
+                <div class="row mt-3">
+                    <div class="text-left col-6">
+                        <p class="pt-2 pl-3"><i class="fas fa-map-marker-alt mr-2"></i> {{ account.City }}, {{ account.State }}</p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button class="btn btn-link" data-toggle="modal" data-target="#sequenceContactModal"><i class="far fa-envelope-open"></i>  Contact</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3 mb-3 p-3">
+                <div class="row">
+                    <div class="dropdown col-3">
+                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Org Options
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/account/{{ account.id }}/edit/">Edit Organization details</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteSequenceModal">Delete Organization</a>
+                      </div>
+                    </div>
+                    <div class="col-9 text-right">
+                        {% if runninguser.RoleID == 2 or (runninguser.AccountID == account.id and runninguser.RoleID == 1) %}
+                        <a href="/user/new?account_id={{ account.id }}"><button class="btn btn-outline-primary"><i class="far fa-user"></i> Add new user</button></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if public_sequences|length > 0 %}
+            <div class="divider_title col-sm-12">
+                <span>Public sequences</span>
+            </div>
+            <div class="card-columns column-count-2 mb-3">
+                {% for sequence in public_sequences %}
+                <div class="card text-center">
+                  <div class="card-body">
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
+                    <p>{{ sequence.Comment }}</p>
+                    <div class="dropdown-divider"></div>
+                    <div>
+                        <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
+                    </div>
+                    <div>
+                        <span>Synthesis Time: {{ sequence.SynthesisTime }}{% if sequence.SynthesisTime != None and sequence.SynthesisTimeStandardDeviation %} ± {{ sequence.SynthesisTimeStandardDeviation }} {% endif %}</span>
+                        minutes
+                    </div>
+                    <div><span># Cassettes: {{ sequence.NumberOfSteps }}</span></div>
+                    <div><span>Purification: {{ sequence.PurificationMethod }}</span></div>
+                    <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="sequence-card-footer sc-footer-account">
+                        <ul class="list-inline  mb-0 pt-1 pb-1">
+                        <li class="list-inline-item">Molecule name:</li>
+                        <li class="list-inline-item"><a href="/account/{{ sequence.AccountID }}">
+                            {{ sequence.MoleculeName|safe }}
+                            </a>
+                        </li>
 
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+        
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="divider_title col-sm-12">
+                <span>Private sequences </span>
+            </div>
+            <div class="card-columns column-count-2">
+                {% for sequence in private_sequences %}
+                <div class="card text-center">
+                  <div class="card-body">
+                    <a href="/sequence/{{ sequence.SequenceID }}"><h5 class="card-title">{{ sequence.Name }}</h5></a>
+                    <p>{% if sequence.Comment != None %}  {{ sequence.Comment }} {% endif %}</p>
+                    <div class="dropdown-divider"></div>
+                    <div>
+                        <span>Label: {{ sequence.Yield }} {% if sequence.Yield != None and sequence.YieldStandardDeviation %} ± {{ sequence.YieldStandardDeviation }} {% endif %}</span>
+                    </div>
+                    <div>
+                        <span>Synthesis Time: {{ sequence.SynthesisTime }}{% if sequence.SynthesisTime != None and sequence.SynthesisTimeStandardDeviation %} ± {{ sequence.SynthesisTimeStandardDeviation }} {% endif %}</span>
+                        minutes
+                    </div>
+                    <div><span># Cassettes: {{ sequence.NumberOfSteps }}</span></div>
+                    <div><span>Purification: {{ sequence.PurificationMethod }}</span></div>
+                    <div><span>Module: {{ sequence.SynthesisModule }}</span></div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="sequence-card-footer text-center">
+                        <a href="/account/{{ sequence.AccountID }}">
+                            <img src="/account/{{ sequence.AccountID }}/logo" alt="" class="avatar-small img-fluid rounded-circle">
+                            <span class="pl-3 ml-3">{{ sequence.AccountName }}</span>
+                        </a>
+                    </div>
+                  </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+        <!-- right side sidebar -->
+        <div class="col-3 sidebar-padding" id="sequence-right-sidebar">
+            <div class="card text-center">
+                <div class="card-header bg-secondary text-center">
+                    <h5 class="mb-0 text-white">Members</h5>
+                </div>
+                <div class="members">
+                    <ul class="list-inline pt-3">
+                    {% for user in account_users %}
+                        <li class="list-inline-item col-3 mb-3">
+                            <img class="rounded-circle avatar-medium" src="/user/{{ user.UserID }}/avatar" alt="" title="{{ user.FirstName }} {{ user.LastName }}">
+                            
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-    <div class="m-molecule-details-wrapper">
-        <!--<div class="m-horizontal-scroll-title">
-            <span data-bind="text: account.name"></span>
-        </div>
-        <div class="m-card-wrapper">
-            <div class="m-horizontal-scrolling">
-                <div class="m-horizontal-list" data-bind="template: {name: 'user_template', foreach: account.calculatedUsers(), as: 'user'}"></div>
-                <div class="clear"></div>
-            </div>
-        </div>-->
-        <div class="clear"></div>
-        <div data-bind="with: account,
-                        visible: account.publicSequences().length > 0" class="m-account-sequences">
-            <div class="divider_title col-sm-12">
-                <span>Public ELIXYS Sequences</span>
-            </div>
-            <div data-bind="foreach: {data:  calculatedPublicSequences(), as: 'sequence'}">
-                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
-            </div>
-            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
-                                        'currentPage': account.publicSequencePage,
-                                        'items': account.publicSequences().length}"></div>-->
-        </div>
-        <div class="clear"></div>
-        <div data-bind="with: account,
-                        visible: account.privateElixysSequences().length > 0" class="m-account-sequences">
-            <div class="divider_title col-sm-12">
-                <span>Private ELIXYS Sequences</span>
-            </div>
-            <div data-bind="foreach: {data: calculatedPrivateElixysSequences(), as: 'sequence'}">
-                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
-            </div>
-            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
-                                        'currentPage': account.privateElixysSequencePage,
-                                        'items': account.privateElixysSequences().length}"></div>-->
-        </div>
-        <div class="clear"></div>
-        <div data-bind="with: account,
-                        visible: account.privateSequences().length > 0" class="m-account-sequences">
-            <div class="divider_title col-sm-12">
-                <span>Other Sequences</span>
-            </div>
-            <div data-bind="foreach: {data: calculatedPrivateSequences(), as: 'sequence'}">
-                <sequence-detail-card params="sequence: sequence,displayAccountName: false"></sequence-detail-card>
-            </div>
-            <!--<div data-bind="pagination:{'itemsOnPage': paginationSize,
-                                        'currentPage': account.privateSequencePage,
-                                        'items': account.privateSequences().length}"></div>-->
-        </div>
+    </div><!-- end of row -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteSequenceModal" tabindex="-1" role="dialog" aria-labelledby="deleteSequenceModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center mt-3">
+        <h5 class="text-danger">Are you sure you want to delete {{ molecule.DisplayFormat|safe }}</h5>
+        <p class="text-danger">NOTE: This action cannot be undone</p>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-outline-danger" data-mol="{{ molecule.ID }}" id="delete-sequence-button">Delete sequence</button>
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+      </div>
     </div>
-    <div class="clear"></div>
+  </div>
+</div>
+<!-- Contact modal -->
+<div class="modal fade" id="sequenceContactModal" tabindex="-1" role="dialog" aria-labelledby="sequenceContactModalL" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sequenceContactModalL">Contact {{ account.name }} </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/contact">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Your email</label>
+            <input type="email" class="form-control" id="sequence-contact-email" placeholder="Enter email" value="{{ runninguser.Email }}">
+            <small id="emailHelp" class="form-text text-muted"><i class="fas fa-info-circle"></i> Autofilled</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Your Message</label>
+            <textarea class="form-control" id="sequence-contact-message" placeholder="Your message"> </textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Send</button>
+      </div>
     </div>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+
+    // Delete sequence functionality
+    $("#delete-sequence-button").click(function(){
+        var sequence_id = {{ sequence.SequenceID }};
+        $.ajax({
+              url: "/sequence/"+sequence_id+"/",
+              method: "DELETE",
+              success: function(result){
+                console.log(result);
+              }
+            });
+    }); // end of delete sequence call
+    
+    // the code below is to subscript the formula, do not delete
+    var formula = $("#formula").text();
+    formatted = formula.replace(/([0-9])/g, "<sub>$1</sub>");
+    $("#formula").html(formatted);
+
+    // make a new comment with ajax
+});
+
+</script>
+
 {% endblock %}
-
 
 {% block footer %}
     {{super()}}
     <script type="text/javascript">
-        var account = initAccounts([JSON.parse({{account|tojson|safe}})])[0];
-        var maxEmployees = 5;
-        openActionMenu = function(){
-            actionMenuOpen(!actionMenuOpen());
-        }
-        hideActionMenu = function(){
-            setTimeout(function(){
-                actionMenuOpen(false);
-            }, 300);
-        }
-        actionMenuOpen = ko.observable(false);
-        var newUserCtrl = new UserDetailPopupCtrl({AccountID: account.id,
-                                                   hideButton: true});
-        var organizationCtrl = new AccountDetailPopup({hideButton: true, account: account});
-        createUser = function(){
-            newUserCtrl.open();
-        }
-        editAccount = function(){
-            organizationCtrl.open();
-        }
+        
     </script>
 {% endblock %}
-

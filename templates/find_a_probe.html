@@ -1,0 +1,285 @@
+{% extends "application.html" %}
+{% block login_content_body %}
+<script src="/static/js/map.js"></script>
+<script src="/static/js/user_login_model.js"></script>
+<script>
+    var accountLocations = JSON.parse({{sequence_data|tojson|safe}}) //account location
+    var loginModel = new UserLoginModel(accountLocations);
+    var allProbeInfo = JSON.parse({{probe_data|tojson|safe}});
+    var probeinformation = loginModel.set_number_probelist(allProbeInfo); //Original List with updated the number of probes each site has
+    console.log(accountLocations)
+    console.log(probeinformation)
+    $(function(){
+        search();
+    });
+</script>
+<div class="container-fluid" id="maps-page">
+    <button class="btn btn-outline-primary" onclick='reset()' id="map-reset-button">Reset</button>
+	<div class="row" id="map-row">
+        <!-- Left information card pane -->
+        <div class="col-4 left-info-pane pt-3">
+            <div class="input-group ui-widget mb-3">
+                <span class="input-group-btn input-btn-left">
+                    <a href="javascript:history.back()"><button class="btn btn-default" type="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> BACK</button></a>
+                </span>
+                <input type="text" class="form-control" placeholder="Search for a site, probe, or location" id="probe-search1">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </div>
+            </div>
+            <ul class="nav nav-tabs" id="map-tabs" role="tablist">
+              <li class="nav-item col-6 text-center pl-0 pr-0">
+                <a class="nav-link active" id="probe-tab" data-toggle="tab" href="#probe" role="tab" aria-controls="probe" aria-selected="true">Probes</a>
+              </li>
+              <li class="nav-item col-6 text-center pl-0 pr-0">
+                <a class="nav-link" id="site-tab" data-toggle="tab" href="#site" role="tab" aria-controls="site" aria-selected="false">Site</a>
+              </li>
+            </ul>
+            <div class="tab-content mt-3 p-1">
+              <div class="tab-pane fade show active" id="probe" role="tabpanel" aria-labelledby="probe-tab">
+                <div class="info">
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> Tap on a card to see sites with that probe</p>
+                </div>
+                <div class="search-results" id=search-list>
+
+                </div>
+              </div>
+              <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
+                  <!-- sites tab content -->
+                <div class="info">
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> Tap on a card to see probes with at that site</p>
+                </div>
+                <div class="search-results" id=search-list-site>
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <!-- right map pane -->
+        <div class="col-8">
+        <div id='map' class="col-12 mt-3"></div>
+        <div class="map-legend probe-card row">
+            <div class="col-sm-12"><h4>Legend</h4></div>
+            <div class="col-4"><img src="https://docs.google.com/uc?id=1n28ewwZiK2eLHyo8r2YfKDOhIrrlzbg4" alt="" class="img-responsive"> : Multiple location group</div>
+            <div class="col-4"><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" alt="" class="img-responsive"> : SOFIE Radiopharmacy</div>
+            <div class="col-4"><img src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png" alt="" class="img-responsive"> : Independent site</div>
+        </div>
+        </div>
+        <script src="https://use.fontawesome.com/f5e7e74cb3.js"></script>
+        <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtkp_xUuraQVIDR0-kOvgNmp60DXMqeig&callback=loginModel.initMap" type="text/javascript"></script>
+    </div>
+</div>
+<p>Available at</p>
+<script>
+var searchList = document.getElementById("search-list")
+var searchList_site = document.getElementById("search-list-site")
+
+
+function reset(){
+    //reset map and search result
+    loginModel.resetMap()
+    probeinformation.forEach(searchedList)
+    accountLocations.forEach(searchedList_site)
+}
+
+function search(){
+    var user_insert = document.getElementById("probe-search1").value
+    searchList.innerHTML = ""
+    searchList_site.innerHTML = ""
+    console.log(user_insert)
+    if(user_insert == '') {
+        //going to initial state, when the page is first load
+        //probeformation is initial list for probes!
+        probeinformation.forEach(searchedList)
+        accountLocations.forEach(searchedList_site)  
+    }else{
+        //use  
+        find_probe(user_insert)
+        find_site(user_insert)
+        
+    } 
+}
+function searchedList(item, index) {
+    searchName = "'" + item.searchName +"'"
+    searchFunction = '<a onclick="click_searched_probe('+ searchName +')">'
+    searchList.innerHTML = searchList.innerHTML +
+                            searchFunction +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content row align-items-center h-100">' +
+                                        '<div class="col-6">'+
+                                            '<h6 class="">'+ item.Name  +'</h6>' +
+                                            '<img src="'+item.url+'" class="img-responsive" alt="">' +
+                                        '</div><div class="col-6 text-center">'+
+                                            '<p>Available at</p><div id="circle-sites-container"><div id="circle-sites">'+ item.number  +'</div></div><p>Sites</p></div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>';
+}
+//searchedList for the site -> TODO
+function find_probe(keyword) {
+    $.ajax({
+        url : '/probe/hint/' + keyword,
+        type : 'GET',
+        success : function(res) {
+            console.log("search result");
+            console.log(res)
+            if(res.length == 0) {
+                //inform user that there is no probe
+                console.log("no result")
+                searchList.innerHTML = ""
+                searchList.innerHTML = searchList.innerHTML + '<div>' + 'No result' + '</div>'
+                document.getElementById("probe-tab").innerHTML = "Probes (0)";
+
+            }else{
+                searched_result = []
+                for(var i = 0; i < res.length; i++) {
+                    for(var j = 0; j < probeinformation.length; j++) {
+                        if(res[i].searchName == probeinformation[j].searchName) {
+                            searched_result.push(probeinformation[j])
+                            break;
+                        }
+                    }
+                }
+                console.log(searched_result)
+                document.getElementById("probe-tab").innerHTML = "Probes (" + searched_result.length.toString() + ")";
+                searched_result.forEach(searchedList)        
+            }
+            // update probeinformation array to array with only probe which user searached for
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+}
+
+function find_site(keyword) {
+    console.log(keyword)
+    $.ajax({
+        url : '/probe/hint/' + keyword,
+        type : 'GET',
+        dataType: 'json',
+        data: {site:true},
+        success : function(res) {
+            console.log("search result");
+            console.log(res)
+            if(res.length == 0) {
+                //inform user that there is no probe
+                console.log("no result for site as well")
+                searchList_site.innerHTML = ""
+                searchList_site.innerHTML = searchList_site.innerHTML + '<div>' + 'No result' + '</div>'
+                document.getElementById("site-tab").innerHTML = "Sites (0)";
+
+            }else{
+                searched_result = []
+                for(var i = 0; i < res.length; i++) {
+                    for(var j = 0; j < accountLocations.length; j++) {
+                        if(res[i] == accountLocations[j].name) {
+                            searched_result.push(accountLocations[j])
+                            break;
+                        }
+                    }
+                }
+                console.log(searched_result)
+                document.getElementById("site-tab").innerHTML = "Site (" + searched_result.length.toString() + ")";
+                searched_result.forEach(searchedList_site)        
+            }
+            // update probeinformation array to array with only probe which user searached for
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+}
+
+function click_searched_probe(probe_name) {
+    //going to probe tab
+    document.getElementById('probe-tab').click()
+    document.getElementById("probe-tab").innerHTML = "Probes";
+    document.getElementById("site-tab").innerHTML = "Site";
+    //update map on the right
+    var sites = loginModel.selectLocationByProbe(probe_name)
+    //update searched list on the left
+    //probe information and site information needed
+    console.log(sites)
+    var probe = null
+    for(var i = 0; i < probeinformation.length; i++) {
+        if(probe_name == probeinformation[i].searchName) {
+            probe = probeinformation[i];
+            break;            
+        }
+    }
+    //update the probe uppper part
+    searchList.innerHTML = "" 
+    searchList.innerHTML = searchList.innerHTML +
+                            '<a>' +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content col-sm-6">' +
+                                        '<h6 class="text-left">'+ probe.Name  +'</h6>' +
+                                       /*'<h6 class="text-left">'+ item.number  +'</h6>' +*/
+                                        '<img src="'+probe.url+'" class="img-responsive" alt="">' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>' +
+                            '<div>'+ 'Site With ' + probe.Name +'</div>';
+    //update bottom parts for the sites with the probe
+    for(var i = 0; i < sites.length; i++) {
+        Name = "'" +  sites[i].name +"'"
+        searchFunction = '<a onclick="click_site_for_probes('+  Name +')">'
+        searchList.innerHTML = searchList.innerHTML + 
+                            searchFunction +
+                            '<div>' + sites[i].name + '</div>' +
+                            '</a>';
+    }
+
+
+
+}
+
+function click_site_for_probes(site_name) {
+    document.getElementById('site-tab').click()
+    document.getElementById("probe-tab").innerHTML = "Probes";
+    document.getElementById("site-tab").innerHTML = "Site";
+    //going to site tab
+    var list = loginModel.get_probe_info(site_name);
+    searchList_site.innerHTML = "<div>" + "Site" + '</div>'
+
+    searchList_site.innerHTML = searchList_site.innerHTML + 
+                            '<div>' + site_name
+                            '</div>';
+    if(list != undefined) {
+        list.forEach(searchedList_site_probe)
+    }
+}
+function searchedList_site_probe(item, index) {
+    searchName = "'" + item.searchName +"'"
+    searchFunction = '<a onclick="click_searched_probe('+ searchName +')">'
+    searchList_site.innerHTML = searchList_site.innerHTML +
+                            searchFunction +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content col-sm-6">' +
+                                        '<h6 class="text-left">'+ item.Name  +'</h6>' +
+                                        '<h6 class="text-left">'+ item.number  +'</h6>' +
+                                        '<img src="'+item.url+'" class="img-responsive" alt="">' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>';
+}
+
+function searchedList_site(item, index) {
+    searchName = "'" + item.name +"'"
+    searchFunction = '<a onclick="click_site_for_probes('+ searchName +')">'
+    searchList_site.innerHTML = searchList_site.innerHTML +
+                            searchFunction +
+                                '<div class="probe-card featured-probe-card">' +
+                                    '<div class="probe-card-content col-sm-6">' +
+                                        '<h6 class="text-left">'+ item.name  +'</h6>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</a>';
+}
+
+</script>
+{% endblock %}
