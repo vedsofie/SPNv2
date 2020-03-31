@@ -41,5 +41,5 @@ setuptools==39.0.1
 six==1.10.0
 SQLAlchemy==1.0.12
 webassets==0.11.1
-Werkzeug==0.11.4
+Werkzeug==0.15.3
 wheel==0.29.0
